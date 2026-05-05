@@ -1,0 +1,100 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const platforms = [
+  {
+    name: 'macOS',
+    meta: 'macOS 11 Big Sur or later',
+    icon: 'apple',
+    options: [
+      { label: 'Apple Silicon (M-series)', arch: '.dmg · arm64', href: 'https://github.com/inbindapp/inbind/releases/latest/download/Inbind-arm64.dmg' },
+      { label: 'Intel', arch: '.dmg · x86_64', href: 'https://github.com/inbindapp/inbind/releases/latest/download/Inbind-x86_64.dmg' },
+    ],
+  },
+  {
+    name: 'Windows',
+    meta: 'Windows 10 / 11',
+    icon: 'windows',
+    options: [
+      { label: 'Installer', arch: '.msi · x64', href: 'https://github.com/inbindapp/inbind/releases/latest/download/Inbind-x64-setup.msi' },
+      { label: 'Portable', arch: '.exe · x64', href: 'https://github.com/inbindapp/inbind/releases/latest/download/Inbind-x64.exe' },
+    ],
+  },
+  {
+    name: 'Linux',
+    meta: 'Ubuntu, Debian, Fedora, Arch',
+    icon: 'linux',
+    options: [
+      { label: 'AppImage', arch: '.AppImage · x86_64', href: 'https://github.com/inbindapp/inbind/releases/latest/download/Inbind-x86_64.AppImage' },
+      { label: 'Debian / Ubuntu', arch: '.deb · amd64', href: 'https://github.com/inbindapp/inbind/releases/latest/download/Inbind-amd64.deb' },
+    ],
+  },
+];
+---
+
+<Layout title="Download" description="Download Inbind for macOS, Windows, and Linux. Free to download and use.">
+  <Header />
+
+  <section class="mk-section" style="padding-top: 88px; padding-bottom: 48px;">
+    <div class="mk-container">
+      <div class="mk-section-head">
+        <div class="mk-section-eyebrow">Download — version 0.4.2</div>
+        <h2 class="mk-section-h">Pick your computer.</h2>
+        <p class="mk-section-sub">Inbind is free to download and use. We notarize macOS builds and sign Windows builds. Linux is community-built; we list the AppImage and the deb.</p>
+      </div>
+
+      <div class="mk-platforms">
+        {platforms.map((p) => (
+          <div class="mk-platform">
+            <div style="display: flex; align-items: center; gap: 14px; color: var(--text);">
+              {p.icon === 'apple' && (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm4.565 15.71c-.03.07-.46 1.58-1.5 3.12-.85 1.31-1.73 2.61-3.13 2.63-1.36.03-1.81-.8-3.39-.8-1.58 0-2.07.78-3.36.83-1.34.05-2.36-1.41-3.21-2.71-1.74-2.65-3.07-7.49-1.28-10.78.88-1.62 2.46-2.65 4.18-2.69 1.32-.03 2.56.89 3.36.89.81 0 2.32-1.1 3.92-.94.66.03 2.51.27 3.7 2.02-.09.05-2.21 1.29-2.18 3.84.02 3.05 2.66 4.06 2.69 4.07z"/>
+                </svg>
+              )}
+              {p.icon === 'windows' && (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M0 3.45L9.81 2.1V11.4H0V3.45zm10.95-1.49L24 0v11.25H10.95V1.96zM0 12.6h9.81v9.3L0 20.55V12.6zm10.95 0H24V24l-13.05-1.84V12.6z"/>
+                </svg>
+              )}
+              {p.icon === 'linux' && (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.077 1.115-.3 1.99-1.029 3.137-.852 1.142-2.067 2.911-2.69 4.84-.301.86-.45 1.85-.45 2.94 0 .31.01.62.05.93.12.95.45 1.79.95 2.5l.05.07c.96 1.31 2.43 2.27 4.06 2.27.4 0 .8-.05 1.18-.15 1.93-.51 3.16-1.95 3.16-3.71 0-.31-.04-.61-.12-.91.06.04.12.07.18.11.65.46 1.45.81 2.45.81 1.66 0 2.99-.95 3.41-2.4.13.11.25.21.39.31.94.71 2.06 1.03 3.16 1.03.21 0 .41-.01.61-.04 2.04-.32 3.62-2.06 3.62-4.06 0-.96-.36-1.86-.96-2.56-.84-.97-2.16-1.55-3.41-1.55-.27 0-.55.03-.82.08-1.15.21-2.18.81-2.94 1.62-.5.51-.91 1.18-1.18 1.94-.27-.84-.69-1.6-1.21-2.27-1.39-1.74-3.42-2.6-3.42-4.85 0-.7.21-1.4.21-2.1 0-2.05-1.86-3.79-3.83-3.79z"/>
+                </svg>
+              )}
+              <div>
+                <h3>{p.name}</h3>
+                <div class="mk-platform-meta">{p.meta}</div>
+              </div>
+            </div>
+            <div class="mk-platform-options">
+              {p.options.map((o) => (
+                <a href={o.href} class="mk-platform-option">
+                  <span>{o.label}</span>
+                  <span class="arch">{o.arch}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style="max-width: 720px; margin: 56px auto 0; padding: 24px 28px; background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);">
+        <h3 style="font-family: var(--font-display); font-size: 17px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.015em;">One thing about the macOS build</h3>
+        <p style="font-size: 14.5px; line-height: 1.6; color: var(--text-subtle); margin: 0;">
+          We're notarized, but on the very first launch macOS will ask you to confirm. Right-click the app, hit Open, then Open again. After that it's normal. We learned this annoys some folks; we'd rather be honest than pretend it doesn't happen.
+        </p>
+      </div>
+
+      <div style="text-align: center; margin-top: 40px;">
+        <a href="https://github.com/inbindapp/inbind/releases" target="_blank" rel="noopener" class="mk-btn mk-btn--ghost">
+          Older versions and changelog →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

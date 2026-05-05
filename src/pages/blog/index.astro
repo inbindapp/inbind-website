@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
+);
+---
+
+<Layout title="Blog" description="Notes from the Inbind team. Honest posts about building the product.">
+  <Header />
+
+  <section class="mk-section" style="padding-top: 88px;">
+    <div class="mk-container">
+      <div class="mk-section-head">
+        <div class="mk-section-eyebrow">Blog</div>
+        <h2 class="mk-section-h">Notes from the team.</h2>
+        <p class="mk-section-sub">We publish when we have something honest to say. No SEO posts. No listicles.</p>
+      </div>
+      <div class="mk-blog-list">
+        {posts.map((post) => (
+          <a href={`/blog/${post.slug}`} class="mk-blog-item">
+            <div class="mk-blog-date">{post.data.date}</div>
+            <div>
+              <h3>{post.data.title}</h3>
+              <p>{post.data.lead}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout title={post.data.title} description={post.data.lead}>
+  <Header />
+
+  <article class="mk-post">
+    <div class="mk-narrow">
+      <a href="/blog" class="mk-back-link">← All posts</a>
+      <div class="mk-post-meta">{post.data.date} · 4 min read</div>
+      <h1>{post.data.title}</h1>
+      <p class="mk-post-lead">{post.data.lead}</p>
+      <div class="mk-post-body">
+        <Content />
+      </div>
+      <div class="mk-post-footer">
+        <span style="color: var(--text-subtle); font-size: 14.5px;">Like this post? Inbind is free to try.</span>
+        <a href="/download" class="mk-btn mk-btn--primary">Download Inbind</a>
+      </div>
+    </div>
+  </article>
+
+  <Footer />
+</Layout>
