@@ -1,22 +1,26 @@
 ---
+import { url, homeUrl } from '../utils/url';
+
 const path = Astro.url.pathname;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 function isActive(href: string) {
-  if (href === '/') return path === '/';
-  return path.startsWith(href);
+  const full = href === '/' ? (base || '/') : `${base}${href}`;
+  if (href === '/') return path === full || path === `${full}/`;
+  return path.startsWith(full);
 }
 ---
 
 <header class="mk-header">
   <div class="mk-container mk-header-inner">
-    <a href="/" class="mk-logo">
-      <img src="/logo-color.svg" alt="Inbind" width="80" height="26" />
+    <a href={homeUrl} class="mk-logo">
+      <img src={url('logo-color.svg')} alt="Inbind" width="80" height="26" />
     </a>
     <nav class="mk-nav">
-      <a href="/" class:list={[{ active: isActive('/') && !isActive('/download') && !isActive('/pricing') && !isActive('/blog') }]}>Home</a>
-      <a href="/download" class:list={[{ active: isActive('/download') }]}>Download</a>
-      <a href="/pricing" class:list={[{ active: isActive('/pricing') }]}>Pricing</a>
-      <a href="/blog" class:list={[{ active: isActive('/blog') }]}>Blog</a>
+      <a href={homeUrl} class:list={[{ active: isActive('/') && !isActive('/download') && !isActive('/pricing') && !isActive('/blog') }]}>Home</a>
+      <a href={url('download')} class:list={[{ active: isActive('/download') }]}>Download</a>
+      <a href={url('pricing')} class:list={[{ active: isActive('/pricing') }]}>Pricing</a>
+      <a href={url('blog')} class:list={[{ active: isActive('/blog') }]}>Blog</a>
     </nav>
     <div class="mk-header-cta">
       <a href="https://github.com/inbindapp/inbind" target="_blank" rel="noopener" class="mk-github-link">
@@ -25,7 +29,7 @@ function isActive(href: string) {
         </svg>
         GitHub
       </a>
-      <a href="/download" class="mk-btn mk-btn--primary" style="height: 36px; font-size: 14px; padding: 0 14px;">Download</a>
+      <a href={url('download')} class="mk-btn mk-btn--primary" style="height: 36px; font-size: 14px; padding: 0 14px;">Download</a>
     </div>
   </div>
 </header>

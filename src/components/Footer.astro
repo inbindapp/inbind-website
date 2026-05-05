@@ -1,25 +1,26 @@
 ---
+import { url } from '../utils/url';
 ---
 
 <footer class="mk-footer">
   <div class="mk-container">
     <div class="mk-footer-grid">
       <div class="mk-footer-brand">
-        <img src="/logo-color.svg" alt="Inbind" style="height: 22px;" />
+        <img src={url('logo-color.svg')} alt="Inbind" style="height: 22px;" />
         <p>Take notes the way AI likes to read them.</p>
       </div>
       <div class="mk-footer-col">
         <h4>Product</h4>
         <ul>
-          <li><a href="/download">Download</a></li>
-          <li><a href="/pricing">Pricing</a></li>
+          <li><a href={url('download')}>Download</a></li>
+          <li><a href={url('pricing')}>Pricing</a></li>
           <li><a href="https://github.com/inbindapp/inbind" target="_blank" rel="noopener">Source on GitHub</a></li>
         </ul>
       </div>
       <div class="mk-footer-col">
         <h4>Read</h4>
         <ul>
-          <li><a href="/blog">Blog</a></li>
+          <li><a href={url('blog')}>Blog</a></li>
           <li><a href="https://github.com/inbindapp/inbind/releases" target="_blank" rel="noopener">Changelog</a></li>
         </ul>
       </div>

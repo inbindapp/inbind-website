@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import { url } from '../../utils/url';
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
@@ -21,7 +22,7 @@ const posts = (await getCollection('blog')).sort(
       </div>
       <div class="mk-blog-list">
         {posts.map((post) => (
-          <a href={`/blog/${post.slug}`} class="mk-blog-item">
+          <a href={url(`blog/${post.slug}`)} class="mk-blog-item">
             <div class="mk-blog-date">{post.data.date}</div>
             <div>
               <h3>{post.data.title}</h3>

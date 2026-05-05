@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FlowLines from '../components/FlowLines.astro';
 import AppMock from '../components/AppMock.astro';
+import { url } from '../utils/url';
 ---
 
 <Layout title="Inbind" description="Take notes the way AI likes to read them. A context-first writing tool for founders and small teams who create content with AI.">
@@ -20,7 +21,7 @@ import AppMock from '../components/AppMock.astro';
           Notes, knowledge, and an editor in one place. So your AI sounds like you, not like everyone else.
         </p>
         <div class="mk-hero-ctas">
-          <a class="mk-btn mk-btn--primary mk-btn--lg" href="/download">Download Inbind</a>
+          <a class="mk-btn mk-btn--primary mk-btn--lg" href={url('download')}>Download Inbind</a>
           <a class="mk-btn mk-btn--ghost mk-btn--lg" href="https://github.com/inbindapp/inbind" target="_blank" rel="noopener">View on GitHub</a>
           <span class="mk-hero-meta">
             <span class="mk-hero-meta-dot"></span>
@@ -208,7 +209,7 @@ import AppMock from '../components/AppMock.astro';
     <div class="mk-container mk-cta-inner">
       <h2>Try it. It's free.</h2>
       <p>No account. No upload. Just download and point it at a folder.</p>
-      <a class="mk-btn mk-btn--primary mk-btn--lg" href="/download">Download Inbind</a>
+      <a class="mk-btn mk-btn--primary mk-btn--lg" href={url('download')}>Download Inbind</a>
     </div>
   </section>
 

@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { url } from '../utils/url';
 ---
 
 <Layout title="Pricing" description="Inbind is free for one. $12/person/month for teams. No lock-in.">
@@ -56,7 +57,7 @@ import Footer from '../components/Footer.astro';
               Open source on GitHub
             </li>
           </ul>
-          <a class="mk-btn mk-btn--ghost" href="/download" style="margin-top: auto;">Download free</a>
+          <a class="mk-btn mk-btn--ghost" href={url('download')} style="margin-top: auto;">Download free</a>
         </div>
 
         <!-- Team -->

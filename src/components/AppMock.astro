@@ -1,4 +1,5 @@
 ---
+import { url } from '../utils/url';
 ---
 
 <div class="mk-app-mock">
@@ -12,7 +13,7 @@
   <div class="mk-app-mock-body">
     <aside class="mk-app-mock-side">
       <div class="mk-app-mock-side-head">
-        <img src="/favicon-app.svg" alt="" width="18" height="18" />
+        <img src={url('favicon-app.svg')} alt="" width="18" height="18" />
         <span style="font-weight: 600; font-size: 13px;">launch-notes</span>
       </div>
       <div class="mk-app-mock-side-row folder">campaigns</div>

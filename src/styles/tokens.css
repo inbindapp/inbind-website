@@ -2,23 +2,7 @@
    Inbind. Colors & type tokens
    ───────────────────────────────────────────────────────────── */
 
-@font-face {
-  font-family: "Sora";
-  src: url("/fonts/Sora-VariableFont_wght.ttf") format("truetype-variations"),
-       url("/fonts/Sora-VariableFont_wght.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Figtree";
-  src: url("/fonts/Figtree-VariableFont_wght.ttf") format("truetype-variations"),
-       url("/fonts/Figtree-VariableFont_wght.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
+/* Fonts loaded via Google Fonts in Layout.astro */
 
 :root {
   /* ── Brand core ─────────────────────────────────── */
