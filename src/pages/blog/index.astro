@@ -1,13 +1,29 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { url } from '../../utils/url';
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
+const COLLECTION_URL = 'https://cdn.inbind.app/content/596/posts';
+
+const res = await fetch(`${COLLECTION_URL}/_index.json`);
+const data = res.ok ? await res.json() : { items: [] };
+
+const posts = ((data.items ?? []) as any[]).sort(
+  (a, b) => new Date(b._meta.published_at).valueOf() - new Date(a._meta.published_at).valueOf()
 );
+
+function formatDate(iso: string) {
+  const d = new Date(iso);
+  const day = d.getUTCDate();
+  const month = d.toLocaleDateString('en-GB', { month: 'long', timeZone: 'UTC' });
+  const year = d.getUTCFullYear();
+  const suffix = day === 1 || day === 21 || day === 31 ? 'st'
+    : day === 2 || day === 22 ? 'nd'
+    : day === 3 || day === 23 ? 'rd'
+    : 'th';
+  return `${day}${suffix} ${month}, ${year}`;
+}
 ---
 
 <Layout title="Blog" description="Notes from the Inbind team. Honest posts about building the product.">
@@ -23,10 +39,10 @@ const posts = (await getCollection('blog')).sort(
       <div class="mk-blog-list">
         {posts.map((post) => (
           <a href={url(`blog/${post.slug}`)} class="mk-blog-item">
-            <div class="mk-blog-date">{post.data.date}</div>
+            <div class="mk-blog-date">{formatDate(post._meta.published_at)}</div>
             <div>
-              <h3>{post.data.title}</h3>
-              <p>{post.data.lead}</p>
+              <h3>{post.name}</h3>
+              <p>{post['post-summary']}</p>
             </div>
           </a>
         ))}

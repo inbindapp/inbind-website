@@ -5,9 +5,7 @@ import { url } from '../utils/url';
 <div class="mk-app-mock">
   <div class="mk-app-mock-titlebar">
     <div class="mk-app-mock-tl">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </div>
   </div>
   <div class="mk-app-mock-body">
@@ -17,16 +15,16 @@ import { url } from '../utils/url';
         <span style="font-weight: 600; font-size: 13px;">launch-notes</span>
       </div>
       <div class="mk-app-mock-side-row folder">campaigns</div>
-      <div class="mk-app-mock-side-row" style="padding-left: 18px;"><span class="dot"></span>Q4 launch brief</div>
-      <div class="mk-app-mock-side-row active" style="padding-left: 18px;"><span class="dot"></span>Friday standup notes</div>
-      <div class="mk-app-mock-side-row" style="padding-left: 18px;"><span class="dot"></span>hero-shot.png</div>
+      <div class="mk-app-mock-side-row" style="padding-left: 18px;">Q4 launch brief</div>
+      <div class="mk-app-mock-side-row active" style="padding-left: 18px;">Friday standup notes</div>
+      <div class="mk-app-mock-side-row" style="padding-left: 18px;">hero-shot.png</div>
       <div class="mk-app-mock-side-row folder">drafts</div>
-      <div class="mk-app-mock-side-row" style="padding-left: 18px;"><span class="dot"></span>Pricing rewrite</div>
-      <div class="mk-app-mock-side-row"><span class="dot"></span>README</div>
+      <div class="mk-app-mock-side-row" style="padding-left: 18px;">Pricing rewrite</div>
+      <div class="mk-app-mock-side-row">README</div>
     </aside>
     <main class="mk-app-mock-main">
       <h1 class="mk-app-mock-title">Friday standup notes</h1>
-      <div class="mk-app-mock-body-text">
+      <div class="mk-app-mock-body-text" contenteditable="true" spellcheck="false">
         <p>Quick read-through of where each workstream landed this week. Nothing on fire. We're moving the launch back one week so design can finish the email sequence.</p>
         <h3>What shipped</h3>
         <p>Pricing page copy v2. Hero illustration round 3 (we picked B). Onboarding email 1 of 4.</p>
@@ -35,10 +33,400 @@ import { url } from '../utils/url';
       </div>
     </main>
     <aside class="mk-app-mock-chat">
-      <div class="mk-app-mock-chat-head">Launch brief</div>
-      <div class="mk-app-mock-chat-msg user">Summarize @standup.md in 3 lines</div>
-      <div class="mk-app-mock-chat-msg">Launch slips one week. Pricing v2 shipped, FAQ block still in <code>drafts/</code>. Only blocker is legal sign-off.</div>
-      <div class="mk-app-mock-chat-input">Ask… (@ files, / skills)</div>
+      <div class="mk-app-mock-chat-tabs">
+        <div class="mk-app-mock-chat-tab">
+          <span>Launch brief</span>
+          <span class="mk-chat-tab-x">×</span>
+        </div>
+        <div class="mk-app-mock-chat-tab-actions">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/>
+            <line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M6.5 4V6.5L8 8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="mk-app-mock-chat-msgs">
+        <div class="mk-app-mock-chat-msg user">Summarize @standup.md in 3 lines</div>
+        <div class="mk-app-mock-chat-thinking">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Thinking
+        </div>
+        <div class="mk-app-mock-chat-msg">Launch slips one week. Pricing v2 shipped, FAQ block still in <code>drafts/</code>. Only blocker is legal sign-off.</div>
+      </div>
+      <div class="mk-app-mock-chat-footer">
+        <div class="mk-app-mock-chat-input-row">
+          <span class="mk-app-mock-chat-input">Ask… (@ files, / skills, Enter to send)</span>
+          <button class="mk-chat-send">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5H11M11 6.5L7.5 3M11 6.5L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="mk-app-mock-chat-footer-meta">
+          <span class="mk-chat-model">Sonnet ∨</span>
+        </div>
+      </div>
     </aside>
   </div>
+
+  <!-- Format toolbar (matches app bubble menu) -->
+  <div class="mk-format-toolbar" id="mk-format-toolbar" aria-hidden="true">
+    <button class="mk-fmt-btn" data-tip="Heading 1" data-block="h1">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="m17 12 3-2v8"/>
+      </svg>
+    </button>
+    <button class="mk-fmt-btn" data-tip="Heading 2" data-block="h2">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/>
+        <path d="M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1"/>
+      </svg>
+    </button>
+    <button class="mk-fmt-btn" data-tip="Heading 3" data-block="h3">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/>
+        <path d="M17.5 10.5c1.7-1 3.5 0 3.5 1.5a2 2 0 0 1-2 2"/>
+        <path d="M17 17.5c2 1.5 4 .3 4-1.5a2 2 0 0 0-2-2"/>
+      </svg>
+    </button>
+    <button class="mk-fmt-btn" data-tip="Heading 4" data-block="h4">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 18V6"/><path d="M17 10v3a1 1 0 0 0 1 1h3"/>
+        <path d="M21 10v8"/><path d="M4 12h8"/><path d="M4 18V6"/>
+      </svg>
+    </button>
+    <button class="mk-fmt-btn" data-tip="Heading 5" data-block="h5">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/>
+        <path d="M17 13v-3h4"/>
+        <path d="M17 17.7c.4.2.8.3 1.3.3 1.5 0 2.7-1.1 2.7-2.5S19.8 13 18.3 13H17"/>
+      </svg>
+    </button>
+    <button class="mk-fmt-btn" data-tip="Heading 6" data-block="h6">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/>
+        <circle cx="19" cy="16" r="2"/>
+        <path d="M20 10c-2 2-3 3.5-3 6"/>
+      </svg>
+    </button>
+    <span class="mk-fmt-sep"></span>
+    <button class="mk-fmt-btn" data-tip="Bold" data-cmd="bold">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8"/>
+      </svg>
+    </button>
+    <button class="mk-fmt-btn" data-tip="Italic" data-cmd="italic">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" x2="10" y1="4" y2="4"/>
+        <line x1="14" x2="5" y1="20" y2="20"/>
+        <line x1="15" x2="9" y1="4" y2="20"/>
+      </svg>
+    </button>
+    <button class="mk-fmt-btn" data-tip="Underline" data-cmd="underline">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 4v6a6 6 0 0 0 12 0V4"/>
+        <line x1="4" x2="20" y1="20" y2="20"/>
+      </svg>
+    </button>
+    <button class="mk-fmt-btn" data-tip="Inline code">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>
+      </svg>
+    </button>
+    <button class="mk-fmt-btn" data-tip="Blockquote" data-block="blockquote">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 5H3"/><path d="M21 12H8"/><path d="M21 19H8"/><path d="M3 12v7"/>
+      </svg>
+    </button>
+    <span class="mk-fmt-sep"></span>
+    <button class="mk-fmt-btn" data-tip="Link" id="mk-fmt-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+      </svg>
+    </button>
+    <button class="mk-fmt-btn" data-tip="Add comment" id="mk-fmt-comment">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>
+        <path d="M12 8v6"/>
+        <path d="M9 11h6"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Slash commands dropdown -->
+  <div class="mk-slash-menu" id="mk-slash-menu"></div>
 </div>
+
+<script>
+  const ico = (p: string) =>
+    `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+
+  interface Cmd { id: string; title: string; desc?: string; icon: string; }
+
+  const CMDS: Cmd[] = [
+    { id: 'h1', title: 'Heading 1', desc: 'Large section heading',   icon: ico('<path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="m17 12 3-2v8"/>') },
+    { id: 'h2', title: 'Heading 2', desc: 'Medium section heading',  icon: ico('<path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="M21 18h-4c0-4 4-3 4-6 0-1.5-2-2.5-4-1"/>') },
+    { id: 'h3', title: 'Heading 3', desc: 'Small section heading',   icon: ico('<path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="M17.5 10.5c1.7-1 3.5 0 3.5 1.5a2 2 0 0 1-2 2"/><path d="M17 17.5c2 1.5 4 .3 4-1.5a2 2 0 0 0-2-2"/>') },
+    { id: 'h4', title: 'Heading 4', icon: ico('<path d="M12 18V6"/><path d="M17 10v3a1 1 0 0 0 1 1h3"/><path d="M21 10v8"/><path d="M4 12h8"/><path d="M4 18V6"/>') },
+    { id: 'h5', title: 'Heading 5', icon: ico('<path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><path d="M17 13v-3h4"/><path d="M17 17.7c.4.2.8.3 1.3.3 1.5 0 2.7-1.1 2.7-2.5S19.8 13 18.3 13H17"/>') },
+    { id: 'h6', title: 'Heading 6', icon: ico('<path d="M4 12h8"/><path d="M4 18V6"/><path d="M12 18V6"/><circle cx="19" cy="16" r="2"/><path d="M20 10c-2 2-3 3.5-3 6"/>') },
+    { id: 'bullet',  title: 'Bullet List',    desc: 'Create a bulleted list',   icon: ico('<path d="M3 5h.01"/><path d="M3 12h.01"/><path d="M3 19h.01"/><path d="M8 5h13"/><path d="M8 12h13"/><path d="M8 19h13"/>') },
+    { id: 'ordered', title: 'Numbered List',  desc: 'Create a numbered list',   icon: ico('<path d="M11 5h10"/><path d="M11 12h10"/><path d="M11 19h10"/><path d="M4 4h1v5"/><path d="M4 9h2"/><path d="M6.5 20H3.4c0-1 2.6-1.925 2.6-3.5a1.5 1.5 0 0 0-2.6-1.02"/>') },
+    { id: 'table',   title: 'Table',          desc: 'Insert a table',           icon: ico('<path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/>') },
+    { id: 'link',    title: 'Link to page',   desc: 'Link to another page in this project', icon: ico('<path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>') },
+  ];
+
+  const toolbar  = document.getElementById('mk-format-toolbar') as HTMLElement | null;
+  const content  = document.querySelector('.mk-app-mock-body-text') as HTMLElement | null;
+  const slashMenu = document.getElementById('mk-slash-menu') as HTMLElement | null;
+  const mock     = document.querySelector('.mk-app-mock') as HTMLElement | null;
+
+  if (toolbar && content && slashMenu && mock) {
+    const tb = toolbar, ct = content, sm = slashMenu, mk = mock;
+
+    // ── TOOLBAR ────────────────────────────────────────────────────────
+
+    function positionToolbar(range: Range) {
+      const rect = range.getBoundingClientRect();
+      const mockRect = mk.getBoundingClientRect();
+      const tbRect = tb.getBoundingClientRect();
+      let top  = rect.top  - mockRect.top  - tbRect.height - 8;
+      let left = rect.left - mockRect.left + rect.width / 2 - tbRect.width / 2;
+      top  = Math.max(36, top);
+      left = Math.max(4, Math.min(mockRect.width - tbRect.width - 4, left));
+      tb.style.top  = top  + 'px';
+      tb.style.left = left + 'px';
+    }
+
+    function updateActiveStates() {
+      let blockVal = '';
+      try { blockVal = document.queryCommandValue('formatBlock').toLowerCase(); } catch {}
+      tb.querySelectorAll('[data-cmd]').forEach(el => {
+        const btn = el as HTMLElement;
+        try { btn.classList.toggle('is-active', document.queryCommandState(btn.dataset.cmd!)); } catch {}
+      });
+      tb.querySelectorAll('[data-block]').forEach(el => {
+        const btn = el as HTMLElement;
+        btn.classList.toggle('is-active', blockVal === btn.dataset.block!);
+      });
+    }
+
+    function updateToolbar() {
+      const sel = window.getSelection();
+      if (!sel || sel.isCollapsed || !sel.toString().trim()) {
+        tb.classList.remove('is-visible');
+        tb.setAttribute('aria-hidden', 'true');
+        return;
+      }
+      const range = sel.getRangeAt(0);
+      if (!ct.contains(range.commonAncestorContainer)) {
+        tb.classList.remove('is-visible');
+        tb.setAttribute('aria-hidden', 'true');
+        return;
+      }
+      tb.classList.add('is-visible');
+      tb.setAttribute('aria-hidden', 'false');
+      requestAnimationFrame(() => positionToolbar(range));
+      updateActiveStates();
+    }
+
+    tb.querySelectorAll('[data-cmd]').forEach(el => {
+      const btn = el as HTMLButtonElement;
+      btn.addEventListener('mousedown', e => {
+        e.preventDefault();
+        document.execCommand(btn.dataset.cmd!, false, undefined);
+        updateActiveStates();
+      });
+    });
+
+    tb.querySelectorAll('[data-block]').forEach(el => {
+      const btn = el as HTMLButtonElement;
+      btn.addEventListener('mousedown', e => {
+        e.preventDefault();
+        document.execCommand('formatBlock', false, btn.dataset.block!);
+        updateActiveStates();
+      });
+    });
+
+    document.getElementById('mk-fmt-link')?.addEventListener('mousedown', e => {
+      e.preventDefault();
+      const savedRange = window.getSelection()?.getRangeAt(0)?.cloneRange();
+      const href = prompt('Enter URL:');
+      if (href && savedRange) {
+        const sel = window.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(savedRange);
+        document.execCommand('createLink', false, href);
+      }
+    });
+
+    // Prevent focus loss on visual-only buttons (code, comment)
+    tb.querySelectorAll('.mk-fmt-btn:not([data-cmd]):not([data-block]):not(#mk-fmt-link):not(#mk-fmt-comment)').forEach(btn => {
+      btn.addEventListener('mousedown', e => e.preventDefault());
+    });
+
+    document.getElementById('mk-fmt-comment')?.addEventListener('mousedown', e => {
+      e.preventDefault();
+    });
+
+    // ── SLASH COMMANDS ──────────────────────────────────────────────────
+
+    let slashVisible = false;
+    let slashStart: { node: Text; offset: number } | null = null;
+    let slashEndOffset = 0;
+    let selectedIdx = 0;
+    let filteredCmds: Cmd[] = [...CMDS];
+
+    function renderSlashItems() {
+      if (filteredCmds.length === 0) {
+        sm.innerHTML = '<div class="mk-slash-empty">No results</div>';
+        return;
+      }
+      sm.innerHTML = filteredCmds.map((c, i) => `
+        <button class="mk-slash-item${i === selectedIdx ? ' is-selected' : ''}" data-idx="${i}">
+          <span class="mk-slash-icon">${c.icon}</span>
+          <div class="mk-slash-text">
+            <span class="mk-slash-title">${c.title}</span>
+            ${c.desc ? `<span class="mk-slash-desc">${c.desc}</span>` : ''}
+          </div>
+        </button>
+      `).join('');
+
+      sm.querySelectorAll('.mk-slash-item').forEach(btn => {
+        btn.addEventListener('mousedown', e => {
+          e.preventDefault();
+          applyCmd(filteredCmds[parseInt((btn as HTMLElement).dataset.idx!)].id);
+        });
+      });
+    }
+
+    function positionSlash() {
+      const sel = window.getSelection();
+      if (!sel?.rangeCount) return;
+      const range = sel.getRangeAt(0).cloneRange();
+      range.collapse(true);
+      const rect = range.getBoundingClientRect();
+      const mockRect = mk.getBoundingClientRect();
+      let top  = rect.bottom - mockRect.top + 4;
+      let left = rect.left   - mockRect.left;
+      const menuW = 240;
+      left = Math.max(4, Math.min(mockRect.width - menuW - 4, left));
+      sm.style.top  = top  + 'px';
+      sm.style.left = left + 'px';
+    }
+
+    function showSlash(query: string) {
+      slashVisible = true;
+      selectedIdx = 0;
+      filteredCmds = query === ''
+        ? [...CMDS]
+        : CMDS.filter(c => c.title.toLowerCase().startsWith(query));
+      renderSlashItems();
+      positionSlash();
+      sm.classList.add('is-visible');
+    }
+
+    function hideSlash() {
+      if (!slashVisible) return;
+      slashVisible = false;
+      slashStart = null;
+      sm.classList.remove('is-visible');
+    }
+
+    function checkSlash() {
+      const sel = window.getSelection();
+      if (!sel?.focusNode || sel.focusNode.nodeType !== Node.TEXT_NODE) {
+        hideSlash(); return;
+      }
+      const node = sel.focusNode as Text;
+      const cursorOffset = sel.focusOffset;
+      const text = (node.textContent ?? '').slice(0, cursorOffset);
+
+      const slashIdx = text.lastIndexOf('/');
+      if (slashIdx === -1) { hideSlash(); return; }
+
+      const afterSlash = text.slice(slashIdx + 1);
+      if (afterSlash.includes(' ')) { hideSlash(); return; }
+      if (slashIdx > 0 && !/\s/.test(text[slashIdx - 1])) { hideSlash(); return; }
+
+      slashStart = { node, offset: slashIdx };
+      slashEndOffset = cursorOffset;
+      showSlash(afterSlash.toLowerCase());
+    }
+
+    function applyCmd(cmdId: string) {
+      if (!slashStart) return;
+      const sel = window.getSelection();
+      if (!sel) { hideSlash(); return; }
+
+      const endOff = Math.min(slashEndOffset, slashStart.node.length);
+      const range = document.createRange();
+      range.setStart(slashStart.node, slashStart.offset);
+      range.setEnd(slashStart.node, endOff);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      document.execCommand('delete');
+
+      const tdStyle = 'border:1px solid #e5e0d5;padding:4px 8px';
+      const thStyle = tdStyle + ';background:#f6f3ed;text-align:left';
+      const td = `<td style="${tdStyle}"> </td>`;
+      const th = `<th style="${thStyle}"> </th>`;
+
+      switch (cmdId) {
+        case 'h1': document.execCommand('formatBlock', false, 'h1'); break;
+        case 'h2': document.execCommand('formatBlock', false, 'h2'); break;
+        case 'h3': document.execCommand('formatBlock', false, 'h3'); break;
+        case 'h4': document.execCommand('formatBlock', false, 'h4'); break;
+        case 'h5': document.execCommand('formatBlock', false, 'h5'); break;
+        case 'h6': document.execCommand('formatBlock', false, 'h6'); break;
+        case 'bullet':  document.execCommand('insertUnorderedList'); break;
+        case 'ordered': document.execCommand('insertOrderedList');   break;
+        case 'table':
+          document.execCommand('insertHTML', false,
+            `<table style="width:100%;border-collapse:collapse;margin:0.5em 0">` +
+            `<thead><tr>${th}${th}${th}</tr></thead>` +
+            `<tbody><tr>${td}${td}${td}</tr><tr>${td}${td}${td}</tr></tbody>` +
+            `</table>`
+          );
+          break;
+        // 'link': not implementable in static mock
+      }
+
+      hideSlash();
+      updateToolbar();
+    }
+
+    ct.addEventListener('input', checkSlash);
+
+    ct.addEventListener('keydown', e => {
+      if (!slashVisible || filteredCmds.length === 0) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedIdx = (selectedIdx + 1) % filteredCmds.length;
+        renderSlashItems();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedIdx = (selectedIdx + filteredCmds.length - 1) % filteredCmds.length;
+        renderSlashItems();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        applyCmd(filteredCmds[selectedIdx].id);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        hideSlash();
+      }
+    });
+
+    document.addEventListener('selectionchange', () => {
+      updateToolbar();
+      if (slashVisible) {
+        const sel = window.getSelection();
+        if (!sel?.focusNode || !ct.contains(sel.focusNode)) hideSlash();
+      }
+    });
+  }
+</script>

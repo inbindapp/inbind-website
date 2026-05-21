@@ -17,7 +17,8 @@ function isActive(href: string) {
       <img src={url('logo-color.svg')} alt="Inbind" width="80" height="26" />
     </a>
     <nav class="mk-nav">
-      <a href={homeUrl} class:list={[{ active: isActive('/') && !isActive('/download') && !isActive('/pricing') && !isActive('/blog') }]}>Home</a>
+      <a href={homeUrl} class:list={[{ active: isActive('/') && !isActive('/download') && !isActive('/pricing') && !isActive('/blog') && !isActive('/use-cases') }]}>Home</a>
+      <a href={url('use-cases')} class:list={[{ active: isActive('/use-cases') }]}>Use Cases</a>
       <a href={url('download')} class:list={[{ active: isActive('/download') }]}>Download</a>
       <a href={url('pricing')} class:list={[{ active: isActive('/pricing') }]}>Pricing</a>
       <a href={url('blog')} class:list={[{ active: isActive('/blog') }]}>Blog</a>

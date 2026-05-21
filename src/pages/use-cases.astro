@@ -1,0 +1,169 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FlowLines from '../components/FlowLines.astro';
+import UseCaseIllustration from '../components/UseCaseIllustration.astro';
+import { url } from '../utils/url';
+
+type IllusKind = 'scattered' | 'voice' | 'raw' | 'docs' | 'client';
+
+interface UseCase {
+  illus: IllusKind;
+  title: string;
+  problem: string;
+  solution: string;
+}
+
+const useCases: UseCase[] = [
+  {
+    illus: 'scattered',
+    title: 'Turning scattered notes into publishable content',
+    problem:
+      'You have meeting notes, product context, and brand guidelines spread across apps. Every time you sit down to write something, you spend 20 minutes assembling context into a prompt. The draft comes out generic. You rewrite half of it.',
+    solution:
+      'In Inbind, your context lives next to the editor. The AI already has your notes, your product knowledge, and how you talk about things. You write and generate in the same place, and the output actually reads like you wrote it.',
+  },
+  {
+    illus: 'voice',
+    title: 'Keeping a consistent voice across everything you publish',
+    problem:
+      "You're producing content regularly, but AI drafts always need heavy editing to sound on-brand. Every new piece starts from zero context.",
+    solution:
+      'In Inbind, you keep brand guidelines and product context alongside the editor. First drafts come out closer to publishable because the AI has real context to work from. Consistent voice across pieces without briefing the AI every time.',
+  },
+  {
+    illus: 'raw',
+    title: 'Going from raw notes to shareable docs',
+    problem:
+      'You take detailed notes during meetings and planning sessions but spend just as long reformatting them into docs other people can actually read.',
+    solution:
+      'In Inbind, you capture notes, then use the AI to turn them into requirements docs, release notes, or whatever you need to share. The context is already there. No re-explaining, no copy-pasting into another tool.',
+  },
+  {
+    illus: 'docs',
+    title: 'Writing documentation from implementation notes',
+    problem:
+      'You keep notes on what was built and why, but producing polished documentation is a separate effort that keeps getting deprioritised.',
+    solution:
+      'In Inbind, you keep implementation notes in the editor, then generate feature docs or release notes grounded in those notes. The result reflects what was actually built, not what someone remembered weeks later.',
+  },
+  {
+    illus: 'client',
+    title: 'Drafting client-facing communications from scattered context',
+    problem:
+      'Customer context. Onboarding history, pain points, past incidents. Scattered across notes and email threads. Writing anything client-facing means hunting through all of it first.',
+    solution:
+      'In Inbind, you keep that context in one place, then use the AI to draft tailored guides, incident summaries, or status updates. Communications come out specific and accurate without digging through three apps.',
+  },
+];
+---
+
+<Layout
+  title="Use Cases"
+  description="If you already use AI and markdown but keep losing context between tools, Inbind is where that workflow comes together."
+>
+  <Header />
+
+  <!-- PAGE HEADER -->
+  <section class="mk-section" style="padding-top: 88px; padding-bottom: 56px;">
+    <div class="mk-container">
+      <div class="mk-section-head">
+        <div class="mk-section-eyebrow">Who's it for</div>
+        <h1 class="mk-section-h">
+          You already use AI to write. <br />You just wish the output didn't need so much fixing.
+        </h1>
+        <p class="mk-section-sub">
+          Inbind is for people who work in markdown, use AI tools daily, and are
+          tired of copy-pasting context between apps just to get a draft that
+          sounds like them.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- USE CASES — editorial alternating layout (Variation B) -->
+  <section
+    class="mk-section"
+    style="background: var(--bg-panel); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);"
+  >
+    <div class="mk-container">
+      <div class="mk-uc-list">
+        {useCases.map((uc, i) => (
+          <article class={`mk-uc-card${i % 2 === 1 ? ' is-flipped' : ''}`}>
+            <div class="mk-uc-illus">
+              <UseCaseIllustration kind={uc.illus} />
+            </div>
+            <div class="mk-uc-body">
+              <div class="mk-uc-num">{String(i + 1).padStart(2, '0')}</div>
+              <h3>{uc.title}</h3>
+              <div class="mk-uc-cols">
+                <div class="mk-uc-col mk-uc-col--problem">
+                  <div class="mk-uc-label mk-uc-label--problem">
+                    <span class="mk-uc-label-x">✕</span>
+                    The friction
+                  </div>
+                  <p class="mk-uc-problem">{uc.problem}</p>
+                </div>
+                <div class="mk-uc-col mk-uc-col--solution">
+                  <div class="mk-uc-label mk-uc-label--solution">
+                    <span class="mk-uc-label-arrow">→</span>
+                    With Inbind
+                  </div>
+                  <p class="mk-uc-solution">{uc.solution}</p>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <!-- NOT A FIT -->
+      <div class="mk-not-fit">
+        <div class="mk-not-fit-head">
+          <div class="mk-section-eyebrow">A quick reality check</div>
+          <h3 class="mk-not-fit-title">When Inbind isn't the right tool.</h3>
+        </div>
+        <div class="mk-not-fit-grid">
+          <div class="mk-not-fit-tile">
+            <div class="mk-uc-label mk-uc-label--problem">
+              <span class="mk-uc-label-x">✕</span>
+              Skip if
+            </div>
+            <p class="mk-not-fit-bold">You don't create content regularly.</p>
+            <p class="mk-not-fit-rest">The value compounds with use. It's not useful as a one-off writing tool.</p>
+          </div>
+          <div class="mk-not-fit-tile">
+            <div class="mk-uc-label mk-uc-label--problem">
+              <span class="mk-uc-label-x">✕</span>
+              Skip if
+            </div>
+            <p class="mk-not-fit-bold">You don't use AI in your workflow.</p>
+            <p class="mk-not-fit-rest">There are better pure editors for that.</p>
+          </div>
+          <div class="mk-not-fit-tile">
+            <div class="mk-uc-label mk-uc-label--problem">
+              <span class="mk-uc-label-x">✕</span>
+              Skip if
+            </div>
+            <p class="mk-not-fit-bold">You have a large content ops team with an established pipeline.</p>
+            <p class="mk-not-fit-rest">We're not a CMS or content workflow tool at this stage.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section class="mk-cta">
+    <div class="mk-cta-flow-tl"><FlowLines count={4} withAnchor={false} /></div>
+    <div class="mk-cta-flow-br"><FlowLines count={4} withAnchor={false} /></div>
+    <div class="mk-container mk-cta-inner">
+      <h2>See if it fits.</h2>
+      <p>Download the app, point it at a folder, and try your actual workflow. No account required.</p>
+      <a class="mk-btn mk-btn--primary mk-btn--lg" href={url('download')}>Download Inbind</a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

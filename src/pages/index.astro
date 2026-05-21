@@ -3,29 +3,30 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FlowLines from '../components/FlowLines.astro';
+import FlowLinesZ from '../components/FlowLinesZ.astro';
 import AppMock from '../components/AppMock.astro';
 import { url } from '../utils/url';
 ---
 
-<Layout title="Inbind" description="Take notes the way AI likes to read them. A context-first writing tool for founders and small teams who create content with AI.">
+<Layout title="Inbind" description="Take notes the way AI likes to read them. A context-first writing tool for people who create content with AI.">
   <Header />
 
   <!-- HERO -->
   <section class="mk-hero">
     <div class="mk-container">
       <div style="max-width: 760px;">
-        <div class="mk-eyebrow">A markdown editor for marketing teams</div>
+        <div class="mk-eyebrow">A context-first writing tool</div>
         <h1 class="mk-h1">Take notes the way AI likes to read them.</h1>
         <p class="mk-lead">
-          Inbind is a context-first writing tool for founders and small teams who create content with AI.
-          Notes, knowledge, and an editor in one place. So your AI sounds like you, not like everyone else.
+          Inbind is a writing tool for people who already use AI and markdown but are tired of juggling a notes app, a code editor, version control, and an AI chat just to get a decent draft out.<span style="display: block; margin-top: 12px;">Notes, context, and editor in one place. So the AI actually has something real to work with.</span>
         </p>
         <div class="mk-hero-ctas">
-          <a class="mk-btn mk-btn--primary mk-btn--lg" href={url('download')}>Download Inbind</a>
-          <a class="mk-btn mk-btn--ghost mk-btn--lg" href="https://github.com/inbindapp/inbind" target="_blank" rel="noopener">View on GitHub</a>
+          <div class="mk-hero-ctas__buttons">
+            <a class="mk-btn mk-btn--primary mk-btn--lg" href={url('download')}>Download Inbind</a>
+            <a class="mk-btn mk-btn--ghost mk-btn--lg" href="https://github.com/inbindapp/inbind" target="_blank" rel="noopener">View on GitHub</a>
+          </div>
           <span class="mk-hero-meta">
-            <span class="mk-hero-meta-dot"></span>
-            Free. macOS, Windows, Linux.
+            Free download for macOS, Windows & Linux.
           </span>
         </div>
       </div>
@@ -33,19 +34,12 @@ import { url } from '../utils/url';
       <!-- HERO COMPOSITION — Product mock with flow lines -->
       <div class="mk-hero-frame">
         <div style="position: relative;">
-          <FlowLines
-            count={6}
-            withAnchor={false}
-            mirror={false}
-            style="position: absolute; top: -60px; right: -120px; width: 360px; opacity: 0.55; pointer-events: none;"
+          <FlowLinesZ
+            count={4}
+            style="position: absolute; top: -80px; left: -80px; width: calc(100% + 160px); height: calc(100% + 160px); pointer-events: none;"
+            opacity={0.35}
           />
-          <FlowLines
-            count={5}
-            withAnchor={false}
-            mirror={true}
-            style="position: absolute; bottom: -40px; left: -100px; width: 320px; opacity: 0.45; pointer-events: none;"
-          />
-          <div style="position: relative; z-index: 2;">
+<div style="position: relative; z-index: 2;">
             <AppMock />
           </div>
         </div>
@@ -59,9 +53,38 @@ import { url } from '../utils/url';
       <div class="mk-section-head">
         <div class="mk-section-eyebrow">What you get</div>
         <h2 class="mk-section-h">Built for the way you actually write.</h2>
-        <p class="mk-section-sub">Six features. No lock-in. Your files stay on your computer as plain Markdown. We don't even have a cloud.</p>
+        <p class="mk-section-sub">Everything works out of the box. No plugins, no configuration. Your files stay on your computer as plain Markdown.</p>
       </div>
       <div class="mk-features">
+        <div class="mk-feature">
+          <div class="mk-feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </div>
+          <h3>Real-time Markdown editor</h3>
+          <p>Write in markdown and see formatted output instantly. Select text to change formatting. No preview toggle, no raw syntax on screen.</p>
+        </div>
+        <div class="mk-feature">
+          <div class="mk-feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6l2.1 2.1M5.6 18.4l2.1-2.1m8.6-8.6l2.1-2.1"/>
+            </svg>
+          </div>
+          <h3>AI chat that reads your files</h3>
+          <p>A built-in chat panel (Claude or Codex) that reads everything in your workspace. Ask it to summarize a doc, draft from your notes, or rewrite in your voice.</p>
+        </div>
+        <div class="mk-feature">
+          <div class="mk-feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 11 12 14 22 4"/>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+          </div>
+          <h3>Visual AI edit approval</h3>
+          <p>Changes proposed by the AI are shown as a visual diff before they're applied. Review and approve edits in one click. No raw markdown diffs.</p>
+        </div>
         <div class="mk-feature">
           <div class="mk-feature-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -84,27 +107,7 @@ import { url } from '../utils/url';
             </svg>
           </div>
           <h3>Git built in</h3>
-          <p>Commit, pull, push from the sidebar. No terminal. Made for teams that already store content in a repo.</p>
-        </div>
-        <div class="mk-feature">
-          <div class="mk-feature-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6l2.1 2.1M5.6 18.4l2.1-2.1m8.6-8.6l2.1-2.1"/>
-            </svg>
-          </div>
-          <h3>AI panel that reads your files</h3>
-          <p>Ask the agent to summarize a doc, draft from your notes, or rewrite in your voice. It reads everything in scope.</p>
-        </div>
-        <div class="mk-feature">
-          <div class="mk-feature-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <circle cx="9" cy="9" r="2"/>
-              <path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>
-            </svg>
-          </div>
-          <h3>Inline assets</h3>
-          <p>Drag in screenshots, see them inline. We don't hide them in some cloud bucket.</p>
+          <p>Commit, pull, push from the sidebar. No terminal needed.</p>
         </div>
         <div class="mk-feature">
           <div class="mk-feature-icon">
@@ -113,19 +116,8 @@ import { url } from '../utils/url';
               <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
             </svg>
           </div>
-          <h3>Wiki-style links</h3>
-          <p>Type <code>[[</code> to link any note. The agent follows links the way you do.</p>
-        </div>
-        <div class="mk-feature">
-          <div class="mk-feature-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="23 4 23 10 17 10"/>
-              <polyline points="1 20 1 14 7 14"/>
-              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-            </svg>
-          </div>
-          <h3>Reloads on disk changes</h3>
-          <p>Edit a file in another tool? Inbind picks it up. No "are you sure" dialogs.</p>
+          <h3>Wiki links and inline assets</h3>
+          <p>Type <code>[[</code> to link any note. Drag in screenshots and see them inline. The agent follows links the way you do.</p>
         </div>
       </div>
     </div>
@@ -137,7 +129,7 @@ import { url } from '../utils/url';
       <div class="mk-section-head">
         <div class="mk-section-eyebrow">Honest comparison</div>
         <h2 class="mk-section-h">How Inbind is different.</h2>
-        <p class="mk-section-sub">We're not trying to replace your AI chat or your second brain. We sit in the middle, where the actual writing happens.</p>
+        <p class="mk-section-sub">If your writing workflow involves three or four apps before you even start drafting, you know the pain. Inbind puts all of that in one window.</p>
       </div>
       <div class="mk-compare">
         <table>
@@ -152,11 +144,18 @@ import { url } from '../utils/url';
           </thead>
           <tbody>
             <tr>
-              <td>Plain Markdown on your computer</td>
+              <td>Real-time formatted editing</td>
+              <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
+              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
+              <td><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
+              <td><span class="mk-compare-cell">Partially</span></td>
+            </tr>
+            <tr>
+              <td>AI edits shown before they apply</td>
               <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
               <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
               <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
-              <td><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
+              <td><span class="mk-compare-cell">N/A</span></td>
             </tr>
             <tr>
               <td>AI agent reads your folder</td>
@@ -166,18 +165,25 @@ import { url } from '../utils/url';
               <td><span class="mk-compare-cell">Third-party</span></td>
             </tr>
             <tr>
+              <td>Plain Markdown on your computer</td>
+              <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
+              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
+              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
+              <td><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
+            </tr>
+            <tr>
+              <td>Works out of the box, no plugins</td>
+              <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
+              <td><span class="mk-compare-cell">N/A</span></td>
+              <td><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
+              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
+            </tr>
+            <tr>
               <td>Git built in</td>
               <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
               <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
               <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
               <td><span class="mk-compare-cell">Plugin</span></td>
-            </tr>
-            <tr>
-              <td>Edits review before they apply</td>
-              <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
-              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
-              <td><span class="mk-compare-cell">N/A</span></td>
             </tr>
             <tr>
               <td>Works offline</td>
@@ -196,16 +202,13 @@ import { url } from '../utils/url';
           </tbody>
         </table>
       </div>
-      <p style="text-align: center; margin-top: 18px; font-size: 13px; color: var(--text-muted);">
-        We're new and we're honest about it. If we left something off, <a href="https://github.com/inbindapp/inbind/issues" target="_blank" rel="noopener">open an issue</a>.
-      </p>
     </div>
   </section>
 
   <!-- CTA BAND -->
   <section class="mk-cta">
-    <FlowLines count={4} withAnchor={false} class="mk-cta-flow-tl" />
-    <FlowLines count={4} withAnchor={false} mirror={true} class="mk-cta-flow-br" />
+    <div class="mk-cta-flow-tl"><FlowLines count={4} withAnchor={false} /></div>
+    <div class="mk-cta-flow-br"><FlowLines count={4} withAnchor={false} /></div>
     <div class="mk-container mk-cta-inner">
       <h2>Try it. It's free.</h2>
       <p>No account. No upload. Just download and point it at a folder.</p>

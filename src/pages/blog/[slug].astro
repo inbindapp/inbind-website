@@ -1,35 +1,46 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { url } from '../../utils/url';
 
+const COLLECTION_URL = 'https://cdn.inbind.app/content/596/posts';
+
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts.map((post) => ({
+  const res = await fetch('https://cdn.inbind.app/content/596/posts/_index.json');
+  const data = res.ok ? await res.json() : { items: [] };
+  return (data.items ?? []).map((post: any) => ({
     params: { slug: post.slug },
-    props: { post },
   }));
 }
 
+const { slug } = Astro.params;
+const res = await fetch(`${COLLECTION_URL}/${slug}.json`);
+const post = await res.json();
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+function formatDate(iso: string) {
+  const d = new Date(iso);
+  const day = d.getUTCDate();
+  const month = d.toLocaleDateString('en-GB', { month: 'long', timeZone: 'UTC' });
+  const year = d.getUTCFullYear();
+  const suffix = day === 1 || day === 21 || day === 31 ? 'st'
+    : day === 2 || day === 22 ? 'nd'
+    : day === 3 || day === 23 ? 'rd'
+    : 'th';
+  return `${day}${suffix} ${month}, ${year}`;
+}
 ---
 
-<Layout title={post.data.title} description={post.data.lead}>
+<Layout title={post['meta-title'] || post.name} description={post['meta-description'] || post['post-summary']}>
   <Header />
 
   <article class="mk-post">
     <div class="mk-narrow">
       <a href={url('blog')} class="mk-back-link">← All posts</a>
-      <div class="mk-post-meta">{post.data.date} · 4 min read</div>
-      <h1>{post.data.title}</h1>
-      <p class="mk-post-lead">{post.data.lead}</p>
-      <div class="mk-post-body">
-        <Content />
-      </div>
+      <div class="mk-post-meta">{formatDate(post._meta.published_at)} · 4 min read</div>
+      <h1>{post.name}</h1>
+      <p class="mk-post-lead">{post['post-summary']}</p>
+      <div class="mk-post-body" set:html={post['post-body']} />
       <div class="mk-post-footer">
         <span style="color: var(--text-subtle); font-size: 14.5px;">Like this post? Inbind is free to try.</span>
         <a href={url('download')} class="mk-btn mk-btn--primary">Download Inbind</a>
