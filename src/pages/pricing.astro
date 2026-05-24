@@ -3,9 +3,56 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { url } from '../utils/url';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Is Inbind really free?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Download it, use it, keep your files. It uses your existing Claude Code or Codex subscription for AI, no separate setup needed.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Will there ever be a paid plan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "Probably. We're still figuring out what that looks like and who it's actually for. We'll be upfront about it before it happens.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Where do my notes live?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "In a folder on your computer as .md files. We don't have a cloud. If you put that folder in iCloud or Dropbox, it'll sync there.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you train on my notes?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "No. We don't see them.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What happens to my files if I stop using Inbind?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "Nothing. They're .md files in a folder. Open them in any other editor. We're not the kind of tool you have to migrate out of.",
+      },
+    },
+  ],
+};
 ---
 
-<Layout title="Pricing" description="Inbind is free to download and use. Local-first markdown editor with AI editing built in." ogImage="/og/pricing.png">
+<Layout title="Pricing" description="Inbind is free to download and use. Local-first markdown editor with AI editing built in." ogImage="/og/pricing.png" schema={schema}>
   <Header />
 
   <section class="mk-section" style="padding-top: 88px;">

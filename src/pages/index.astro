@@ -6,9 +6,29 @@ import FlowLines from '../components/FlowLines.astro';
 import FlowLinesZ from '../components/FlowLinesZ.astro';
 import AppMock from '../components/AppMock.astro';
 import { url } from '../utils/url';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Inbind',
+  url: 'https://inbind.app',
+  applicationCategory: 'ProductivityApplication',
+  operatingSystem: 'macOS, Windows, Linux',
+  description: 'A local-first markdown editor with built-in AI chat. Write, store context, and generate content in one window.',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Inbind',
+    url: 'https://inbind.app',
+  },
+};
 ---
 
-<Layout title="Inbind" description="A local-first markdown editor with built-in AI chat. For people already using AI and markdown who are tired of juggling four tools to get one draft out." ogImage="/og/home.png">
+<Layout title="Inbind — Markdown editor with AI chat" description="A local-first markdown editor with built-in AI chat. For people already using AI and markdown who are tired of juggling four tools to get one draft out." ogImage="/og/home.png" schema={schema}>
   <Header />
 
   <!-- HERO -->

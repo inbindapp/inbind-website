@@ -18,6 +18,20 @@ const { slug } = Astro.params;
 const res = await fetch(`${COLLECTION_URL}/${slug}.json`);
 const post = await res.json();
 
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post['meta-title'] || post.name,
+  description: post['meta-description'] || post['post-summary'],
+  datePublished: post._meta?.published_at,
+  url: `https://inbind.app/blog/${slug}`,
+  publisher: {
+    '@type': 'Organization',
+    name: 'Inbind',
+    url: 'https://inbind.app',
+  },
+};
+
 function formatDate(iso: string) {
   const d = new Date(iso);
   const day = d.getUTCDate();
@@ -31,7 +45,7 @@ function formatDate(iso: string) {
 }
 ---
 
-<Layout title={post['meta-title'] || post.name} description={post['meta-description'] || post['post-summary']} ogImage={`/og/blog/${slug}.png`}>
+<Layout title={post['meta-title'] || post.name} description={post['meta-description'] || post['post-summary']} ogImage={`/og/blog/${slug}.png`} schema={schema}>
   <Header />
 
   <article class="mk-post">

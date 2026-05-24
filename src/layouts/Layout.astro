@@ -5,15 +5,17 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  schema?: object;
 }
 
 const {
   title = 'Inbind',
   description = 'A local-first markdown editor with built-in AI chat. For people already using AI and markdown who are tired of juggling four tools to get one draft out.',
   ogImage = '/og/home.png',
+  schema,
 } = Astro.props;
 
-const pageTitle = title === 'Inbind' ? title : `${title} — Inbind`;
+const pageTitle = title.includes('Inbind') ? title : `${title} — Inbind`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL(ogImage, Astro.site).toString();
 ---
@@ -28,6 +30,7 @@ const ogImageUrl = new URL(ogImage, Astro.site).toString();
   <link rel="canonical" href={canonicalUrl} />
 
   <!-- Open Graph -->
+  <meta property="og:site_name" content="Inbind" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:title" content={pageTitle} />
@@ -42,6 +45,7 @@ const ogImageUrl = new URL(ogImage, Astro.site).toString();
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImageUrl} />
 
+  {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
   <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
