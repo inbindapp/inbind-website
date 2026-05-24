@@ -18,6 +18,10 @@ const pages: Record<string, { title: string; description: string }> = {
     title: 'Use Cases',
     description: 'If you already use AI and markdown but keep losing context between tools, Inbind is where that workflow comes together.',
   },
+  blog: {
+    title: 'Blog',
+    description: 'Notes from the Inbind team. Honest posts about building the product.',
+  },
 };
 
 export const getStaticPaths: GetStaticPaths = () =>

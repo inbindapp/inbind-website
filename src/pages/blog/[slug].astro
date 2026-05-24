@@ -31,7 +31,7 @@ function formatDate(iso: string) {
 }
 ---
 
-<Layout title={post['meta-title'] || post.name} description={post['meta-description'] || post['post-summary']}>
+<Layout title={post['meta-title'] || post.name} description={post['meta-description'] || post['post-summary']} ogImage={`/og/blog/${slug}.png`}>
   <Header />
 
   <article class="mk-post">

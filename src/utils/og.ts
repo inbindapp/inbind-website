@@ -20,6 +20,16 @@ const logoPng = (() => {
   return `data:image/png;base64,${Buffer.from(buf).toString('base64')}`;
 })();
 
+function titleFontSize(title: string): number {
+  if (title.length <= 30) return 76;
+  if (title.length <= 50) return 62;
+  return 50;
+}
+
+function truncate(text: string, max: number): string {
+  return text.length <= max ? text : text.slice(0, max).trimEnd() + '…';
+}
+
 export async function generateOgImage(title: string, description: string): Promise<Buffer> {
   const svg = await satori(
     {
@@ -60,13 +70,13 @@ export async function generateOgImage(title: string, description: string): Promi
                     style: {
                       fontFamily: '"Sora"',
                       fontWeight: 700,
-                      fontSize: '76px',
+                      fontSize: `${titleFontSize(title)}px`,
                       lineHeight: 1.1,
                       color: '#2b2b2b',
                       letterSpacing: '-1.5px',
                       margin: '0',
                     },
-                    children: title,
+                    children: truncate(title, 70),
                   },
                 },
                 {
@@ -81,7 +91,7 @@ export async function generateOgImage(title: string, description: string): Promi
                       margin: '0',
                       maxWidth: '800px',
                     },
-                    children: description,
+                    children: truncate(description, 120),
                   },
                 },
               ],
