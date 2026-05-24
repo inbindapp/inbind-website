@@ -4,7 +4,7 @@ import { generateOgImage } from '../../utils/og';
 const pages: Record<string, { title: string; description: string }> = {
   home: {
     title: 'Inbind',
-    description: 'Take notes the way AI likes to read them. A context-first writing tool for founders and small teams.',
+    description: 'For people already using AI and markdown, tired of juggling four tools just to get a draft out.',
   },
   pricing: {
     title: 'Pricing',
