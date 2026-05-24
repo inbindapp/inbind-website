@@ -5,15 +5,15 @@ import Footer from '../components/Footer.astro';
 import { url } from '../utils/url';
 ---
 
-<Layout title="Pricing" description="Inbind is free for one. $12/person/month for teams. No lock-in.">
+<Layout title="Pricing" description="Inbind is free to download and use. Local-first markdown editor with AI editing built in.">
   <Header />
 
   <section class="mk-section" style="padding-top: 88px;">
     <div class="mk-container">
       <div class="mk-section-head">
         <div class="mk-section-eyebrow">Pricing</div>
-        <h2 class="mk-section-h">Free for one. Reasonable for a team.</h2>
-        <p class="mk-section-sub">The app itself is free and open source. Team is for shared workspaces and the AI agent that reads them.</p>
+        <h2 class="mk-section-h">Free. No strings.</h2>
+        <p class="mk-section-sub">The full editor is free to download and use. We may introduce a paid plan down the line, but we'll be honest about what it is and who it's for when we do.</p>
       </div>
 
       <div class="mk-pricing-grid">
@@ -24,93 +24,35 @@ import { url } from '../utils/url';
             <span class="mk-price-amt">$0</span>
             <span class="mk-price-per">/ forever</span>
           </div>
-          <p style="color: var(--text-subtle); margin: 0; font-size: 14.5px;">The full editor. Local-only. Bring your own API key for the AI panel.</p>
+          <p style="color: var(--text-subtle); margin: 0; font-size: 14.5px;">The full editor. Local-only. Uses your Claude Code or Codex subscription for AI.</p>
           <ul>
             <li>
               <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="2 8 6 12 14 4"/>
               </svg>
-              Markdown editor with split, focus, and outline modes
+              Real-time markdown editor
             </li>
             <li>
               <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="2 8 6 12 14 4"/>
               </svg>
-              Git, files, and assets in the sidebar
+              Folder-based file browser with page properties
             </li>
             <li>
               <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="2 8 6 12 14 4"/>
               </svg>
-              Wiki links and inline images
+              AI chat with visual edit approval
             </li>
             <li>
               <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="2 8 6 12 14 4"/>
               </svg>
-              Bring-your-own AI key (OpenAI, Anthropic, or Ollama)
-            </li>
-            <li>
-              <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="2 8 6 12 14 4"/>
-              </svg>
-              Open source on GitHub
+              Works with your Claude Code or Codex subscription
             </li>
           </ul>
           <a class="mk-btn mk-btn--ghost" href={url('download')} style="margin-top: auto;">Download free</a>
         </div>
-
-        <!-- Team -->
-        <div class="mk-price-card is-highlight">
-          <span class="mk-price-card-tag">For teams</span>
-          <h3>Team</h3>
-          <div class="mk-price">
-            <span class="mk-price-amt">$12</span>
-            <span class="mk-price-per">/ person · month</span>
-          </div>
-          <p style="color: var(--text-subtle); margin: 0; font-size: 14.5px;">Everything in Free, plus shared brand context and our hosted AI agent.</p>
-          <ul>
-            <li>
-              <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="2 8 6 12 14 4"/>
-              </svg>
-              Shared brand voice notes that sync across the team
-            </li>
-            <li>
-              <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="2 8 6 12 14 4"/>
-              </svg>
-              Hosted AI agent. No API key juggling
-            </li>
-            <li>
-              <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="2 8 6 12 14 4"/>
-              </svg>
-              Per-workspace access controls
-            </li>
-            <li>
-              <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="2 8 6 12 14 4"/>
-              </svg>
-              Priority support from the people who built it
-            </li>
-            <li>
-              <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="2 8 6 12 14 4"/>
-              </svg>
-              30-day trial. Cancel any time
-            </li>
-          </ul>
-          <a class="mk-btn mk-btn--primary" href="mailto:hello@inbind.app?subject=Team%20trial" style="margin-top: auto;">Start a team trial</a>
-        </div>
-      </div>
-
-      <!-- Honest copy block -->
-      <div style="max-width: 720px; margin: 72px auto 0; text-align: center;">
-        <h3 style="font-family: var(--font-display); font-size: 22px; font-weight: 600; margin: 0 0 12px; letter-spacing: -0.02em;">What "Team" actually means</h3>
-        <p style="font-size: 16px; line-height: 1.65; color: var(--text-subtle); margin: 0;">
-          We built Inbind because we kept losing context every time we switched tools. Team plans exist so a small group can share that context, not so we can charge for things that should be free. If you're a team of two on a tight budget, write us. We'll figure something out.
-        </p>
       </div>
 
       <!-- FAQ -->
@@ -119,7 +61,12 @@ import { url } from '../utils/url';
 
         <details class="mk-faq-item">
           <summary>Is Inbind really free?</summary>
-          <p class="mk-faq-body">The desktop app is open source and free. Bring your own AI key and you'll never pay us a cent. Team is for groups that want shared context and don't want to manage keys.</p>
+          <p class="mk-faq-body">Yes. Download it, use it, keep your files. It uses your existing Claude Code or Codex subscription for AI, no separate setup needed.</p>
+        </details>
+
+        <details class="mk-faq-item">
+          <summary>Will there ever be a paid plan?</summary>
+          <p class="mk-faq-body">Probably. We're still figuring out what that looks like and who it's actually for. We'll be upfront about it before it happens.</p>
         </details>
 
         <details class="mk-faq-item">
@@ -129,17 +76,12 @@ import { url } from '../utils/url';
 
         <details class="mk-faq-item">
           <summary>Do you train on my notes?</summary>
-          <p class="mk-faq-body">No. We don't see them. The Team plan routes AI calls through us, but we don't store the prompts or the responses. It's in the privacy policy.</p>
+          <p class="mk-faq-body">No. We don't see them.</p>
         </details>
 
         <details class="mk-faq-item">
-          <summary>What happens to my files if I cancel?</summary>
+          <summary>What happens to my files if I stop using Inbind?</summary>
           <p class="mk-faq-body">Nothing. They're <code>.md</code> files in a folder. Open them in any other editor. We're not the kind of tool you have to migrate out of.</p>
-        </details>
-
-        <details class="mk-faq-item">
-          <summary>Is there a free trial of Team?</summary>
-          <p class="mk-faq-body">30 days. No credit card up front. We'll email you the day before it ends.</p>
         </details>
       </div>
     </div>

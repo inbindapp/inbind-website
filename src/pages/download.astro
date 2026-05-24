@@ -4,7 +4,14 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CmdBlock from '../components/CmdBlock.astro';
 
-const version = '0.1.21';
+let version = '0.1.21';
+try {
+  const res = await fetch('https://api.github.com/repos/inbindapp/inbind/releases/latest');
+  if (res.ok) {
+    const { tag_name } = await res.json();
+    if (tag_name) version = tag_name.replace(/^v/, '');
+  }
+} catch {}
 const base = `https://github.com/inbindapp/inbind/releases/download/v${version}`;
 
 const platforms = [
@@ -12,25 +19,25 @@ const platforms = [
     name: 'macOS',
     meta: 'macOS 11 Big Sur or later',
     options: [
-      { label: 'Apple Silicon (M-series)', arch: '.dmg · arm64', href: `${base}/Inbind_${version}_aarch64.dmg` },
-      { label: 'Intel', arch: '.dmg · x86_64', href: `${base}/Inbind_${version}_x86_64.dmg` },
+      { label: 'Apple Silicon (M-series)', arch: '.dmg · arm64', href: `${base}/Inbind_${version}_aarch64.dmg`, asset: 'Inbind_{v}_aarch64.dmg' },
+      { label: 'Intel', arch: '.dmg · x86_64', href: `${base}/Inbind_${version}_x86_64.dmg`, asset: 'Inbind_{v}_x86_64.dmg' },
     ],
   },
   {
     name: 'Windows',
     meta: 'Windows 10 / 11',
     options: [
-      { label: 'Installer', arch: '.msi · x64', href: `${base}/Inbind_${version}_x64_en-US.msi` },
-      { label: 'Setup', arch: '.exe · x64', href: `${base}/Inbind_${version}_x64-setup.exe` },
+      { label: 'Installer', arch: '.msi · x64', href: `${base}/Inbind_${version}_x64_en-US.msi`, asset: 'Inbind_{v}_x64_en-US.msi' },
+      { label: 'Setup', arch: '.exe · x64', href: `${base}/Inbind_${version}_x64-setup.exe`, asset: 'Inbind_{v}_x64-setup.exe' },
     ],
   },
   {
     name: 'Linux',
     meta: 'Ubuntu, Debian, Fedora, Arch',
     options: [
-      { label: 'AppImage', arch: '.AppImage · amd64', href: `${base}/Inbind_${version}_amd64.AppImage` },
-      { label: 'Debian / Ubuntu', arch: '.deb · amd64', href: `${base}/Inbind_${version}_amd64.deb` },
-      { label: 'Fedora / RHEL', arch: '.rpm · x86_64', href: `${base}/Inbind-${version}-1.x86_64.rpm` },
+      { label: 'AppImage', arch: '.AppImage · amd64', href: `${base}/Inbind_${version}_amd64.AppImage`, asset: 'Inbind_{v}_amd64.AppImage' },
+      { label: 'Debian / Ubuntu', arch: '.deb · amd64', href: `${base}/Inbind_${version}_amd64.deb`, asset: 'Inbind_{v}_amd64.deb' },
+      { label: 'Fedora / RHEL', arch: '.rpm · x86_64', href: `${base}/Inbind-${version}-1.x86_64.rpm`, asset: 'Inbind-{v}-1.x86_64.rpm' },
     ],
   },
 ];
@@ -42,7 +49,7 @@ const platforms = [
   <section class="mk-section mk-section--download">
     <div class="mk-container">
       <div class="mk-section-head">
-        <div class="mk-section-eyebrow">Download — version {version}</div>
+        <div class="mk-section-eyebrow" id="version-label">Download — version {version}</div>
         <h2 class="mk-section-h">Pick your computer.</h2>
         <p class="mk-section-sub">Inbind is free to download and use.</p>
       </div>
@@ -58,7 +65,7 @@ const platforms = [
             </div>
             <div class="mk-platform-options">
               {p.options.map((o) => (
-                <a href={o.href} class="mk-platform-option">
+                <a href={o.href} data-asset={o.asset} class="mk-platform-option">
                   <span>{o.label}</span>
                   <span class="arch">{o.arch}</span>
                 </a>
@@ -86,3 +93,27 @@ const platforms = [
 
   <Footer />
 </Layout>
+
+<script>
+  (async () => {
+    try {
+      const res = await fetch('https://api.github.com/repos/inbindapp/inbind/releases/latest');
+      if (!res.ok) return;
+      const { tag_name } = await res.json();
+      if (!tag_name) return;
+
+      const version = tag_name.replace(/^v/, '');
+      const base = `https://github.com/inbindapp/inbind/releases/download/${tag_name}`;
+
+      document.querySelectorAll<HTMLAnchorElement>('[data-asset]').forEach((el) => {
+        const asset = el.dataset.asset!.replace('{v}', version);
+        el.href = `${base}/${asset}`;
+      });
+
+      const label = document.getElementById('version-label');
+      if (label) label.textContent = `Download — version ${version}`;
+    } catch {
+      // silently fall back to the build-time version
+    }
+  })();
+</script>
