@@ -2,9 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import CmdBlock from '../components/CmdBlock.astro';
 
-let version = '0.1.21';
+let version = '0.1.25';
 try {
   const res = await fetch('https://api.github.com/repos/inbindapp/inbind/releases/latest');
   if (res.ok) {
@@ -12,35 +11,20 @@ try {
     if (tag_name) version = tag_name.replace(/^v/, '');
   }
 } catch {}
+
 const base = `https://github.com/inbindapp/inbind/releases/download/v${version}`;
 
-const platforms = [
-  {
-    name: 'macOS',
-    meta: 'macOS 11 Big Sur or later',
-    options: [
-      { label: 'Apple Silicon (M-series)', arch: '.dmg · arm64', href: `${base}/Inbind_${version}_aarch64.dmg`, asset: 'Inbind_{v}_aarch64.dmg' },
-      { label: 'Intel', arch: '.dmg · x86_64', href: `${base}/Inbind_${version}_x86_64.dmg`, asset: 'Inbind_{v}_x86_64.dmg' },
-    ],
-  },
-  {
-    name: 'Windows',
-    meta: 'Windows 10 / 11',
-    options: [
-      { label: 'Installer', arch: '.msi · x64', href: `${base}/Inbind_${version}_x64_en-US.msi`, asset: 'Inbind_{v}_x64_en-US.msi' },
-      { label: 'Setup', arch: '.exe · x64', href: `${base}/Inbind_${version}_x64-setup.exe`, asset: 'Inbind_{v}_x64-setup.exe' },
-    ],
-  },
-  {
-    name: 'Linux',
-    meta: 'Ubuntu, Debian, Fedora, Arch',
-    options: [
-      { label: 'AppImage', arch: '.AppImage · amd64', href: `${base}/Inbind_${version}_amd64.AppImage`, asset: 'Inbind_{v}_amd64.AppImage' },
-      { label: 'Debian / Ubuntu', arch: '.deb · amd64', href: `${base}/Inbind_${version}_amd64.deb`, asset: 'Inbind_{v}_amd64.deb' },
-      { label: 'Fedora / RHEL', arch: '.rpm · x86_64', href: `${base}/Inbind-${version}-1.x86_64.rpm`, asset: 'Inbind-{v}-1.x86_64.rpm' },
-    ],
-  },
-];
+// Prompt templates — {v} is replaced with the version at runtime
+const T = {
+  macosArm:   `Install Inbind on this Mac.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_aarch64.dmg\n\nOpen the DMG, drag Inbind to /Applications, then run in Terminal:\n\nxattr -cr "/Applications/Inbind.app"`,
+  macosIntel: `Install Inbind on this Mac.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_x86_64.dmg\n\nOpen the DMG, drag Inbind to /Applications, then run in Terminal:\n\nxattr -cr "/Applications/Inbind.app"`,
+  windows:    `Install Inbind on this Windows PC.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_x64_en-US.msi\n\nRun the installer and follow the setup wizard.`,
+  linux:      `Install Inbind on this Linux machine.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_amd64.AppImage\n\nMake it executable and launch it:\n\nchmod +x Inbind_{v}_amd64.AppImage && ./Inbind_{v}_amd64.AppImage`,
+};
+
+function fill(tpl: string, v: string) {
+  return tpl.replace(/{v}/g, v);
+}
 ---
 
 <Layout title="Download" description="Download Inbind for macOS, Windows, and Linux. Free to download and use." ogImage="/og/download.png">
@@ -48,45 +32,117 @@ const platforms = [
 
   <section class="mk-section mk-section--download">
     <div class="mk-container">
-      <div class="mk-section-head">
-        <div class="mk-section-eyebrow" id="version-label">Download — version {version}</div>
-        <h2 class="mk-section-h">Pick your computer.</h2>
-        <p class="mk-section-sub">Inbind is free to download and use.</p>
+      <!-- Step 1: platform selector -->
+      <div id="dl-step1">
+        <div class="mk-section-head">
+          <h2 class="mk-section-h">Pick your computer.</h2>
+          <p class="mk-section-sub">Inbind is free to download and use.</p>
+          <div class="mk-section-eyebrow" id="version-label" style="margin-top: 12px;">version {version}</div>
+        </div>
+
+        <div class="mk-dl-grid">
+          <button class="mk-dl-card" data-platform="macos">
+            <span class="mk-dl-card-name">macOS</span>
+            <span class="mk-dl-card-meta">11 Big Sur or later</span>
+          </button>
+          <button class="mk-dl-card" data-platform="windows">
+            <span class="mk-dl-card-name">Windows</span>
+            <span class="mk-dl-card-meta">10 / 11</span>
+          </button>
+          <button class="mk-dl-card" data-platform="linux">
+            <span class="mk-dl-card-name">Linux</span>
+            <span class="mk-dl-card-meta">Ubuntu, Debian, Fedora, Arch</span>
+          </button>
+        </div>
       </div>
 
-      <div class="mk-platforms">
-        {platforms.map((p) => (
-          <div class="mk-platform">
-            <div class="mk-platform-header">
-              <div>
-                <h3>{p.name}</h3>
-                <div class="mk-platform-meta">{p.meta}</div>
-              </div>
-            </div>
-            <div class="mk-platform-options">
-              {p.options.map((o) => (
-                <a href={o.href} data-asset={o.asset} class="mk-platform-option">
-                  <span>{o.label}</span>
-                  <span class="arch">{o.arch}</span>
-                </a>
-              ))}
+      <!-- Step 2: install instructions (hidden until platform selected) -->
+      <div id="dl-step2" hidden>
+
+        <!-- macOS panel -->
+        <div class="mk-dl-panel" data-panel="macos" hidden>
+          <h2 class="mk-section-h">Install on macOS</h2>
+          <p class="mk-dl-prompt-intro">Paste this into Claude or Codex. It'll handle the rest.</p>
+
+          <div class="mk-dl-arch-tabs" role="tablist">
+            <button class="mk-dl-arch-tab is-active" data-arch="macosArm" role="tab" aria-selected="true">Apple Silicon</button>
+            <button class="mk-dl-arch-tab" data-arch="macosIntel" role="tab" aria-selected="false">Intel</button>
+          </div>
+
+          <div class="mk-prompt-block">
+            <pre class="mk-prompt-pre" id="prompt-macos">{fill(T.macosArm, version)}</pre>
+            <button class="mk-prompt-copy" id="copy-macos">Copy</button>
+          </div>
+
+          <div class="mk-dl-direct">
+            <div class="mk-dl-direct-label">Or download directly</div>
+            <div class="mk-dl-direct-links">
+              <a href={`${base}/Inbind_${version}_aarch64.dmg`} data-asset="Inbind_{v}_aarch64.dmg" class="mk-platform-option">
+                <span>Apple Silicon</span><span class="arch">.dmg · arm64</span>
+              </a>
+              <a href={`${base}/Inbind_${version}_x86_64.dmg`} data-asset="Inbind_{v}_x86_64.dmg" class="mk-platform-option">
+                <span>Intel</span><span class="arch">.dmg · x86_64</span>
+              </a>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
 
-      <div class="mk-notice">
-        <h3>One thing about the macOS build</h3>
-        <p>
-          The app isn't notarized yet. macOS will block it on first launch. Run this command in Terminal after installing to fix it. Or use <a href="https://itsalin.com/appInfo/?id=sentinel" target="_blank" rel="noopener noreferrer">Sentinel</a> if you'd rather skip the command line.
-        </p>
-        <CmdBlock command='xattr -cr "/Applications/Inbind.app"' />
-      </div>
+        <!-- Windows panel -->
+        <div class="mk-dl-panel" data-panel="windows" hidden>
+          <h2 class="mk-section-h">Install on Windows</h2>
+          <p class="mk-dl-prompt-intro">Paste this into Claude or Codex. It'll handle the rest.</p>
 
-      <div class="mk-download-actions">
-        <a href="https://github.com/inbindapp/inbind/releases" target="_blank" rel="noopener" class="mk-btn mk-btn--ghost">
-          Older versions and changelog →
-        </a>
+          <div class="mk-prompt-block">
+            <pre class="mk-prompt-pre" id="prompt-windows">{fill(T.windows, version)}</pre>
+            <button class="mk-prompt-copy" id="copy-windows">Copy</button>
+          </div>
+
+          <div class="mk-dl-direct">
+            <div class="mk-dl-direct-label">Or download directly</div>
+            <div class="mk-dl-direct-links">
+              <a href={`${base}/Inbind_${version}_x64_en-US.msi`} data-asset="Inbind_{v}_x64_en-US.msi" class="mk-platform-option">
+                <span>Installer</span><span class="arch">.msi · x64</span>
+              </a>
+              <a href={`${base}/Inbind_${version}_x64-setup.exe`} data-asset="Inbind_{v}_x64-setup.exe" class="mk-platform-option">
+                <span>Setup</span><span class="arch">.exe · x64</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Linux panel -->
+        <div class="mk-dl-panel" data-panel="linux" hidden>
+          <h2 class="mk-section-h">Install on Linux</h2>
+          <p class="mk-dl-prompt-intro">Paste this into Claude or Codex. It'll handle the rest.</p>
+
+          <div class="mk-prompt-block">
+            <pre class="mk-prompt-pre" id="prompt-linux">{fill(T.linux, version)}</pre>
+            <button class="mk-prompt-copy" id="copy-linux">Copy</button>
+          </div>
+
+          <div class="mk-dl-direct">
+            <div class="mk-dl-direct-label">Or download directly</div>
+            <div class="mk-dl-direct-links">
+              <a href={`${base}/Inbind_${version}_amd64.AppImage`} data-asset="Inbind_{v}_amd64.AppImage" class="mk-platform-option">
+                <span>AppImage</span><span class="arch">.AppImage · amd64</span>
+              </a>
+              <a href={`${base}/Inbind_${version}_amd64.deb`} data-asset="Inbind_{v}_amd64.deb" class="mk-platform-option">
+                <span>Debian / Ubuntu</span><span class="arch">.deb · amd64</span>
+              </a>
+              <a href={`${base}/Inbind-${version}-1.x86_64.rpm`} data-asset="Inbind-{v}-1.x86_64.rpm" class="mk-platform-option">
+                <span>Fedora / RHEL</span><span class="arch">.rpm · x86_64</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="mk-dl-back-row">
+          <button id="dl-back" class="mk-btn mk-btn--ghost">← Pick a different platform</button>
+          <a href="https://github.com/inbindapp/inbind/releases" target="_blank" rel="noopener" class="mk-btn mk-btn--ghost">
+            Older versions and changelog →
+          </a>
+        </div>
+
       </div>
     </div>
   </section>
@@ -94,7 +150,83 @@ const platforms = [
   <Footer />
 </Layout>
 
-<script>
+<script define:vars={{ version, T }} is:inline>
+  let currentVersion = version;
+  let currentMacArch = 'macosArm';
+
+  function fill(tpl, v) {
+    return tpl.replace(/{v}/g, v);
+  }
+
+  function detectPlatform() {
+    const ua = navigator.userAgent.toLowerCase();
+    if (ua.includes('win')) return 'windows';
+    if (ua.includes('linux')) return 'linux';
+    return 'macos';
+  }
+
+  function showPanel(platform) {
+    document.getElementById('dl-step1').hidden = true;
+    document.getElementById('dl-step2').hidden = false;
+    document.querySelectorAll('.mk-dl-panel').forEach(panel => {
+      panel.hidden = panel.dataset.panel !== platform;
+    });
+  }
+
+  // Platform card clicks
+  document.querySelectorAll('.mk-dl-card').forEach(btn => {
+    btn.addEventListener('click', () => showPanel(btn.dataset.platform));
+  });
+
+  // Back button
+  document.getElementById('dl-back').addEventListener('click', () => {
+    document.getElementById('dl-step1').hidden = false;
+    document.getElementById('dl-step2').hidden = true;
+    document.querySelectorAll('.mk-dl-panel').forEach(p => { p.hidden = true; });
+  });
+
+  // macOS arch tabs
+  document.querySelectorAll('.mk-dl-arch-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      currentMacArch = tab.dataset.arch;
+      document.querySelectorAll('.mk-dl-arch-tab').forEach(t => {
+        t.classList.toggle('is-active', t === tab);
+        t.setAttribute('aria-selected', String(t === tab));
+      });
+      document.getElementById('prompt-macos').textContent = fill(T[currentMacArch], currentVersion);
+    });
+  });
+
+  // Copy buttons
+  document.querySelectorAll('.mk-prompt-copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pre = btn.closest('.mk-prompt-block').querySelector('.mk-prompt-pre');
+      navigator.clipboard.writeText(pre.textContent ?? '');
+      btn.textContent = 'Copied';
+      btn.classList.add('is-copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('is-copied');
+      }, 2000);
+    });
+  });
+
+  // Auto-detect and advance to step 2
+  const detected = detectPlatform();
+  document.querySelector(`[data-platform="${detected}"]`)?.classList.add('is-detected');
+  showPanel(detected);
+
+  // Try to detect Apple Silicon vs Intel for macOS
+  if (detected === 'macos' && navigator.userAgentData) {
+    navigator.userAgentData.getHighEntropyValues(['architecture']).then(ua => {
+      if (ua.architecture === 'arm') return; // already on macosArm (default)
+      // Switch to Intel tab
+      const intelTab = document.querySelector('[data-arch="macosIntel"]');
+      if (intelTab) intelTab.click();
+    }).catch(() => {});
+  }
+
+  // Client-side version update from GitHub API
   (async () => {
     try {
       const res = await fetch('https://api.github.com/repos/inbindapp/inbind/releases/latest');
@@ -102,18 +234,25 @@ const platforms = [
       const { tag_name } = await res.json();
       if (!tag_name) return;
 
-      const version = tag_name.replace(/^v/, '');
+      currentVersion = tag_name.replace(/^v/, '');
       const base = `https://github.com/inbindapp/inbind/releases/download/${tag_name}`;
 
-      document.querySelectorAll<HTMLAnchorElement>('[data-asset]').forEach((el) => {
-        const asset = el.dataset.asset!.replace('{v}', version);
+      // Update download link hrefs
+      document.querySelectorAll('[data-asset]').forEach(el => {
+        const asset = el.dataset.asset.replace(/{v}/g, currentVersion);
         el.href = `${base}/${asset}`;
       });
 
+      // Update version eyebrow
       const label = document.getElementById('version-label');
-      if (label) label.textContent = `Download — version ${version}`;
+      if (label) label.textContent = `version ${currentVersion}`;
+
+      // Update prompt texts
+      document.getElementById('prompt-macos').textContent = fill(T[currentMacArch], currentVersion);
+      document.getElementById('prompt-windows').textContent = fill(T.windows, currentVersion);
+      document.getElementById('prompt-linux').textContent = fill(T.linux, currentVersion);
     } catch {
-      // silently fall back to the build-time version
+      // fall back to build-time version
     }
   })();
 </script>

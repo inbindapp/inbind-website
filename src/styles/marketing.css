@@ -383,41 +383,73 @@
   font-size: 15px; line-height: 1.65; color: var(--text-subtle); padding-bottom: 20px;
 }
 
-/* Download page layout */
+/* Download page */
 .mk-section--download { padding-top: 88px; padding-bottom: 48px; }
-.mk-platform-header { display: flex; align-items: center; gap: 14px; color: var(--text); }
-.mk-notice {
-  max-width: 720px; margin: 56px auto 0; padding: 24px 28px;
-  background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);
-}
-.mk-notice h3 {
-  font-family: var(--font-display); font-size: 17px; font-weight: 600;
-  margin: 0 0 8px; letter-spacing: -0.015em;
-}
-.mk-notice p { font-size: 14.5px; line-height: 1.6; color: var(--text-subtle); margin: 0; }
-.mk-download-actions { text-align: center; margin-top: 40px; }
 
-/* Download platforms */
-.mk-platforms { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.mk-platform {
+/* Step 1: platform selector cards */
+.mk-dl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.mk-dl-card {
   background: var(--bg-panel); border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg); padding: 32px 28px;
-  display: flex; flex-direction: column; gap: 16px;
+  display: flex; flex-direction: column; gap: 8px;
+  cursor: pointer; text-align: left; width: 100%; font-family: inherit;
   transition: border-color var(--dur-med), transform var(--dur-med);
 }
-.mk-platform:hover { border-color: var(--accent); transform: translateY(-2px); }
-.mk-platform h3 { font-family: var(--font-display); font-size: 22px; font-weight: 600; margin: 0; }
-.mk-platform-meta { font-size: 13px; color: var(--text-muted); font-family: var(--font-mono); }
-.mk-platform-options { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+.mk-dl-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.mk-dl-card.is-detected { border-color: var(--accent); background: var(--accent-light); }
+.mk-dl-card-name { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; }
+.mk-dl-card-meta { font-size: 13px; color: var(--text-muted); font-family: var(--font-mono); }
+
+/* Step 2: install panel */
+.mk-dl-panel { max-width: 680px; margin: 0 auto; }
+.mk-dl-prompt-intro { font-size: 16px; color: var(--text-subtle); margin: 0 0 20px; }
+
+/* macOS chip toggle */
+.mk-dl-arch-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+.mk-dl-arch-tab {
+  padding: 6px 14px; border: 1px solid var(--border-subtle);
+  border-radius: var(--radius); font-size: 14px; font-family: inherit;
+  background: var(--bg-panel); color: var(--text-subtle); cursor: pointer;
+  transition: background var(--dur-med), color var(--dur-med), border-color var(--dur-med);
+}
+.mk-dl-arch-tab.is-active { background: var(--bg-hover); color: var(--text); border-color: var(--border); }
+.mk-dl-arch-tab:hover:not(.is-active) { background: var(--bg-hover); }
+
+/* AI install prompt block */
+.mk-prompt-block { position: relative; }
+.mk-prompt-pre {
+  font-family: var(--font-mono); font-size: 13.5px; line-height: 1.75;
+  background: var(--bg-sidebar); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); padding: 22px 24px;
+  padding-right: 80px; white-space: pre-wrap; word-break: break-all;
+  margin: 0; color: var(--text);
+}
+.mk-prompt-copy {
+  position: absolute; top: 14px; right: 14px;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 5px 12px;
+  font-size: 12px; font-family: inherit; color: var(--text-subtle);
+  cursor: pointer; white-space: nowrap;
+  transition: color var(--dur-med), border-color var(--dur-med);
+}
+.mk-prompt-copy:hover { color: var(--accent); border-color: var(--accent); }
+.mk-prompt-copy.is-copied { color: var(--success); border-color: var(--success); }
+
+/* Direct download links */
+.mk-dl-direct { margin-top: 28px; }
+.mk-dl-direct-label { font-size: 12px; color: var(--text-muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+.mk-dl-direct-links { display: flex; flex-direction: column; gap: 8px; }
 .mk-platform-option {
   display: flex; align-items: center; justify-content: space-between;
   padding: 10px 14px; border: 1px solid var(--border-subtle);
   border-radius: var(--radius); font-size: 14px; color: var(--text);
-  text-decoration: none; border-bottom: 1px solid var(--border-subtle);
-  transition: background var(--dur-med);
+  text-decoration: none; transition: background var(--dur-med), border-color var(--dur-med);
 }
-.mk-platform-option:hover { background: var(--bg-hover); border-color: var(--border); border-bottom: 1px solid var(--border); }
+.mk-platform-option:hover { background: var(--bg-hover); border-color: var(--border); }
 .mk-platform-option .arch { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+
+/* Bottom row: back + changelog */
+.mk-dl-back-row { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-top: 48px; }
 
 /* Blog */
 .mk-blog-list { display: flex; flex-direction: column; gap: 0; max-width: 720px; margin: 0 auto; }
@@ -673,7 +705,7 @@
 
 @media (max-width: 900px) {
   .mk-not-fit-grid { grid-template-columns: 1fr; }
-  .mk-features, .mk-platforms { grid-template-columns: 1fr 1fr; }
+  .mk-features, .mk-dl-grid { grid-template-columns: 1fr 1fr; }
   .mk-footer-grid { grid-template-columns: 1fr 1fr; }
   .mk-app-mock-chat { display: none; }
   .mk-uc-card,
@@ -686,7 +718,7 @@
   .mk-uc-card + .mk-uc-card { padding-top: 48px; }
 }
 @media (max-width: 640px) {
-  .mk-features, .mk-platforms, .mk-pricing-grid { grid-template-columns: 1fr; }
+  .mk-features, .mk-dl-grid, .mk-pricing-grid { grid-template-columns: 1fr; }
   .mk-nav { display: none; }
   .mk-app-mock-side { display: none; }
   .mk-blog-item { grid-template-columns: 1fr; gap: 8px; }
