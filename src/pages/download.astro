@@ -16,8 +16,8 @@ const base = `https://github.com/inbindapp/inbind/releases/download/v${version}`
 
 // Prompt templates — {v} is replaced with the version at runtime
 const T = {
-  macosArm:   `Install Inbind on this Mac.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_aarch64.dmg\n\nOpen the DMG, drag Inbind to /Applications, then run in Terminal:\n\nxattr -cr "/Applications/Inbind.app"`,
-  macosIntel: `Install Inbind on this Mac.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_x86_64.dmg\n\nOpen the DMG, drag Inbind to /Applications, then run in Terminal:\n\nxattr -cr "/Applications/Inbind.app"`,
+  macosArm:   `Install Inbind on this Mac.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_aarch64.dmg\n\nOpen the DMG, drag Inbind to /Applications, then run in Terminal:\n\nfind "/Applications/Inbind.app" -exec xattr -c {} \\;`,
+  macosIntel: `Install Inbind on this Mac.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_x86_64.dmg\n\nOpen the DMG, drag Inbind to /Applications, then run in Terminal:\n\nfind "/Applications/Inbind.app" -exec xattr -c {} \\;`,
   windows:    `Install Inbind on this Windows PC.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_x64_en-US.msi\n\nRun the installer and follow the setup wizard.`,
   linux:      `Install Inbind on this Linux machine.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_amd64.AppImage\n\nMake it executable and launch it:\n\nchmod +x Inbind_{v}_amd64.AppImage && ./Inbind_{v}_amd64.AppImage`,
 };
@@ -62,7 +62,7 @@ function fill(tpl: string, v: string) {
         <!-- macOS panel -->
         <div class="mk-dl-panel" data-panel="macos" hidden>
           <h2 class="mk-section-h">Install on macOS</h2>
-          <p class="mk-dl-prompt-intro">Paste this into Claude or Codex. It'll handle the rest.</p>
+          <p class="mk-dl-prompt-intro">Paste this into Claude Code or Codex. It'll handle the rest.</p>
 
           <div class="mk-dl-arch-tabs" role="tablist">
             <button class="mk-dl-arch-tab is-active" data-arch="macosArm" role="tab" aria-selected="true">Apple Silicon</button>
