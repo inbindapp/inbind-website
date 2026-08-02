@@ -58,7 +58,7 @@ const schema = {
             style="position: absolute; top: -80px; left: -80px; width: calc(100% + 160px); height: calc(100% + 160px); pointer-events: none;"
             opacity={0.35}
           />
-<div style="position: relative; z-index: 2;">
+<div class="mk-hero-mock" style="position: relative; z-index: 2;">
             <AppMock />
           </div>
         </div>
@@ -148,6 +148,7 @@ const schema = {
         <h2 class="mk-section-h">How Inbind is different.</h2>
         <p class="mk-section-sub">If your writing workflow involves three or four apps before you even start drafting, you know the pain. Inbind puts all of that in one window.</p>
       </div>
+      <div class="mk-compare-wrap">
       <div class="mk-compare">
         <table>
           <thead>
@@ -212,6 +213,8 @@ const schema = {
           </tbody>
         </table>
       </div>
+      <span class="mk-compare-fade" aria-hidden="true"></span>
+      </div>
     </div>
   </section>
 
@@ -228,3 +231,18 @@ const schema = {
 
   <Footer />
 </Layout>
+
+<script>
+  // Hide the comparison table's right-edge fade once scrolled to the end.
+  const wrap = document.querySelector('.mk-compare-wrap');
+  const scroller = wrap?.querySelector('.mk-compare') as HTMLElement | null;
+  if (wrap && scroller) {
+    const update = () => {
+      const atEnd = scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 1;
+      wrap.classList.toggle('is-end', atEnd);
+    };
+    scroller.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+</script>

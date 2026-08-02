@@ -16,7 +16,7 @@ function isActive(href: string) {
     <a href={homeUrl} class="mk-logo">
       <img src={url('logo-color.svg')} alt="Inbind" width="80" height="26" />
     </a>
-    <nav class="mk-nav">
+    <nav class="mk-nav" id="mk-nav">
       <a href={homeUrl} class:list={[{ active: isActive('/') && !isActive('/download') && !isActive('/pricing') && !isActive('/blog') && !isActive('/use-cases') }]}>Home</a>
       <a href={url('use-cases')} class:list={[{ active: isActive('/use-cases') }]}>Use Cases</a>
       <a href={url('download')} class:list={[{ active: isActive('/download') }]}>Download</a>
@@ -26,5 +26,34 @@ function isActive(href: string) {
     <div class="mk-header-cta">
       <a href={url('download')} class="mk-btn mk-btn--primary" style="height: 36px; font-size: 14px; padding: 0 14px;">Download</a>
     </div>
+    <button class="mk-nav-toggle" id="mk-nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="mk-nav">
+      <span class="mk-nav-toggle__bar"></span>
+      <span class="mk-nav-toggle__bar"></span>
+      <span class="mk-nav-toggle__bar"></span>
+    </button>
   </div>
 </header>
+
+<script>
+  const toggle = document.getElementById('mk-nav-toggle');
+  const nav = document.getElementById('mk-nav');
+
+  function setOpen(open: boolean) {
+    nav?.classList.toggle('is-open', open);
+    toggle?.setAttribute('aria-expanded', String(open));
+  }
+
+  toggle?.addEventListener('click', () => {
+    setOpen(!nav?.classList.contains('is-open'));
+  });
+
+  // Close when a link is tapped
+  nav?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+</script>
