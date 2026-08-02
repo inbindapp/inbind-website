@@ -185,7 +185,37 @@ import { url } from '../utils/url';
   const slashMenu = document.getElementById('mk-slash-menu') as HTMLElement | null;
   const mock     = document.querySelector('.mk-app-mock') as HTMLElement | null;
 
-  if (toolbar && content && slashMenu && mock) {
+  // On mobile the mock is a static, non-interactive preview: the format
+  // toolbar and slash menu depend on hover/keyboard, which don't work on
+  // touch, so we render the full desktop layout and scale it down to fit.
+  const isMobile = window.matchMedia('(max-width: 640px)').matches;
+  const mockEl = mock as HTMLElement | null;
+  const wrapper = mockEl?.parentElement as HTMLElement | null;
+
+  if (isMobile && mockEl && wrapper) {
+    content?.setAttribute('contenteditable', 'false');
+    const DESIGN_W = 780;
+    const BLEED = 18; // px the snapshot extends past the container padding each side
+    const fit = () => {
+      if (!window.matchMedia('(max-width: 640px)').matches) {
+        mockEl.style.width = mockEl.style.transform = '';
+        wrapper.style.width = wrapper.style.height = wrapper.style.marginInline = '';
+        return;
+      }
+      const avail = (wrapper.parentElement?.clientWidth ?? wrapper.clientWidth) + BLEED * 2;
+      const scale = avail / DESIGN_W;
+      mockEl.style.width = DESIGN_W + 'px';
+      mockEl.style.transformOrigin = 'top left';
+      mockEl.style.transform = `scale(${scale})`;
+      wrapper.style.width = avail + 'px';
+      wrapper.style.height = mockEl.offsetHeight * scale + 'px';
+      wrapper.style.marginInline = -BLEED + 'px';
+    };
+    requestAnimationFrame(fit);
+    window.addEventListener('resize', fit);
+  }
+
+  if (toolbar && content && slashMenu && mock && !isMobile) {
     const tb = toolbar, ct = content, sm = slashMenu, mk = mock;
 
     // ── TOOLBAR ────────────────────────────────────────────────────────

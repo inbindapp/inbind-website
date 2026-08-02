@@ -44,6 +44,19 @@
 .mk-nav a:hover { background: var(--bg-hover); color: var(--text); border-bottom: none; }
 .mk-nav a.active { background: var(--accent-light); color: var(--accent); }
 .mk-header-cta { display: flex; gap: 8px; align-items: center; }
+.mk-nav-toggle {
+  display: none; align-items: center; justify-content: center;
+  width: 40px; height: 40px; margin-left: 4px; padding: 0;
+  background: none; border: none; cursor: pointer;
+  flex-direction: column; gap: 5px;
+}
+.mk-nav-toggle__bar {
+  display: block; width: 22px; height: 2px; border-radius: 2px;
+  background: var(--text); transition: transform var(--dur-med), opacity var(--dur-med);
+}
+.mk-nav.is-open ~ .mk-nav-toggle .mk-nav-toggle__bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.mk-nav.is-open ~ .mk-nav-toggle .mk-nav-toggle__bar:nth-child(2) { opacity: 0; }
+.mk-nav.is-open ~ .mk-nav-toggle .mk-nav-toggle__bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 .mk-github-link {
   color: var(--text-subtle); border: none; display: flex; align-items: center;
   gap: 6px; padding: 6px 10px; border-radius: var(--radius);
@@ -120,10 +133,18 @@
 }
 
 /* Comparison table */
+.mk-compare-wrap { position: relative; }
 .mk-compare {
   background: var(--bg-panel); border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg); overflow: hidden;
 }
+.mk-compare-fade {
+  display: none; position: absolute; top: 1px; right: 1px; bottom: 1px; width: 52px;
+  pointer-events: none; border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  background: linear-gradient(to right, rgba(250, 248, 244, 0), var(--bg-panel));
+  opacity: 1; transition: opacity var(--dur-med);
+}
+.mk-compare-wrap.is-end .mk-compare-fade { opacity: 0; }
 .mk-compare table { width: 100%; border-collapse: collapse; }
 .mk-compare th, .mk-compare td {
   padding: 16px 20px; text-align: left;
@@ -719,8 +740,30 @@
 }
 @media (max-width: 640px) {
   .mk-features, .mk-dl-grid, .mk-pricing-grid { grid-template-columns: 1fr; }
-  .mk-nav { display: none; }
-  .mk-app-mock-side { display: none; }
+  .mk-nav-toggle { display: flex; }
+  .mk-header-cta { margin-left: auto; }
+  .mk-nav {
+    position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; gap: 2px; flex: none;
+    padding: 8px; margin: 0;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border-subtle);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+    display: none;
+  }
+  .mk-nav.is-open { display: flex; }
+  .mk-nav a { padding: 12px 14px; font-size: 16px; }
+  /* Non-interactive preview: render the full desktop 3-pane app, then scale
+     the whole window down to fit the viewport (scale factor set via JS). */
+  .mk-hero-mock { overflow: hidden; } /* width, height, margin set by JS in AppMock */
+  .mk-app-mock { pointer-events: none; }
+  .mk-app-mock-side,
+  .mk-app-mock-chat { display: flex; }
+  .mk-app-mock-body-text[contenteditable] { caret-color: transparent; cursor: default; }
+  /* Let the 5-column comparison table scroll instead of squishing/clipping */
+  .mk-compare { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .mk-compare table { min-width: 620px; }
+  .mk-compare-fade { display: block; }
   .mk-blog-item { grid-template-columns: 1fr; gap: 8px; }
   .mk-footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .mk-uc-cols { grid-template-columns: 1fr; }
@@ -733,4 +776,7 @@
     border-radius: 0 0 var(--radius) var(--radius);
   }
   .mk-uc-body h3 { font-size: 24px; }
+  .mk-cta { padding: 72px 0; }
+  .mk-cta-flow-tl,
+  .mk-cta-flow-br { display: none; }
 }
