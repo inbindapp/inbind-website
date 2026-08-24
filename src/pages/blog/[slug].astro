@@ -51,7 +51,7 @@ function formatDate(iso: string) {
   <article class="mk-post">
     <div class="mk-narrow">
       <a href={url('blog')} class="mk-back-link">← All posts</a>
-      <div class="mk-post-meta">{formatDate(post._meta.published_at)} · 4 min read</div>
+      <div class="mk-post-meta">{formatDate(post._meta.published_at)} · {post['reading-time']} min read</div>
       <h1>{post.name}</h1>
       <p class="mk-post-lead">{post['post-summary']}</p>
       <div class="mk-post-body" set:html={post['post-body']} />
