@@ -482,9 +482,7 @@
 .mk-blog-item:first-child { border-top: none; }
 .mk-blog-item:hover h3 { color: var(--accent); }
 .mk-blog-item:hover { border-bottom: none; }
-.mk-blog-meta { padding-top: 6px; }
-.mk-blog-date, .mk-blog-author { font-family: var(--font-mono); font-size: 12.5px; color: var(--text-muted); }
-.mk-blog-author { margin-top: 8px; }
+.mk-blog-date { font-family: var(--font-mono); font-size: 12.5px; color: var(--text-muted); padding-top: 6px; }
 .mk-blog-item h3 {
   font-family: var(--font-display); font-size: 22px; font-weight: 600;
   letter-spacing: -0.02em; margin: 0 0 8px; transition: color var(--dur-med); color: var(--text);
