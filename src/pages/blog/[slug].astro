@@ -18,12 +18,28 @@ const { slug } = Astro.params;
 const res = await fetch(`${COLLECTION_URL}/${slug}.json`);
 const post = await res.json();
 
+function getAuthorName(author: unknown) {
+  if (typeof author === 'string') return author;
+  if (author && typeof author === 'object' && 'name' in author && typeof author.name === 'string') {
+    return author.name;
+  }
+  return '';
+}
+
+const authorName = getAuthorName(post.author);
+
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
   headline: post['meta-title'] || post.name,
   description: post['meta-description'] || post['post-summary'],
   datePublished: post._meta?.published_at,
+  ...(authorName && {
+    author: {
+      '@type': 'Person',
+      name: authorName,
+    },
+  }),
   url: `https://inbind.app/blog/${slug}`,
   publisher: {
     '@type': 'Organization',
@@ -43,6 +59,12 @@ function formatDate(iso: string) {
     : 'th';
   return `${day}${suffix} ${month}, ${year}`;
 }
+
+const postMeta = [
+  formatDate(post._meta.published_at),
+  authorName,
+  post['reading-time'] ? `${post['reading-time']} min read` : '',
+].filter(Boolean).join(' · ');
 ---
 
 <Layout title={post['meta-title'] || post.name} description={post['meta-description'] || post['post-summary']} ogImage={`/og/blog/${slug}.png`} schema={schema}>
@@ -51,7 +73,7 @@ function formatDate(iso: string) {
   <article class="mk-post">
     <div class="mk-narrow">
       <a href={url('blog')} class="mk-back-link">← All posts</a>
-      <div class="mk-post-meta">{formatDate(post._meta.published_at)} · {post['reading-time']} min read</div>
+      <div class="mk-post-meta">{postMeta}</div>
       <h1>{post.name}</h1>
       <p class="mk-post-lead">{post['post-summary']}</p>
       <div class="mk-post-body" set:html={post['post-body']} />

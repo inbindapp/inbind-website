@@ -482,7 +482,9 @@
 .mk-blog-item:first-child { border-top: none; }
 .mk-blog-item:hover h3 { color: var(--accent); }
 .mk-blog-item:hover { border-bottom: none; }
-.mk-blog-date { font-family: var(--font-mono); font-size: 12.5px; color: var(--text-muted); padding-top: 6px; }
+.mk-blog-meta { padding-top: 6px; }
+.mk-blog-date, .mk-blog-author { font-family: var(--font-mono); font-size: 12.5px; color: var(--text-muted); }
+.mk-blog-author { margin-top: 8px; }
 .mk-blog-item h3 {
   font-family: var(--font-display); font-size: 22px; font-weight: 600;
   letter-spacing: -0.02em; margin: 0 0 8px; transition: color var(--dur-med); color: var(--text);
@@ -504,8 +506,10 @@
 }
 .mk-post-body h3 { font-family: var(--font-display); font-size: 20px; font-weight: 600; margin: 32px 0 12px; }
 .mk-post-body p { margin: 0 0 18px; }
-.mk-post-body ul { padding-left: 22px; margin: 0 0 18px; }
+.mk-post-body ul, .mk-post-body ol { padding-left: 22px; margin: 0 0 18px; }
 .mk-post-body li { margin-bottom: 8px; }
+.mk-post-body li > p { margin: 0; }
+.mk-post-body li > ul, .mk-post-body li > ol { margin-top: 8px; margin-bottom: 0; }
 .mk-post-body blockquote {
   border-left: 3px solid var(--accent); background: var(--accent-light);
   padding: 14px 22px; margin: 24px 0; border-radius: 0 6px 6px 0;
