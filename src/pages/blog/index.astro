@@ -24,14 +24,6 @@ function formatDate(iso: string) {
     : 'th';
   return `${day}${suffix} ${month}, ${year}`;
 }
-
-function getAuthorName(author: unknown) {
-  if (typeof author === 'string') return author;
-  if (author && typeof author === 'object' && 'name' in author && typeof author.name === 'string') {
-    return author.name;
-  }
-  return '';
-}
 ---
 
 <Layout title="Blog" description="Notes from the Inbind team. Honest posts about building the product." ogImage="/og/blog.png">
@@ -47,10 +39,7 @@ function getAuthorName(author: unknown) {
       <div class="mk-blog-list">
         {posts.map((post) => (
           <a href={url(`blog/${post.slug}`)} class="mk-blog-item">
-            <div class="mk-blog-meta">
-              <div class="mk-blog-date">{formatDate(post._meta.published_at)}</div>
-              {getAuthorName(post.author) && <div class="mk-blog-author">{getAuthorName(post.author)}</div>}
-            </div>
+            <div class="mk-blog-date">{formatDate(post._meta.published_at)}</div>
             <div>
               <h3>{post.name}</h3>
               <p>{post['post-summary']}</p>
