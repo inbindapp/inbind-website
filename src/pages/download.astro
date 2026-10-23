@@ -14,17 +14,7 @@ try {
 
 const base = `https://github.com/inbindapp/inbind/releases/download/v${version}`;
 
-// Prompt templates — {v} is replaced with the version at runtime
-const T = {
-  macosArm:   `Install Inbind on this Mac.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_aarch64.dmg\n\nOpen the DMG, drag Inbind to /Applications, then run in Terminal:\n\nfind "/Applications/Inbind.app" -exec xattr -c {} \\;`,
-  macosIntel: `Install Inbind on this Mac.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_x86_64.dmg\n\nOpen the DMG, drag Inbind to /Applications, then run in Terminal:\n\nfind "/Applications/Inbind.app" -exec xattr -c {} \\;`,
-  windows:    `Install Inbind on this Windows PC.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_x64_en-US.msi\n\nRun the installer and follow the setup wizard.`,
-  linux:      `Install Inbind on this Linux machine.\n\nDownload: https://github.com/inbindapp/inbind/releases/download/v{v}/Inbind_{v}_amd64.AppImage\n\nMake it executable and launch it:\n\nchmod +x Inbind_{v}_amd64.AppImage && ./Inbind_{v}_amd64.AppImage`,
-};
-
-function fill(tpl: string, v: string) {
-  return tpl.replace(/{v}/g, v);
-}
+const linuxCmd = (v: string) => `chmod +x Inbind_${v}_amd64.AppImage && ./Inbind_${v}_amd64.AppImage`;
 ---
 
 <Layout title="Download" description="Download Inbind for macOS, Windows, and Linux. Free to download and use." ogImage="/og/download.png">
@@ -62,77 +52,61 @@ function fill(tpl: string, v: string) {
         <!-- macOS panel -->
         <div class="mk-dl-panel" data-panel="macos" hidden>
           <h2 class="mk-section-h">Install on macOS</h2>
-          <p class="mk-dl-prompt-intro">Paste this into Claude Code or Codex. It'll handle the rest.</p>
+          <p class="mk-dl-prompt-intro">Pick the one that matches your Mac. Open the DMG, then drag Inbind to Applications.</p>
 
-          <div class="mk-dl-arch-tabs" role="tablist">
-            <button class="mk-dl-arch-tab is-active" data-arch="macosArm" role="tab" aria-selected="true">Apple Silicon</button>
-            <button class="mk-dl-arch-tab" data-arch="macosIntel" role="tab" aria-selected="false">Intel</button>
-          </div>
-
-          <div class="mk-prompt-block">
-            <pre class="mk-prompt-pre" id="prompt-macos">{fill(T.macosArm, version)}</pre>
-            <button class="mk-prompt-copy" id="copy-macos">Copy</button>
-          </div>
-
-          <div class="mk-dl-direct">
-            <div class="mk-dl-direct-label">Or download directly</div>
-            <div class="mk-dl-direct-links">
-              <a href={`${base}/Inbind_${version}_aarch64.dmg`} data-asset="Inbind_{v}_aarch64.dmg" class="mk-platform-option">
-                <span>Apple Silicon</span><span class="arch">.dmg · arm64</span>
+          <div class="mk-dl-grid mk-dl-grid--options">
+              <a href={`${base}/Inbind_${version}_aarch64.dmg`} data-asset="Inbind_{v}_aarch64.dmg" class="mk-dl-card mk-dl-card--link">
+                <span class="mk-dl-card-name">Apple Silicon</span>
+                <span class="mk-dl-card-meta">.dmg · arm64</span>
               </a>
-              <a href={`${base}/Inbind_${version}_x86_64.dmg`} data-asset="Inbind_{v}_x86_64.dmg" class="mk-platform-option">
-                <span>Intel</span><span class="arch">.dmg · x86_64</span>
+              <a href={`${base}/Inbind_${version}_x64.dmg`} data-asset="Inbind_{v}_x64.dmg" class="mk-dl-card mk-dl-card--link">
+                <span class="mk-dl-card-name">Intel</span>
+                <span class="mk-dl-card-meta">.dmg · x64</span>
               </a>
-            </div>
           </div>
         </div>
 
         <!-- Windows panel -->
         <div class="mk-dl-panel" data-panel="windows" hidden>
           <h2 class="mk-section-h">Install on Windows</h2>
-          <p class="mk-dl-prompt-intro">Paste this into Claude or Codex. It'll handle the rest.</p>
+          <p class="mk-dl-prompt-intro">Download the installer, run it, and follow the setup wizard.</p>
 
-          <div class="mk-prompt-block">
-            <pre class="mk-prompt-pre" id="prompt-windows">{fill(T.windows, version)}</pre>
-            <button class="mk-prompt-copy" id="copy-windows">Copy</button>
-          </div>
-
-          <div class="mk-dl-direct">
-            <div class="mk-dl-direct-label">Or download directly</div>
-            <div class="mk-dl-direct-links">
-              <a href={`${base}/Inbind_${version}_x64_en-US.msi`} data-asset="Inbind_{v}_x64_en-US.msi" class="mk-platform-option">
-                <span>Installer</span><span class="arch">.msi · x64</span>
+          <div class="mk-dl-grid mk-dl-grid--options">
+              <a href={`${base}/Inbind_${version}_x64_en-US.msi`} data-asset="Inbind_{v}_x64_en-US.msi" class="mk-dl-card mk-dl-card--link">
+                <span class="mk-dl-card-name">Installer</span>
+                <span class="mk-dl-card-meta">.msi · x64</span>
               </a>
-              <a href={`${base}/Inbind_${version}_x64-setup.exe`} data-asset="Inbind_{v}_x64-setup.exe" class="mk-platform-option">
-                <span>Setup</span><span class="arch">.exe · x64</span>
+              <a href={`${base}/Inbind_${version}_x64-setup.exe`} data-asset="Inbind_{v}_x64-setup.exe" class="mk-dl-card mk-dl-card--link">
+                <span class="mk-dl-card-name">Setup</span>
+                <span class="mk-dl-card-meta">.exe · x64</span>
               </a>
-            </div>
           </div>
         </div>
 
         <!-- Linux panel -->
         <div class="mk-dl-panel" data-panel="linux" hidden>
           <h2 class="mk-section-h">Install on Linux</h2>
-          <p class="mk-dl-prompt-intro">Paste this into Claude or Codex. It'll handle the rest.</p>
+          <p class="mk-dl-prompt-intro">Grab the package for your distro.</p>
 
-          <div class="mk-prompt-block">
-            <pre class="mk-prompt-pre" id="prompt-linux">{fill(T.linux, version)}</pre>
-            <button class="mk-prompt-copy" id="copy-linux">Copy</button>
+          <div class="mk-dl-grid mk-dl-grid--options">
+              <a href={`${base}/Inbind_${version}_amd64.AppImage`} data-asset="Inbind_{v}_amd64.AppImage" class="mk-dl-card mk-dl-card--link">
+                <span class="mk-dl-card-name">AppImage</span>
+                <span class="mk-dl-card-meta">.AppImage · amd64</span>
+              </a>
+              <a href={`${base}/Inbind_${version}_amd64.deb`} data-asset="Inbind_{v}_amd64.deb" class="mk-dl-card mk-dl-card--link">
+                <span class="mk-dl-card-name">Debian / Ubuntu</span>
+                <span class="mk-dl-card-meta">.deb · amd64</span>
+              </a>
+              <a href={`${base}/Inbind-${version}-1.x86_64.rpm`} data-asset="Inbind-{v}-1.x86_64.rpm" class="mk-dl-card mk-dl-card--link">
+                <span class="mk-dl-card-name">Fedora / RHEL</span>
+                <span class="mk-dl-card-meta">.rpm · x86_64</span>
+              </a>
           </div>
 
-          <div class="mk-dl-direct">
-            <div class="mk-dl-direct-label">Or download directly</div>
-            <div class="mk-dl-direct-links">
-              <a href={`${base}/Inbind_${version}_amd64.AppImage`} data-asset="Inbind_{v}_amd64.AppImage" class="mk-platform-option">
-                <span>AppImage</span><span class="arch">.AppImage · amd64</span>
-              </a>
-              <a href={`${base}/Inbind_${version}_amd64.deb`} data-asset="Inbind_{v}_amd64.deb" class="mk-platform-option">
-                <span>Debian / Ubuntu</span><span class="arch">.deb · amd64</span>
-              </a>
-              <a href={`${base}/Inbind-${version}-1.x86_64.rpm`} data-asset="Inbind-{v}-1.x86_64.rpm" class="mk-platform-option">
-                <span>Fedora / RHEL</span><span class="arch">.rpm · x86_64</span>
-              </a>
-            </div>
+          <p class="mk-dl-prompt-intro mk-dl-prompt-intro--cmd">For the AppImage, make it executable and launch it:</p>
+          <div class="mk-prompt-block">
+            <pre class="mk-prompt-pre" id="cmd-linux">{linuxCmd(version)}</pre>
+            <button class="mk-prompt-copy" id="copy-linux">Copy</button>
           </div>
         </div>
 
@@ -150,13 +124,8 @@ function fill(tpl: string, v: string) {
   <Footer />
 </Layout>
 
-<script define:vars={{ version, T }} is:inline>
+<script define:vars={{ version }} is:inline>
   let currentVersion = version;
-  let currentMacArch = 'macosArm';
-
-  function fill(tpl, v) {
-    return tpl.replace(/{v}/g, v);
-  }
 
   function detectPlatform() {
     const ua = navigator.userAgent.toLowerCase();
@@ -185,18 +154,6 @@ function fill(tpl: string, v: string) {
     document.querySelectorAll('.mk-dl-panel').forEach(p => { p.hidden = true; });
   });
 
-  // macOS arch tabs
-  document.querySelectorAll('.mk-dl-arch-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      currentMacArch = tab.dataset.arch;
-      document.querySelectorAll('.mk-dl-arch-tab').forEach(t => {
-        t.classList.toggle('is-active', t === tab);
-        t.setAttribute('aria-selected', String(t === tab));
-      });
-      document.getElementById('prompt-macos').textContent = fill(T[currentMacArch], currentVersion);
-    });
-  });
-
   // Copy buttons
   document.querySelectorAll('.mk-prompt-copy').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -215,16 +172,6 @@ function fill(tpl: string, v: string) {
   const detected = detectPlatform();
   document.querySelector(`[data-platform="${detected}"]`)?.classList.add('is-detected');
   showPanel(detected);
-
-  // Try to detect Apple Silicon vs Intel for macOS
-  if (detected === 'macos' && navigator.userAgentData) {
-    navigator.userAgentData.getHighEntropyValues(['architecture']).then(ua => {
-      if (ua.architecture === 'arm') return; // already on macosArm (default)
-      // Switch to Intel tab
-      const intelTab = document.querySelector('[data-arch="macosIntel"]');
-      if (intelTab) intelTab.click();
-    }).catch(() => {});
-  }
 
   // Client-side version update from GitHub API
   (async () => {
@@ -247,10 +194,9 @@ function fill(tpl: string, v: string) {
       const label = document.getElementById('version-label');
       if (label) label.textContent = `version ${currentVersion}`;
 
-      // Update prompt texts
-      document.getElementById('prompt-macos').textContent = fill(T[currentMacArch], currentVersion);
-      document.getElementById('prompt-windows').textContent = fill(T.windows, currentVersion);
-      document.getElementById('prompt-linux').textContent = fill(T.linux, currentVersion);
+      // Update Linux command
+      document.getElementById('cmd-linux').textContent =
+        `chmod +x Inbind_${currentVersion}_amd64.AppImage && ./Inbind_${currentVersion}_amd64.AppImage`;
     } catch {
       // fall back to build-time version
     }
