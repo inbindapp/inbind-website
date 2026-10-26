@@ -1,5 +1,48 @@
 ---
 import { url } from '../utils/url';
+
+// Mirrors the desktop app's layout: file tree + skills shelf on the left,
+// the editor in the middle, and the floating command bar at the bottom
+// (Binders/src/components/{Sidebar,Skills,CommandBar}).
+const ico = (p: string, size = 14) =>
+  `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+
+const ICON = {
+  folderOpen: '<path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/>',
+  panelLeft: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/>',
+  search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+  chevronDown: '<path d="m6 9 6 6 6-6"/>',
+  plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+  activity: '<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/>',
+};
+
+const PLAY = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg>';
+const SPARK = (size: number) => {
+  const s = Math.round(size * 0.5);
+  return `<span class="mk-spark" style="width:${size}px;height:${size}px" aria-hidden="true"><svg width="${s}" height="${s}" viewBox="0 0 16 16" fill="none"><path d="M8 1.25 C8.7 4.9 11.1 7.3 14.75 8 C11.1 8.7 8.7 11.1 8 14.75 C7.3 11.1 4.9 8.7 1.25 8 C4.9 7.3 7.3 4.9 8 1.25 Z" fill="#fff"/></svg></span>`;
+};
+
+const tree = [
+  { name: 'campaigns', dir: true, depth: 0 },
+  { name: 'Q4 launch brief', depth: 1 },
+  { name: 'Friday standup notes', depth: 1, active: true, file: 'standup' },
+  // Created by the weekly-recap skill; revealed by the script.
+  { name: 'weekly-recap', depth: 1, file: 'recap', hidden: true },
+  { name: 'hero-shot.png', depth: 1 },
+  { name: 'drafts', dir: true, depth: 0 },
+  { name: 'Pricing rewrite', depth: 1 },
+  { name: 'README', depth: 0 },
+];
+
+const skillSections = [
+  {
+    title: 'Favorites',
+    skills: [
+      { id: 'weekly-recap', desc: "Turns this week's notes into a short team update.", meta: 'This project', used: '2h ago' },
+    ],
+  },
+];
+const skillCount = skillSections.reduce((n, s) => n + s.skills.length, 0);
 ---
 
 <div class="mk-app-mock">
@@ -10,66 +53,117 @@ import { url } from '../utils/url';
   </div>
   <div class="mk-app-mock-body">
     <aside class="mk-app-mock-side">
-      <div class="mk-app-mock-side-head">
-        <img src={url('favicon-app.svg')} alt="" width="18" height="18" />
-        <span style="font-weight: 600; font-size: 13px;">launch-notes</span>
+      <div class="mk-side-header">
+        <span class="mk-side-workspace">launch-notes</span>
+        <span class="mk-side-icon-btn" set:html={ico(ICON.folderOpen, 14)} />
+        <span class="mk-side-icon-btn" set:html={ico(ICON.panelLeft, 14)} />
       </div>
-      <div class="mk-app-mock-side-row folder">campaigns</div>
-      <div class="mk-app-mock-side-row" style="padding-left: 18px;">Q4 launch brief</div>
-      <div class="mk-app-mock-side-row active" style="padding-left: 18px;">Friday standup notes</div>
-      <div class="mk-app-mock-side-row" style="padding-left: 18px;">hero-shot.png</div>
-      <div class="mk-app-mock-side-row folder">drafts</div>
-      <div class="mk-app-mock-side-row" style="padding-left: 18px;">Pricing rewrite</div>
-      <div class="mk-app-mock-side-row">README</div>
+      <div class="mk-side-search">
+        <Fragment set:html={ico(ICON.search, 12)} />
+        <span class="mk-side-search-label">Search files and skills</span>
+        <kbd>⌘K</kbd>
+      </div>
+      <div class="mk-side-tree">
+        {tree.map((n) => (
+          <div
+            class:list={['mk-tree-node', { 'is-dir': n.dir, 'is-active': n.active, 'is-file-link': n.file }]}
+            style={`padding-left: ${n.depth * 14 + 6}px`}
+            data-file={n.file}
+            hidden={n.hidden}
+          >
+            {n.dir ? <span class="mk-tree-arrow">▶</span> : <span class="mk-tree-dot" />}
+            <span class="mk-tree-name">{n.name}</span>
+          </div>
+        ))}
+      </div>
+      <div class="mk-side-skills">
+        <div class="mk-skills-header">
+          <span class="mk-skills-toggle">
+            <Fragment set:html={ico(ICON.chevronDown, 12)} />
+            <strong>Skills <span>{skillCount}</span></strong>
+          </span>
+          <span class="mk-skills-actions">
+            <span class="mk-skills-create">Create</span>
+            <span class="mk-skills-add" set:html={ico(ICON.plus, 14)} />
+          </span>
+        </div>
+        <div class="mk-skills-scroll">
+          {skillSections.map((section) => (
+            <section class="mk-skills-section">
+              <h3>{section.title}<span>{section.skills.length}</span></h3>
+              {section.skills.map((s) => (
+                <article class="mk-skill-row">
+                  <div class="mk-skill-main">
+                    <strong>{s.id}</strong>
+                    <span class="mk-skill-desc">{s.desc}</span>
+                    <span class="mk-skill-meta">{s.meta}<span>·</span>{s.used}</span>
+                  </div>
+                  <button class="mk-skill-run" type="button" data-skill={s.id} title={`Run ${s.id}`} set:html={PLAY} />
+                </article>
+              ))}
+            </section>
+          ))}
+        </div>
+      </div>
     </aside>
+
     <main class="mk-app-mock-main">
-      <h1 class="mk-app-mock-title">Friday standup notes</h1>
-      <div class="mk-app-mock-body-text" contenteditable="true" spellcheck="false">
-        <p>Quick read-through of where each workstream landed this week. Nothing on fire. We're moving the launch back one week so design can finish the email sequence.</p>
-        <h3>What shipped</h3>
-        <p>Pricing page copy v2. Hero illustration round 3 (we picked B). Onboarding email 1 of 4.</p>
-        <h3>What's next</h3>
-        <p>Everyone has their lane. The only blocker is whether legal signs off on the comparison table by Tuesday.</p>
+      <div class="mk-app-mock-doc" data-doc="standup">
+        <h1 class="mk-app-mock-title">Friday standup notes</h1>
+        <div class="mk-app-mock-body-text" contenteditable="true" spellcheck="false">
+          <p>Quick read-through of where each workstream landed this week. Nothing on fire. We're moving the launch back one week so design can <span class="mk-comment" data-thread="t1">finish the email sequence</span>.<span data-ins="t1" hidden> Priya owns it.</span></p>
+          <h3>What shipped</h3>
+          <p>Pricing page copy v2. Hero illustration round 3 (we picked B). Onboarding email 1 of 4.</p>
+          <h3>What's next</h3>
+          <p>Everyone has their lane. The only blocker is whether legal signs off on the <span class="mk-comment" data-thread="t2">comparison table</span> by <span data-del="t2">Tuesday</span><span data-ins="t2" hidden>Monday</span>.</p>
+        </div>
+      </div>
+      <div class="mk-app-mock-doc" data-doc="recap" hidden>
+        <h1 class="mk-app-mock-title">Weekly recap</h1>
+        <div class="mk-app-mock-body-text" id="mk-recap-body"></div>
+      </div>
+
+      <!-- Command bar: collapsed pill + expandable sheet (matches CommandBar/) -->
+      <div class="mk-cbar" id="mk-cbar" data-status="idle" data-view="collapsed" data-download={url('download')}>
+        <div class="mk-cbar-pill" id="mk-cbar-pill" role="button" tabindex="0">
+          <Fragment set:html={SPARK(26).replace('mk-spark', 'mk-spark mk-cbar-avatar')} />
+          <span class="mk-cbar-ask" id="mk-cbar-ask">Ask Inbind AI anything…</span>
+          <span class="mk-cbar-chip" id="mk-cbar-chip">
+            <span id="mk-cbar-chip-count">2</span>&nbsp;to handle
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+          </span>
+          <span class="mk-cbar-activity" id="mk-cbar-activity" title="Activity" set:html={ico(ICON.activity, 14)} />
+        </div>
+
+        <div class="mk-cbar-sheet" id="mk-cbar-sheet" aria-hidden="true">
+          <div class="mk-cbar-handle"></div>
+          <div class="mk-cbar-rail">
+            <div class="mk-cbar-tabs" id="mk-cbar-tabs"></div>
+            <div class="mk-cbar-rail-actions">
+              <span class="mk-cbar-split" id="mk-cbar-split">
+                <span class="mk-cbar-split-new">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                  New chat
+                </span>
+                <span class="mk-cbar-split-divider"></span>
+                <span class="mk-cbar-split-history">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+                </span>
+              </span>
+              <span class="mk-cbar-divider"></span>
+              <span class="mk-cbar-btn" title="Maximize">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg>
+              </span>
+              <button class="mk-cbar-btn" type="button" id="mk-cbar-collapse" title="Collapse" aria-label="Collapse">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="mk-cbar-subrow" id="mk-cbar-subrow" hidden></div>
+          <div class="mk-cbar-body" id="mk-cbar-body"></div>
+        </div>
       </div>
     </main>
-    <aside class="mk-app-mock-chat">
-      <div class="mk-app-mock-chat-tabs">
-        <div class="mk-app-mock-chat-tab">
-          <span>Launch brief</span>
-          <span class="mk-chat-tab-x">×</span>
-        </div>
-        <div class="mk-app-mock-chat-tab-actions">
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-            <rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.2"/>
-            <line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-            <line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-          </svg>
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-            <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.2"/>
-            <path d="M6.5 4V6.5L8 8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-          </svg>
-        </div>
-      </div>
-      <div class="mk-app-mock-chat-msgs">
-        <div class="mk-app-mock-chat-msg user">Summarize @standup.md in 3 lines</div>
-        <div class="mk-app-mock-chat-thinking">
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Thinking
-        </div>
-        <div class="mk-app-mock-chat-msg">Launch slips one week. Pricing v2 shipped, FAQ block still in <code>drafts/</code>. Only blocker is legal sign-off.</div>
-      </div>
-      <div class="mk-app-mock-chat-footer">
-        <div class="mk-app-mock-chat-input-row">
-          <span class="mk-app-mock-chat-input">Ask… (@ files, / skills, Enter to send)</span>
-          <button class="mk-chat-send">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5H11M11 6.5L7.5 3M11 6.5L7.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
-        <div class="mk-app-mock-chat-footer-meta">
-          <span class="mk-chat-model">Sonnet ∨</span>
-        </div>
-      </div>
-    </aside>
   </div>
 
   <!-- Format toolbar (matches app bubble menu) -->
@@ -161,6 +255,18 @@ import { url } from '../utils/url';
   <div class="mk-slash-menu" id="mk-slash-menu"></div>
 </div>
 
+<!-- Mobile: the CSS renders the mock at its 780px design width and reserves
+     its scaled box with aspect-ratio. This sets the matching scale before
+     first paint, so nothing shifts once the page loads. -->
+<script is:inline>
+  (function () {
+    var wrap = document.currentScript.previousElementSibling.parentElement;
+    function fit() { wrap.style.setProperty('--mk-scale', String(wrap.clientWidth / 780)); }
+    fit();
+    addEventListener('resize', fit);
+  })();
+</script>
+
 <script>
   const ico = (p: string) =>
     `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
@@ -189,30 +295,654 @@ import { url } from '../utils/url';
   // toolbar and slash menu depend on hover/keyboard, which don't work on
   // touch, so we render the full desktop layout and scale it down to fit.
   const isMobile = window.matchMedia('(max-width: 640px)').matches;
-  const mockEl = mock as HTMLElement | null;
-  const wrapper = mockEl?.parentElement as HTMLElement | null;
 
-  if (isMobile && mockEl && wrapper) {
-    content?.setAttribute('contenteditable', 'false');
-    const DESIGN_W = 780;
-    const BLEED = 18; // px the snapshot extends past the container padding each side
-    const fit = () => {
-      if (!window.matchMedia('(max-width: 640px)').matches) {
-        mockEl.style.width = mockEl.style.transform = '';
-        wrapper.style.width = wrapper.style.height = wrapper.style.marginInline = '';
+  // The scale itself is set by the inline script under the markup.
+  if (isMobile) content?.setAttribute('contenteditable', 'false');
+
+  // ── COMMAND BAR ────────────────────────────────────────────────────
+  // A scripted stand-in for the app's command bar, built around two flows:
+  //
+  //   1. Run a skill: weekly-recap reads the notes, asks who the recap is
+  //      for (AskUserQuestion), then saves a new file you can open, keep
+  //      or discard.
+  //   2. Hand a comment to the AI: a highlight opens its thread, "Assign to
+  //      Inbind AI" produces a suggested edit, and you apply or reject it.
+  //   3. Once either flow finishes, Inbind AI asks if you're ready to try
+  //      Inbind: yes goes to the download page, no explains what it is.
+  //
+  // On first view the pill plays the start of flow 1 once (working, then a
+  // question) and waits there, like the app does until you answer.
+
+  type Status = 'idle' | 'working' | 'question';
+  type List = 'To handle' | 'Comments' | 'With AI' | 'Done';
+  type View = 'collapsed' | 'chat' | 'thread' | 'review' | List;
+  type Answer = 'team' | 'leads';
+  type RecapFile = 'none' | 'pending' | 'kept' | 'discarded';
+
+  interface Reply { author: string; text: string; time: string; ai?: boolean; event?: boolean; }
+  interface Thread {
+    id: string; quote: string; replies: Reply[];
+    pending: boolean; accepted: boolean; resolved: boolean;
+    prompt: string; chatReply: string; threadReply: string;
+    kind: 'Insertion' | 'Replacement'; removed?: string; added: string;
+  }
+
+  const cbar   = document.getElementById('mk-cbar') as HTMLElement | null;
+  const pill   = document.getElementById('mk-cbar-pill') as HTMLElement | null;
+  const ask    = document.getElementById('mk-cbar-ask') as HTMLElement | null;
+  const chip   = document.getElementById('mk-cbar-chip') as HTMLElement | null;
+  const chipN  = document.getElementById('mk-cbar-chip-count') as HTMLElement | null;
+  const sheet  = document.getElementById('mk-cbar-sheet') as HTMLElement | null;
+  const tabs   = document.getElementById('mk-cbar-tabs') as HTMLElement | null;
+  const subrow = document.getElementById('mk-cbar-subrow') as HTMLElement | null;
+  const body   = document.getElementById('mk-cbar-body') as HTMLElement | null;
+  const split  = document.getElementById('mk-cbar-split') as HTMLElement | null;
+  const recapBody = document.getElementById('mk-recap-body') as HTMLElement | null;
+
+  if (cbar && pill && ask && chip && chipN && sheet && tabs && subrow && body && split && recapBody) {
+    const cb = cbar, bd = body, sr = subrow;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const SPARK = (size: number) => {
+      const s = Math.round(size * 0.5);
+      return `<span class="mk-spark" style="width:${size}px;height:${size}px" aria-hidden="true"><svg width="${s}" height="${s}" viewBox="0 0 16 16" fill="none"><path d="M8 1.25 C8.7 4.9 11.1 7.3 14.75 8 C11.1 8.7 8.7 11.1 8 14.75 C7.3 11.1 4.9 8.7 1.25 8 C4.9 7.3 7.3 4.9 8 1.25 Z" fill="#fff"/></svg></span>`;
+    };
+    const svg = (p: string, size = 12) =>
+      `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+    const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+    const FILE = '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/>';
+    const COMMENT = '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>';
+    const CHEVRON = '<path d="m6 9 6 6 6-6"/>';
+    const BACK = '<path d="m15 18-6-6 6-6"/>';
+    const CHECK = '<path d="M20 6 9 17l-5-5"/>';
+    const CHECKS = '<path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/>';
+    const BAN = '<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>';
+    const X = '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>';
+    const SEND = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 8L2 2l3 6-3 6 12-6z" fill="currentColor"/></svg>';
+
+    const STATUS_COPY: Record<Status, string> = {
+      idle: 'Ask Inbind AI anything…',
+      working: 'Inbind AI is working…',
+      question: 'Inbind AI has a question',
+    };
+
+    // ── Flow 1: weekly-recap ──
+    const RECAP_PROMPT = '/skill:weekly-recap <span class="mk-chat-mention">@Friday standup notes</span>';
+    const OPTIONS: { id: Answer; label: string; desc: string }[] = [
+      { id: 'team', label: 'The team', desc: 'Short and casual, first names' },
+      { id: 'leads', label: 'Leadership', desc: 'Decisions and blockers only' },
+    ];
+    const AUDIENCE: Record<Answer, string> = { team: 'the team', leads: 'leadership' };
+    const RECAPS: Record<Answer, string> = {
+      team:
+        "<p>Hey all. Quick one from Friday.</p>" +
+      "<h3>Done</h3><p>Pricing page copy v2 is live. Hero round 3 is in (we went with B). Onboarding email 1 of 4 is out.</p>" +
+        "<h3>Heads up</h3><p>Launch moves back one week so design can finish the email sequence. We're still waiting on legal for the comparison table.</p>",
+      leads:
+        "<h3>Decisions</h3><p>Launch moves back one week. Design needs the time to finish the email sequence.</p>" +
+        "<h3>Blockers</h3><p>Legal sign-off on the comparison table.</p>",
+    };
+
+    // ── Flow 2: comment threads ──
+    const threads: Thread[] = [
+      {
+        id: 't1', quote: 'finish the email sequence', pending: false, accepted: false, resolved: false,
+        replies: [{ author: 'Sam', text: 'Can we say who owns the email sequence? Design keeps asking.', time: '12m ago' }],
+        prompt: 'Handle comment from Sam: "Can we say who owns the email sequence?"',
+        chatReply: 'I suggested adding "Priya owns it." after the email sequence line.',
+        threadReply: 'Suggested a line saying Priya owns it.',
+        kind: 'Insertion', added: 'Priya owns it.',
+      },
+      {
+        id: 't2', quote: 'comparison table', pending: false, accepted: false, resolved: false,
+        replies: [
+          { author: 'Maya', text: 'Legal wants the final table by Monday, not Tuesday.', time: '1h ago' },
+          { author: 'Alex', text: 'Good catch. Can we fix the note?', time: '40m ago' },
+        ],
+        prompt: 'Handle comment from Maya: "Legal wants the final table by Monday, not Tuesday."',
+        chatReply: 'I suggested swapping Tuesday for Monday in the blocker line.',
+        threadReply: 'Suggested changing the deadline to Monday.',
+        kind: 'Replacement', removed: 'Tuesday', added: 'Monday',
+      },
+    ];
+    const threadById = (id: string | null) => threads.find((t) => t.id === id) ?? null;
+    const openThreads = () => threads.filter((t) => !t.resolved);
+    const handleCount = () => openThreads().length + (recapFile === 'pending' ? 1 : 0);
+
+    let status: Status = 'idle';
+    let view: View = 'collapsed';
+    let listView: List = 'To handle';
+    let convo: string = 'none';       // 'none', 'recap' or a thread id
+    let activeThread: string | null = null;
+    let answer: Answer | null = null;
+    let recapFile: RecapFile = 'none';
+    let currentFile: 'standup' | 'recap' = 'standup';
+    let introPlayed = false;
+    // Flow 3: the closing "ready to try Inbind?" question, asked once.
+    type CtaAnswer = 'yes' | 'no';
+    let ctaStage: 'none' | 'asking' | 'answered' = 'none';
+    let ctaAnswer: CtaAnswer | null = null;
+    let ctaAsked = false;
+    let ctaTimer: number | undefined;
+    const downloadUrl = cb.dataset.download ?? '/download';
+    let timer: number | undefined;
+
+    // ── Editor + file tree ──
+    function syncDoc() {
+      threads.forEach((t) => {
+        const hl = document.querySelector(`.mk-comment[data-thread="${t.id}"]`);
+        hl?.classList.toggle('is-resolved', t.resolved);
+        hl?.classList.toggle('is-focused', (view === 'thread' || view === 'review') && activeThread === t.id);
+        const ins = document.querySelector<HTMLElement>(`[data-ins="${t.id}"]`);
+        if (ins) { ins.hidden = !(t.pending || t.accepted); ins.classList.toggle('mk-sugg-ins', t.pending); }
+        const del = document.querySelector<HTMLElement>(`[data-del="${t.id}"]`);
+        if (del) { del.hidden = t.accepted; del.classList.toggle('mk-sugg-del', t.pending); }
+      });
+      const recapRow = document.querySelector<HTMLElement>('.mk-tree-node[data-file="recap"]');
+      if (recapRow) recapRow.hidden = recapFile === 'none' || recapFile === 'discarded';
+      if (recapFile === 'discarded' && currentFile === 'recap') currentFile = 'standup';
+      document.querySelectorAll<HTMLElement>('.mk-tree-node[data-file]').forEach((row) => {
+        row.classList.toggle('is-active', row.dataset.file === currentFile);
+      });
+      document.querySelectorAll<HTMLElement>('.mk-app-mock-doc[data-doc]').forEach((doc) => {
+        doc.hidden = doc.dataset.doc !== currentFile;
+      });
+    }
+
+    function openFile(file: 'standup' | 'recap') {
+      currentFile = file;
+      view = 'collapsed';
+      render();
+    }
+
+    // ── Pill ──
+    function renderPill() {
+      ask!.textContent = STATUS_COPY[status];
+      chipN!.textContent = String(handleCount());
+      chip!.hidden = handleCount() === 0;
+      cb.dataset.status = status;
+    }
+
+    // ── Sheet chrome ──
+    function renderTabs() {
+      const activeTab = view === 'thread' || view === 'review' ? listView : view;
+      const counts: Partial<Record<List, number>> = { 'To handle': handleCount(), Comments: openThreads().length, 'With AI': status === 'idle' ? 0 : 1 };
+      const tab = (v: List) => {
+        const n = counts[v];
+        const pulse = v === 'With AI' && status !== 'idle' ? '<span class="mk-cbar-pulse"></span>' : '';
+        return `<button type="button" class="mk-cbar-tab${activeTab === v ? ' is-active' : ''}" data-view="${v}">${pulse}${v}${n ? `<span class="mk-cbar-count">${n}</span>` : ''}</button>`;
+      };
+      tabs!.innerHTML =
+        `<button type="button" class="mk-cbar-tab mk-cbar-tab--chat${activeTab === 'chat' ? ' is-active' : ''}" data-view="chat">` +
+          `<span class="mk-cbar-tab-avatar">${SPARK(16)}${status === 'question' ? '<span class="mk-cbar-attn-dot"></span>' : ''}</span>Chat</button>` +
+        '<span class="mk-cbar-divider"></span>' +
+        tab('To handle') + tab('Comments') + tab('With AI') + tab('Done');
+      split!.style.visibility = view === 'chat' ? 'visible' : 'hidden';
+    }
+
+    function renderSubrow() {
+      const t = threadById(activeThread);
+      const back = (to: string) => `<button type="button" class="mk-cbar-btn" ${to} title="Back" aria-label="Back">${svg(BACK, 15)}</button>`;
+      if (view === 'thread' && t) {
+        sr.innerHTML = back('data-back') +
+          `<span class="mk-cbar-subrow-title">Comment thread</span><span class="mk-cbar-spacer"></span>` +
+          (t.resolved
+            ? `<span class="mk-disc-resolved">${svg(CHECK, 11)} Resolved</span>`
+            : `<button type="button" class="mk-cbar-btn" data-resolve="${t.id}" title="Resolve thread" aria-label="Resolve thread">${svg(CHECK, 15)}</button>`);
+      } else if (view === 'review' && t) {
+        sr.innerHTML = back(`data-open-thread="${t.id}"`) +
+          `<span class="mk-cbar-subrow-title">Suggested edits</span><span class="mk-cbar-spacer"></span>` +
+          `<button type="button" class="mk-review-header-btn" data-apply="${t.id}">${svg(CHECKS, 12)} Apply all</button>` +
+          `<button type="button" class="mk-review-header-btn" data-reject="${t.id}">${svg(BAN, 12)} Reject all</button>`;
+      } else if (view === 'chat' && threadById(convo)) {
+        const ct = threadById(convo)!;
+        sr.innerHTML = `<button type="button" class="mk-cbar-origin" data-open-thread="${ct.id}">${svg(BACK, 11)}From comment · ${ct.replies[0].author}</button>`;
+      } else {
+        sr.hidden = true;
         return;
       }
-      const avail = (wrapper.parentElement?.clientWidth ?? wrapper.clientWidth) + BLEED * 2;
-      const scale = avail / DESIGN_W;
-      mockEl.style.width = DESIGN_W + 'px';
-      mockEl.style.transformOrigin = 'top left';
-      mockEl.style.transform = `scale(${scale})`;
-      wrapper.style.width = avail + 'px';
-      wrapper.style.height = mockEl.offsetHeight * scale + 'px';
-      wrapper.style.marginInline = -BLEED + 'px';
-    };
-    requestAnimationFrame(fit);
-    window.addEventListener('resize', fit);
+      sr.hidden = false;
+    }
+
+    // ── Chat ──
+    function assistant(inner: string) {
+      return `<div class="mk-chat-assistant">${SPARK(18)}<div class="mk-chat-assistant-col">${inner}</div></div>`;
+    }
+
+    function canSubmit() {
+      return answer !== null;
+    }
+
+    function questionCard() {
+      const opt = (id: Answer, label: string, desc = '') =>
+        `<button type="button" class="mk-question-opt${answer === id ? ' is-selected' : ''}" data-answer="${id}">` +
+          `<strong>${label}</strong>${desc ? `<span>${desc}</span>` : ''}</button>`;
+      return (
+        `<div class="mk-prompt-card">` +
+          `<p class="mk-prompt-text">Who's this recap for?</p>` +
+          `<div class="mk-question-opts">${OPTIONS.map((o) => opt(o.id, o.label, o.desc)).join('')}</div>` +
+          `<button type="button" class="mk-primary-btn mk-question-submit"${canSubmit() ? '' : ' disabled'}>Submit</button>` +
+        `</div>`
+      );
+    }
+
+    const CTA_OPTIONS: { id: CtaAnswer; label: string }[] = [
+      { id: 'yes', label: 'Yes, take me to the download page' },
+      { id: 'no', label: 'No, tell me more about Inbind' },
+    ];
+    const ABOUT_INBIND =
+      "Inbind is a writing app for people who already use AI. Your notes stay as plain Markdown files on your computer, and the AI works right inside them. " +
+      "It reads your files, runs the skills you set up, and picks up the comments you leave. When it wants to change something, it suggests the edit and you decide. " +
+      `It's free for macOS, Windows and Linux. <a class="mk-chat-link" href="${downloadUrl}">Download Inbind</a> whenever you're ready.`;
+
+    function ctaBlock(): string {
+      if (ctaStage === 'none') return '';
+      if (ctaStage === 'asking') {
+        const opts = CTA_OPTIONS.map((o) =>
+          `<button type="button" class="mk-question-opt${ctaAnswer === o.id ? ' is-selected' : ''}" data-cta="${o.id}"><strong>${o.label}</strong></button>`
+        ).join('');
+        return assistant(
+          `<div class="mk-prompt-card">` +
+            `<p class="mk-prompt-text">Are you ready to try out Inbind?</p>` +
+            `<div class="mk-question-opts">${opts}</div>` +
+            `<button type="button" class="mk-primary-btn mk-cta-submit"${ctaAnswer ? '' : ' disabled'}>Submit</button>` +
+          `</div>`
+        );
+      }
+      const label = CTA_OPTIONS.find((o) => o.id === ctaAnswer)!.label;
+      const answered = `<div class="mk-prompt-answer">${svg(CHECK, 11)}Are you ready to try out Inbind? <strong>${label}</strong></div>`;
+      if (status === 'working') return assistant(`${answered}<span class="mk-chat-caret"></span>`);
+      return assistant(
+        answered +
+        `<div class="mk-chat-text">${ctaAnswer === 'yes' ? 'Taking you to the download page…' : ABOUT_INBIND}</div>`
+      );
+    }
+
+    // Asks the closing question shortly after the first finished flow.
+    function askCtaSoon() {
+      if (ctaAsked) return;
+      ctaAsked = true;
+      window.clearTimeout(ctaTimer);
+      ctaTimer = window.setTimeout(() => {
+        if (status !== 'idle') { ctaAsked = false; return; }
+        ctaStage = 'asking';
+        ctaAnswer = null;
+        status = 'question';
+        render();
+      }, reduceMotion ? 800 : 2400);
+    }
+
+    // Starting a new flow drops an unanswered closing question; it comes
+    // back after that flow finishes.
+    function clearCta() {
+      window.clearTimeout(ctaTimer);
+      if (ctaStage !== 'answered') ctaAsked = false;
+      ctaStage = 'none';
+    }
+
+    function submitCta() {
+      if (!ctaAnswer) return;
+      ctaStage = 'answered';
+      if (ctaAnswer === 'yes') {
+        status = 'idle';
+        render();
+        window.setTimeout(() => { window.location.href = downloadUrl; }, reduceMotion ? 300 : 900);
+      } else {
+        run('idle', 1600);
+      }
+    }
+
+    function chatBody(): string {
+      const t = threadById(convo);
+      let thread: string;
+      if (convo === 'none') {
+        thread =
+          `<div class="mk-chat-welcome">${SPARK(28)}<strong>What should we work on?</strong>` +
+          `<span>Ask about your notes, run a skill, or hand a comment to Inbind AI.</span></div>`;
+      } else {
+        const tool = t
+          ? `<div class="mk-chat-tool">${svg(CHEVRON, 11)}<strong>Read 1 file</strong><span>Friday standup notes</span></div>`
+          : `<div class="mk-chat-tool">${svg(CHEVRON, 11)}<strong>Read 2 files</strong><span>Friday standup notes, Q4 launch brief</span></div>`;
+        thread = `<div class="mk-chat-user">${t ? esc(t.prompt) : RECAP_PROMPT}</div>`;
+        // Once the closing question is up, the flow above it has finished.
+        const mainStatus: Status = ctaStage === 'none' ? status : 'idle';
+        if (mainStatus === 'working') {
+          thread += assistant(`${tool}<span class="mk-chat-caret"></span>`);
+        } else if (mainStatus === 'question' && !t) {
+          thread += assistant(`${tool}${questionCard()}`);
+        } else if (t) {
+          const review = t.pending
+            ? ` <button type="button" class="mk-chat-link" data-review="${t.id}">Review the edit</button> to apply it.`
+            : t.accepted ? ' You applied it.' : ' You rejected it.';
+          thread += assistant(`${tool}<div class="mk-chat-text">${t.chatReply}${review}</div>`);
+        } else {
+          const who = AUDIENCE[answer ?? 'team'];
+          const file = recapFile === 'discarded'
+            ? '<s>weekly-recap</s> (discarded)'
+            : `<button type="button" class="mk-chat-link" data-open-file="recap">weekly-recap</button>`;
+          thread += assistant(
+            `${tool}<div class="mk-prompt-answer">${svg(CHECK, 11)}Who's this recap for? <strong>${who}</strong></div>` +
+            `<div class="mk-chat-text">Saved a recap for ${who} as ${file} in campaigns.</div>`
+          );
+        }
+        thread += ctaBlock();
+      }
+      const working = status === 'working';
+      const composer =
+        `<div class="mk-composer">` +
+          `<div class="mk-composer-row">` +
+            `<div class="mk-composer-input">${working ? 'Inbind AI is working…' : 'Ask… (@ files, / skills, Enter to send)'}</div>` +
+            `<span class="mk-composer-send">${working
+              ? '<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" fill="currentColor"/></svg>'
+              : SEND}</span>` +
+          `</div>` +
+          `<div class="mk-composer-context">` +
+            `<span class="mk-composer-chip">${svg(FILE, 11)}Friday standup notes${svg(X, 10)}</span>` +
+            (t ? `<span class="mk-composer-chip">${svg(COMMENT, 11)}1 comment attached${svg(X, 10)}</span>` : '') +
+            `<span class="mk-composer-spacer"></span>` +
+            `<span class="mk-composer-model">Sonnet${svg(CHEVRON, 10)}</span>` +
+          `</div>` +
+        `</div>`;
+      return `<div class="mk-chat-msgs">${thread}</div>${composer}`;
+    }
+
+    // ── Comment thread (DiscussionRegister) ──
+    function threadBody(t: Thread): string {
+      const rows = t.replies.map((r) =>
+        r.event
+          ? `<div class="mk-disc-event">${r.text}<span>${r.time}</span></div>`
+          : `<div class="mk-disc-reply">` +
+              (r.ai ? SPARK(22) : `<span class="mk-disc-avatar">${r.author[0]}</span>`) +
+              `<div class="mk-disc-reply-body">` +
+                `<div class="mk-disc-reply-head"><strong>${r.author}</strong><span>${r.time}</span></div>` +
+                `<div class="mk-disc-reply-text">${esc(r.text)}</div>` +
+              `</div>` +
+            `</div>`
+      ).join('');
+      const chips = t.pending
+        ? `<div class="mk-disc-chip-row"><button type="button" class="mk-cbar-origin is-accent" data-review="${t.id}">${svg(CHECKS, 11)}1 suggested edit to review</button></div>`
+        : '';
+      return (
+        `<div class="mk-disc">` +
+          chips +
+          `<div class="mk-disc-quote"><span class="mk-disc-quote-bar"></span><span>“${t.quote}”</span></div>` +
+          `<div class="mk-disc-list${t.resolved ? ' is-resolved' : ''}">${rows}</div>` +
+          `<div class="mk-disc-composer">` +
+            `<div class="mk-composer-input">Reply to the thread…</div>` +
+            `<button type="button" class="mk-disc-assign" data-handle="${t.id}"${t.resolved || t.pending ? ' disabled' : ''}>${SPARK(14)}Assign to Inbind AI</button>` +
+            `<span class="mk-composer-send">${SEND}</span>` +
+          `</div>` +
+        `</div>`
+      );
+    }
+
+    // ── Suggested edits (ReviewRegister, small-edit shape) ──
+    function reviewBody(t: Thread): string {
+      const lines = (t.removed ? `<div class="mk-review-line is-removed">${t.removed}</div>` : '') +
+        `<div class="mk-review-line is-added">${t.added}</div>`;
+      return (
+        `<div class="mk-review">` +
+          `<div class="mk-review-chips">` +
+            `<button type="button" class="mk-cbar-origin" data-open-thread="${t.id}">${svg(COMMENT, 11)}In comment · “${t.quote}”</button>` +
+            `<span class="mk-cbar-origin is-static">1 suggestion in Friday standup notes</span>` +
+          `</div>` +
+          `<div class="mk-review-card">` +
+            `<div class="mk-review-card-head"><span class="mk-review-kind">${t.kind}</span>` +
+              `<button type="button" class="mk-review-action" data-apply="${t.id}" title="Apply" aria-label="Apply">${svg(CHECK, 14)}</button>` +
+              `<button type="button" class="mk-review-action" data-reject="${t.id}" title="Reject" aria-label="Reject">${svg(X, 14)}</button>` +
+            `</div>` +
+            `<div class="mk-review-diff">${lines}</div>` +
+          `</div>` +
+        `</div>`
+      );
+    }
+
+    // ── Activity lists ──
+    function threadRow(t: Thread, withAction: boolean) {
+      const first = t.replies[0];
+      const sub = t.resolved
+        ? (t.accepted ? 'Edit applied · Resolved' : 'Resolved')
+        : t.pending ? 'Inbind AI suggested an edit' : `${first.author} · ${first.time}`;
+      const action = !withAction ? ''
+        : t.pending ? `<button type="button" class="mk-activity-btn" data-review="${t.id}">Review</button>`
+        : `<button type="button" class="mk-activity-btn" data-handle="${t.id}">Handle</button>`;
+      return (
+        `<div class="mk-activity-item" data-open-thread="${t.id}">` +
+          `<span class="mk-activity-icon">${svg(COMMENT, 14)}</span>` +
+          `<span class="mk-activity-text"><strong>${esc(first.text)}</strong><span>${sub}</span></span>` +
+          action +
+        `</div>`
+      );
+    }
+
+    function recapRow() {
+      return (
+        `<div class="mk-activity-item" data-open-file="recap">` +
+          `<span class="mk-activity-icon">${svg(FILE, 14)}</span>` +
+          `<span class="mk-activity-text"><strong>weekly-recap</strong><span>Created by Inbind AI · just now</span></span>` +
+          `<button type="button" class="mk-activity-btn" data-keep>Keep</button>` +
+          `<button type="button" class="mk-activity-btn" data-discard>Discard</button>` +
+        `</div>`
+      );
+    }
+
+    function group(label: string, rows: string[]) {
+      return rows.length ? `<div class="mk-activity-group"><span>${label}</span><span>${rows.length}</span></div>${rows.join('')}` : '';
+    }
+
+    function listBody(v: List): string {
+      let html = '';
+      if (v === 'With AI') {
+        if (status !== 'idle') {
+          const t = threadById(convo);
+          html = group('Chats', [
+            `<div class="mk-activity-item" data-view="chat"><span class="mk-activity-icon">${SPARK(14)}</span>` +
+            `<span class="mk-activity-text"><strong>${t ? `Handle ${t.replies[0].author}'s comment` : 'Weekly recap'}</strong>` +
+            `<span>${status === 'question' ? 'Waiting on your answer' : 'Working…'}</span></span></div>`,
+          ]);
+        }
+      } else if (v === 'Done') {
+        html = group('This document', threads.filter((t) => t.resolved).map((t) => threadRow(t, false)));
+      } else {
+        html = group('This document', openThreads().map((t) => threadRow(t, true))) +
+          (v === 'To handle' && recapFile === 'pending' ? group('New files', [recapRow()]) : '');
+      }
+      if (html) return `<div class="mk-activity">${html}</div>`;
+      const empty: Record<List, string> = {
+        'To handle': "Nothing to handle. You're all caught up.",
+        Comments: 'No open comments.',
+        'With AI': 'Anything Inbind AI is working on shows up here.',
+        Done: 'Resolved threads land here.',
+      };
+      return `<div class="mk-cbar-empty">${empty[v]}</div>`;
+    }
+
+    function render() {
+      syncDoc();
+      renderPill();
+      cb.dataset.view = view;
+      sheet!.setAttribute('aria-hidden', String(view === 'collapsed'));
+      if (view === 'collapsed') return;
+      renderTabs();
+      renderSubrow();
+      const t = threadById(activeThread);
+      bd.innerHTML =
+        view === 'chat' ? chatBody()
+        : view === 'thread' && t ? threadBody(t)
+        : view === 'review' && t ? reviewBody(t)
+        : listBody(view as List);
+      const msgs = bd.querySelector('.mk-chat-msgs');
+      if (msgs) msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function setStatus(s: Status) {
+      if (s === 'question') answer = null;
+      status = s;
+      render();
+    }
+
+    // Plays a working phase, then lands on `next`.
+    function run(next: Status, ms = 1800, done?: () => void) {
+      window.clearTimeout(timer);
+      setStatus('working');
+      timer = window.setTimeout(() => { done?.(); setStatus(next); }, reduceMotion ? 600 : ms);
+    }
+
+    // ── Sheet ──
+    function open(v: View, threadId?: string) {
+      if (threadId) activeThread = threadId;
+      if (v === 'To handle' || v === 'Comments' || v === 'With AI' || v === 'Done') listView = v;
+      view = v;
+      render();
+    }
+    function collapse() {
+      if (view === 'collapsed') return;
+      view = 'collapsed';
+      render();
+    }
+
+    // ── Flow 1 ──
+    function runRecap() {
+      introPlayed = true;
+      clearCta();
+      convo = 'recap';
+      run('question', 2000);
+    }
+    function submitAnswer() {
+      run('idle', 2200, () => {
+        recapBody!.innerHTML = RECAPS[answer ?? 'team'];
+        recapFile = 'pending';
+        askCtaSoon();
+      });
+    }
+
+    // ── Flow 2 ──
+    function handleThread(id: string) {
+      const t = threadById(id);
+      if (!t || t.resolved || t.pending) return;
+      clearCta();
+      convo = id;
+      activeThread = id;
+      view = 'chat';
+      run('idle', 2000, () => {
+        t.pending = true;
+        t.replies.push({ author: 'Inbind AI', text: t.threadReply, time: 'just now', ai: true });
+      });
+    }
+    function decide(id: string, apply: boolean) {
+      const t = threadById(id);
+      if (!t || !t.pending) return;
+      t.pending = false;
+      t.accepted = apply;
+      t.resolved = apply;
+      t.replies.push({ author: '', text: apply ? 'Changes accepted' : 'Changes rejected', time: 'just now', event: true });
+      open('thread', id);
+      askCtaSoon();
+    }
+
+    pill.addEventListener('click', (e) => {
+      const t = e.target as Element;
+      if (t.closest('#mk-cbar-chip')) open('To handle');
+      else if (t.closest('#mk-cbar-activity')) open(listView);
+      else open('chat');
+    });
+    pill.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open('chat'); }
+    });
+
+    document.getElementById('mk-cbar-collapse')?.addEventListener('click', collapse);
+    sheet.addEventListener('keydown', (e) => { if (e.key === 'Escape') collapse(); });
+    document.addEventListener('mousedown', (e) => {
+      const t = e.target as Element;
+      if (view !== 'collapsed' && !t.closest('#mk-cbar') && !t.closest('.mk-skill-run, .mk-comment, [data-ins], [data-del]')) collapse();
+    });
+
+    // Clicks anywhere in the sheet: tabs, sub-row and body share these hooks.
+    sheet.addEventListener('click', (e) => {
+      const t = e.target as Element;
+      const attr = (name: string) => t.closest<HTMLElement>(`[data-${name}]`);
+      // The bar's root also carries data-view, so only count matches inside the sheet.
+      const viewEl = attr('view');
+      const toView = viewEl && sheet.contains(viewEl) ? viewEl : null;
+      const opt = attr('answer');
+      if (attr('keep')) { recapFile = 'kept'; render(); }
+      else if (attr('discard')) { recapFile = 'discarded'; render(); }
+      else if (attr('handle')) handleThread(attr('handle')!.dataset.handle!);
+      else if (attr('apply')) decide(attr('apply')!.dataset.apply!, true);
+      else if (attr('reject')) decide(attr('reject')!.dataset.reject!, false);
+      else if (attr('review')) open('review', attr('review')!.dataset.review);
+      else if (attr('resolve')) { const th = threadById(attr('resolve')!.dataset.resolve!); if (th) th.resolved = true; render(); }
+      else if (attr('back')) open(listView);
+      else if (attr('open-file')) openFile('recap');
+      else if (attr('open-thread')) open('thread', attr('open-thread')!.dataset.openThread);
+      else if (toView) open(toView.dataset.view as View);
+      else if (attr('cta')) {
+        ctaAnswer = attr('cta')!.dataset.cta as CtaAnswer;
+        bd.querySelectorAll('[data-cta]').forEach((b) => b.classList.toggle('is-selected', b === attr('cta')));
+        bd.querySelector<HTMLButtonElement>('.mk-cta-submit')!.disabled = false;
+      } else if (t.closest('.mk-cta-submit')) submitCta();
+      else if (opt) {
+        answer = opt.dataset.answer as Answer;
+        bd.querySelectorAll('[data-answer]').forEach((b) => b.classList.toggle('is-selected', b === opt));
+        bd.querySelector<HTMLButtonElement>('.mk-question-submit')!.disabled = !canSubmit();
+      } else if (t.closest('.mk-question-submit') && canSubmit()) submitAnswer();
+    });
+
+    // Doc: highlights open their thread, suggested edits open the review.
+    const selecting = () => { const sel = window.getSelection(); return !!sel && !sel.isCollapsed; };
+    document.querySelectorAll<HTMLElement>('.mk-comment').forEach((hl) => {
+      hl.addEventListener('click', () => { if (!selecting()) open('thread', hl.dataset.thread); });
+    });
+    document.querySelectorAll<HTMLElement>('[data-ins], [data-del]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const id = el.dataset.ins ?? el.dataset.del!;
+        if (!selecting() && threadById(id)?.pending) open('review', id);
+      });
+    });
+
+    // Tree: switch between the notes and the generated recap.
+    document.querySelectorAll<HTMLElement>('.mk-tree-node[data-file]').forEach((row) => {
+      row.addEventListener('click', () => openFile(row.dataset.file as 'standup' | 'recap'));
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('.mk-skill-run').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        window.clearTimeout(timer);
+        view = 'chat';
+        runRecap();
+      });
+    });
+
+    // Intro: once the mock is on screen, play the start of flow 1 and wait
+    // on the question, like the app does until you answer.
+    function playIntro() {
+      if (introPlayed) return;
+      introPlayed = true;
+      timer = window.setTimeout(() => {
+        // Skip if the visitor already started something.
+        if (convo !== 'none' || status !== 'idle') return;
+        convo = 'recap';
+        run('question', 2600);
+      }, 1800);
+    }
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) { playIntro(); io.disconnect(); }
+      }, { threshold: 0.5 });
+      io.observe(cb.closest('.mk-app-mock') ?? cb);
+      // The status ring animates box-shadow, which repaints every frame, so
+      // pause the loops while the mock is off screen.
+      const mockRoot = cb.closest<HTMLElement>('.mk-app-mock');
+      if (mockRoot) {
+        new IntersectionObserver(([entry]) => {
+          mockRoot.classList.toggle('is-offscreen', !entry.isIntersecting);
+        }).observe(mockRoot);
+      }
+    } else {
+      playIntro();
+    }
+
+    render();
   }
 
   if (toolbar && content && slashMenu && mock && !isMobile) {
