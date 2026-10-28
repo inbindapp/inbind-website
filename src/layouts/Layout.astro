@@ -1,5 +1,13 @@
 ---
 import { url } from '../utils/url';
+// Self-hosted variable fonts (Latin + Latin Extended). Served from our own
+// origin with hashed file names, so there's no extra connection and they
+// cache for good.
+import '@fontsource-variable/figtree';
+import '@fontsource-variable/sora';
+import '@fontsource-variable/jetbrains-mono';
+import figtreeLatin from '@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2?url';
+import soraLatin from '@fontsource-variable/sora/files/sora-latin-wght-normal.woff2?url';
 
 interface Props {
   title?: string;
@@ -47,9 +55,10 @@ const ogImageUrl = new URL(ogImage, Astro.site).toString();
 
   {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
   <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- Body and heading fonts are needed for first paint, so fetch them
+       alongside the CSS instead of after it. -->
+  <link rel="preload" href={figtreeLatin} as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href={soraLatin} as="font" type="font/woff2" crossorigin />
   <script is:inline async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 </head>
 <body>
