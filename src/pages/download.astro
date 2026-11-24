@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { url } from '../utils/url';
 
 let version = '0.1.25';
 try {
@@ -17,19 +18,19 @@ const base = `https://github.com/inbindapp/inbind/releases/download/v${version}`
 const linuxCmd = (v: string) => `chmod +x Inbind_${v}_amd64.AppImage && ./Inbind_${v}_amd64.AppImage`;
 ---
 
-<Layout title="Download" description="Download Inbind for macOS, Windows, and Linux. Free to download and use." ogImage="/og/download.png">
+<Layout title="Download" description="Download Inbind for macOS, Windows and Linux. Free to download and use with the Claude or ChatGPT subscription you already have." ogImage="/og/download.png">
   <Header />
 
   <section class="mk-section mk-section--download">
     <div class="mk-container">
+      <div class="mk-section-head mk-dl-head">
+        <div class="mk-section-eyebrow">Download · <span id="version-label">version {version}</span></div>
+        <h1 class="mk-section-h">Pick your computer.</h1>
+        <p class="mk-section-sub">Inbind is free to download and use. For the AI chat, you'll need a Claude or ChatGPT subscription.</p>
+      </div>
+
       <!-- Step 1: platform selector -->
       <div id="dl-step1">
-        <div class="mk-section-head">
-          <h2 class="mk-section-h">Pick your computer.</h2>
-          <p class="mk-section-sub">Inbind is free to download and use.</p>
-          <div class="mk-section-eyebrow" id="version-label" style="margin-top: 12px;">version {version}</div>
-        </div>
-
         <div class="mk-dl-grid">
           <button class="mk-dl-card" data-platform="macos">
             <span class="mk-dl-card-name">macOS</span>
@@ -86,7 +87,7 @@ const linuxCmd = (v: string) => `chmod +x Inbind_${v}_amd64.AppImage && ./Inbind
         <!-- Linux panel -->
         <div class="mk-dl-panel" data-panel="linux" hidden>
           <h2 class="mk-section-h">Install on Linux</h2>
-          <p class="mk-dl-prompt-intro">Grab the package for your distro.</p>
+          <p class="mk-dl-prompt-intro">Grab the package for your distro. For the AppImage, make it executable and launch it with the command below.</p>
 
           <div class="mk-dl-grid mk-dl-grid--options">
               <a href={`${base}/Inbind_${version}_amd64.AppImage`} data-asset="Inbind_{v}_amd64.AppImage" class="mk-dl-card mk-dl-card--link">
@@ -103,8 +104,7 @@ const linuxCmd = (v: string) => `chmod +x Inbind_${v}_amd64.AppImage && ./Inbind
               </a>
           </div>
 
-          <p class="mk-dl-prompt-intro mk-dl-prompt-intro--cmd">For the AppImage, make it executable and launch it:</p>
-          <div class="mk-prompt-block">
+          <div class="mk-prompt-block" style="margin-top: 20px;">
             <pre class="mk-prompt-pre" id="cmd-linux">{linuxCmd(version)}</pre>
             <button class="mk-prompt-copy" id="copy-linux">Copy</button>
           </div>
@@ -117,6 +117,20 @@ const linuxCmd = (v: string) => `chmod +x Inbind_${v}_amd64.AppImage && ./Inbind
           </a>
         </div>
 
+      </div>
+
+      <!-- Anonymous usage data -->
+      <div class="mk-dl-note">
+        <div class="mk-callout-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Anonymous usage data</h3>
+          <p>Inbind collects a small amount of anonymous usage data so we can see what works and what doesn't. It never includes your notes or anything that identifies you. To turn it off, untick <strong>Share Anonymous Usage Data</strong> in the Inbind menu on macOS, or in the Help menu on Windows and Linux.</p>
+          <a class="mk-arrow-link" href={url('privacy')}>Privacy &amp; security <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </div>
   </section>
@@ -143,7 +157,7 @@ const linuxCmd = (v: string) => `chmod +x Inbind_${v}_amd64.AppImage && ./Inbind
   }
 
   // Platform card clicks
-  document.querySelectorAll('.mk-dl-card').forEach(btn => {
+  document.querySelectorAll('button.mk-dl-card').forEach(btn => {
     btn.addEventListener('click', () => showPanel(btn.dataset.platform));
   });
 

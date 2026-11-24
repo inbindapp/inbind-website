@@ -6,88 +6,103 @@ import FlowLines from '../components/FlowLines.astro';
 import UseCaseIllustration from '../components/UseCaseIllustration.astro';
 import { url } from '../utils/url';
 
-type IllusKind = 'scattered' | 'voice' | 'raw' | 'docs' | 'client';
+type IllusKind = 'scattered' | 'voice' | 'messaging' | 'docs' | 'client';
 
 interface UseCase {
   illus: IllusKind;
   title: string;
   problem: string;
   solution: string;
+  link?: { label: string; href: string };
 }
+
+const contentMarketing = { label: 'Inbind for content marketing', href: url('use-cases/content-marketing') };
 
 const useCases: UseCase[] = [
   {
-    illus: 'scattered',
-    title: 'Turning scattered notes into publishable content',
-    problem:
-      'You have meeting notes, product context, and brand guidelines spread across apps. Every time you sit down to write something, you spend 20 minutes assembling context into a prompt. The draft comes out generic. You rewrite half of it.',
-    solution:
-      'In Inbind, your context lives next to the editor. The AI already has your notes, your product knowledge, and how you talk about things. You write and generate in the same place, and the output actually reads like you wrote it.',
-  },
-  {
     illus: 'voice',
-    title: 'Keeping a consistent voice across everything you publish',
+    title: 'Founder building thought leadership',
     problem:
-      "You're producing content regularly, but AI drafts always need heavy editing to sound on-brand. Every new piece starts from zero context.",
+      "You've got expertise worth sharing, but it's spread across meeting notes, product updates and your own head, and you're supposed to show up on social, on your blog and maybe in audio or video too. Every AI draft you try sounds like it could have come from anyone.",
     solution:
-      'In Inbind, you keep brand guidelines and product context alongside the editor. First drafts come out closer to publishable because the AI has real context to work from. Consistent voice across pieces without briefing the AI every time.',
+      'You capture your thinking as notes, keep your product and brand material in the same workspace, and turn it into pieces for each channel from there. The AI works from what you actually know, so what you publish reads like it came from someone who knows the product and the industry, and it takes less of your time.',
+    link: contentMarketing,
   },
   {
-    illus: 'raw',
-    title: 'Going from raw notes to shareable docs',
+    illus: 'scattered',
+    title: 'Content manager',
     problem:
-      'You take detailed notes during meetings and planning sessions but spend just as long reformatting them into docs other people can actually read.',
+      "You're the one who makes sure content goes out regularly, but you're not always the expert on the topic. You rely on teammates to feed you input, and the AI drafts you get need heavy editing before they sound on-brand.",
     solution:
-      'In Inbind, you capture notes, then use the AI to turn them into requirements docs, release notes, or whatever you need to share. The context is already there. No re-explaining, no copy-pasting into another tool.',
+      "Your teammates' input lands in the workspace as notes, next to your brand and product docs, and the AI drafts from all of it. First drafts come out closer to publishable, and the content stays consistent even when the expertise comes from several people.",
+    link: contentMarketing,
+  },
+  {
+    illus: 'messaging',
+    title: 'Product marketing manager',
+    problem:
+      'You own the messaging everyone else builds on: positioning, product facts, and the collateral that goes with them. Keeping it right means gathering input from business area leads, structuring it, checking it back with them, and then handing it to sales and marketing, who brief their own AI tools from their own copies until the story drifts.',
+    solution:
+      'Your messaging framework and product facts live in the workspace, and new input from stakeholders arrives as notes that update them through changes you review. One-pagers and sales material are drafted from that same source, so every piece makes the same claims, and the people you hand off to can produce their own material from it without rewriting the story.',
   },
   {
     illus: 'docs',
-    title: 'Writing documentation from implementation notes',
+    title: 'Engineer who owns the docs',
     problem:
-      'You keep notes on what was built and why, but producing polished documentation is a separate effort that keeps getting deprioritised.',
+      'You keep notes on what was built and why, but turning them into polished documentation or release notes is a separate job that keeps getting pushed back.',
     solution:
-      'In Inbind, you keep implementation notes in the editor, then generate feature docs or release notes grounded in those notes. The result reflects what was actually built, not what someone remembered weeks later.',
+      "You keep implementation notes in Inbind and generate feature docs or release notes from them when you're ready to publish. The result reflects what was actually built, not what someone remembered weeks later.",
   },
   {
     illus: 'client',
-    title: 'Drafting client-facing communications from scattered context',
+    title: 'Customer success manager',
     problem:
-      'Customer context. Onboarding history, pain points, past incidents. Scattered across notes and email threads. Writing anything client-facing means hunting through all of it first.',
+      'Customer context like onboarding history, pain points and past incidents is spread across notes and email threads, so writing anything client-facing means hunting through all of it first.',
     solution:
-      'In Inbind, you keep that context in one place, then use the AI to draft tailored guides, incident summaries, or status updates. Communications come out specific and accurate without digging through three apps.',
+      "You keep that context in Inbind and have the AI draft tailored guides, incident summaries or status updates from it. What you send is specific and accurate, and you didn't have to go digging for it.",
+  },
+];
+
+const notFit = [
+  {
+    bold: 'You only write now and then.',
+    rest: "The AI gets more useful as your notes and docs build up in the workspace, so Inbind won't do much for you as a one-off writing tool.",
+  },
+  {
+    bold: "You'd rather write without AI.",
+    rest: 'Inbind is built around working with an AI, so a plain markdown editor will suit you better.',
+  },
+  {
+    bold: 'You need a CMS or a publishing pipeline.',
+    rest: "Inbind is where the writing happens, not where content gets scheduled and published, so if your team already has content ops in place, it won't replace them.",
   },
 ];
 ---
 
 <Layout
-  title="Use Cases"
-  description="If you already use AI and markdown but keep losing context between tools, Inbind is where that workflow comes together."
+  title="Use cases"
+  description="How founders, content managers, product marketing managers, engineers and customer success managers use Inbind to turn their notes into work that sounds like them."
   ogImage="/og/use-cases.png"
 >
   <Header />
 
   <!-- PAGE HEADER -->
-  <section class="mk-section" style="padding-top: 88px; padding-bottom: 56px;">
+  <section class="mk-page-head">
     <div class="mk-container">
       <div class="mk-section-head">
-        <div class="mk-section-eyebrow">Who's it for</div>
+        <div class="mk-section-eyebrow">Who it's for</div>
         <h1 class="mk-section-h">
           You already use AI to write. <br />You just wish the output didn't need so much fixing.
         </h1>
         <p class="mk-section-sub">
-          Inbind is for people who work in markdown, use AI tools daily, and are
-          tired of copy-pasting context between apps just to get a draft that
-          sounds like them.
+          Inbind is for people who produce market-facing work with AI and keep getting drafts that sound like everyone else's, because the AI doesn't know what's true about their product and customers right now.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- USE CASES — editorial alternating layout (Variation B) -->
-  <section
-    class="mk-section"
-    style="background: var(--bg-panel); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);"
-  >
+  <!-- USE CASES: editorial alternating layout -->
+  <section class="mk-section mk-band">
     <div class="mk-container">
       <div class="mk-uc-list">
         {useCases.map((uc, i) => (
@@ -97,7 +112,7 @@ const useCases: UseCase[] = [
             </div>
             <div class="mk-uc-body">
               <div class="mk-uc-num">{String(i + 1).padStart(2, '0')}</div>
-              <h3>{uc.title}</h3>
+              <h2 class="mk-uc-title">{uc.title}</h2>
               <div class="mk-uc-cols">
                 <div class="mk-uc-col mk-uc-col--problem">
                   <div class="mk-uc-label mk-uc-label--problem">
@@ -114,6 +129,9 @@ const useCases: UseCase[] = [
                   <p class="mk-uc-solution">{uc.solution}</p>
                 </div>
               </div>
+              {uc.link && (
+                <a class="mk-arrow-link mk-uc-link" href={uc.link.href}>{uc.link.label} <span aria-hidden="true">→</span></a>
+              )}
             </div>
           </article>
         ))}
@@ -123,33 +141,19 @@ const useCases: UseCase[] = [
       <div class="mk-not-fit">
         <div class="mk-not-fit-head">
           <div class="mk-section-eyebrow">A quick reality check</div>
-          <h3 class="mk-not-fit-title">When Inbind isn't the right tool.</h3>
+          <h2 class="mk-not-fit-title">When Inbind isn't the right tool.</h2>
         </div>
         <div class="mk-not-fit-grid">
-          <div class="mk-not-fit-tile">
-            <div class="mk-uc-label mk-uc-label--problem">
-              <span class="mk-uc-label-x">✕</span>
-              Skip if
+          {notFit.map((item) => (
+            <div class="mk-not-fit-tile">
+              <div class="mk-uc-label mk-uc-label--problem">
+                <span class="mk-uc-label-x">✕</span>
+                Skip if
+              </div>
+              <p class="mk-not-fit-bold">{item.bold}</p>
+              <p class="mk-not-fit-rest">{item.rest}</p>
             </div>
-            <p class="mk-not-fit-bold">You don't create content regularly.</p>
-            <p class="mk-not-fit-rest">The value compounds with use. It's not useful as a one-off writing tool.</p>
-          </div>
-          <div class="mk-not-fit-tile">
-            <div class="mk-uc-label mk-uc-label--problem">
-              <span class="mk-uc-label-x">✕</span>
-              Skip if
-            </div>
-            <p class="mk-not-fit-bold">You don't use AI in your workflow.</p>
-            <p class="mk-not-fit-rest">There are better pure editors for that.</p>
-          </div>
-          <div class="mk-not-fit-tile">
-            <div class="mk-uc-label mk-uc-label--problem">
-              <span class="mk-uc-label-x">✕</span>
-              Skip if
-            </div>
-            <p class="mk-not-fit-bold">You have a large content ops team with an established pipeline.</p>
-            <p class="mk-not-fit-rest">We're not a CMS or content workflow tool at this stage.</p>
-          </div>
+          ))}
         </div>
       </div>
     </div>
@@ -161,7 +165,7 @@ const useCases: UseCase[] = [
     <div class="mk-cta-flow-br"><FlowLines count={4} withAnchor={false} /></div>
     <div class="mk-container mk-cta-inner">
       <h2>See if it fits.</h2>
-      <p>Download the app, point it at a folder, and try your actual workflow. No account required.</p>
+      <p>Download Inbind, open a folder, and try it on a piece of work you actually need to get done. There's no Inbind account to create.</p>
       <a class="mk-btn mk-btn--primary mk-btn--lg" href={url('download')}>Download Inbind</a>
     </div>
   </section>

@@ -4,132 +4,109 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { url } from '../utils/url';
 
+const includes = [
+  'Real-time markdown editor with comments and page properties',
+  "AI chat that shows every change before it's applied",
+  'Skills: use the ones you have and create new ones',
+  'Connect your tools through MCP',
+  'Share a workspace with your team through GitHub',
+  'Works with your Claude or ChatGPT subscription',
+];
+
+// `html` is the rendered answer; `text` is the plain version for the FAQ schema.
+const faqs = [
+  {
+    q: 'Is Inbind really free?',
+    text: "Yes. Download it, use it and keep your files. The AI runs on the Claude or ChatGPT subscription you already have, so there's no second bill.",
+  },
+  {
+    q: 'What do I need for the AI?',
+    text: "A Claude or ChatGPT subscription. Inbind works through Claude Code or Codex, so you get each provider's newest capabilities as soon as they ship, and you can switch between them whenever you like.",
+  },
+  {
+    q: 'Can my team use it for free?',
+    text: 'Yes. Sharing a workspace through GitHub is part of the free app. Everyone needs a GitHub account, and Inbind handles the git side for you.',
+  },
+  {
+    q: 'Will there ever be a paid plan?',
+    text: "Probably. We're still figuring out what that looks like and who it's actually for, and we'll be upfront about it before it happens.",
+  },
+  {
+    q: 'Where do my notes live?',
+    text: "In a folder on your computer, as .md files. Inbind never holds your files. If you put that folder in iCloud or Dropbox, it'll sync there, and if you share it through GitHub, it lives in a repository you control.",
+    html: "In a folder on your computer, as <code>.md</code> files. Inbind never holds your files. If you put that folder in iCloud or Dropbox, it'll sync there, and if you share it through GitHub, it lives in a repository you control.",
+  },
+  {
+    q: 'Do you train on my notes?',
+    text: 'No, we never see them. Inbind collects anonymous usage data so we can see which features get used, but never the contents of your notes, your prompts or anything that identifies you, and you can turn it off.',
+    html: `No, we never see them. Inbind collects anonymous usage data so we can see which features get used, but never the contents of your notes, your prompts or anything that identifies you, and you can turn it off. <a href="${url('privacy')}">Privacy &amp; security →</a>`,
+  },
+  {
+    q: 'What happens to my files if I stop using Inbind?',
+    text: "Nothing. They're .md files in a folder, and any other editor can open them. We're not the kind of tool you have to migrate out of.",
+    html: "Nothing. They're <code>.md</code> files in a folder, and any other editor can open them. We're not the kind of tool you have to migrate out of.",
+  },
+];
+
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'Is Inbind really free?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. Download it, use it, keep your files. It uses your existing Claude Code or Codex subscription for AI, no separate setup needed.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Will there ever be a paid plan?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "Probably. We're still figuring out what that looks like and who it's actually for. We'll be upfront about it before it happens.",
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Where do my notes live?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "In a folder on your computer as .md files. We don't have a cloud. If you put that folder in iCloud or Dropbox, it'll sync there.",
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Do you train on my notes?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "No. We don't see them.",
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What happens to my files if I stop using Inbind?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: "Nothing. They're .md files in a folder. Open them in any other editor. We're not the kind of tool you have to migrate out of.",
-      },
-    },
-  ],
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.text },
+  })),
 };
 ---
 
-<Layout title="Pricing" description="Inbind is free to download and use. Local-first markdown editor with AI editing built in." ogImage="/og/pricing.png" schema={schema}>
+<Layout title="Pricing" description="Inbind is free to download and use. The AI runs on the Claude or ChatGPT subscription you already have, and we don't charge for AI usage." ogImage="/og/pricing.png" schema={schema}>
   <Header />
 
-  <section class="mk-section" style="padding-top: 88px;">
+  <section class="mk-page-head">
     <div class="mk-container">
       <div class="mk-section-head">
         <div class="mk-section-eyebrow">Pricing</div>
-        <h2 class="mk-section-h">Free. No strings.</h2>
-        <p class="mk-section-sub">The full editor is free to download and use. We may introduce a paid plan down the line, but we'll be honest about what it is and who it's for when we do.</p>
+        <h1 class="mk-section-h">Free, no strings.</h1>
+        <p class="mk-section-sub">The editor, the AI chat and skills management are free to download and use. There's no paid plan right now, and if we add one, we'll tell you plainly what it is and who it's for before it happens.</p>
       </div>
+    </div>
+  </section>
 
-      <div class="mk-pricing-grid">
-        <!-- Free -->
-        <div class="mk-price-card">
-          <h3>Free</h3>
+  <section class="mk-section" style="padding-top: 0;">
+    <div class="mk-container">
+      <div class="mk-plan">
+        <div class="mk-plan-main">
+          <h2>Free</h2>
           <div class="mk-price">
             <span class="mk-price-amt">$0</span>
-            <span class="mk-price-per">/ forever</span>
           </div>
-          <p style="color: var(--text-subtle); margin: 0; font-size: 14.5px;">The full editor. Local-only. Uses your Claude Code or Codex subscription for AI.</p>
+          <p>The full app, running on your computer. The AI runs on your own Claude or ChatGPT subscription, and we don't charge for AI usage.</p>
+          <a class="mk-btn mk-btn--primary" href={url('download')}>Download free</a>
+        </div>
+        <div class="mk-plan-list">
+          <h3>Includes</h3>
           <ul>
-            <li>
-              <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="2 8 6 12 14 4"/>
-              </svg>
-              Real-time markdown editor
-            </li>
-            <li>
-              <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="2 8 6 12 14 4"/>
-              </svg>
-              Folder-based file browser with page properties
-            </li>
-            <li>
-              <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="2 8 6 12 14 4"/>
-              </svg>
-              AI chat with visual edit approval
-            </li>
-            <li>
-              <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="2 8 6 12 14 4"/>
-              </svg>
-              Works with your Claude Code or Codex subscription
-            </li>
+            {includes.map((item) => (
+              <li>
+                <svg class="mk-price-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="2 8 6 12 14 4"/>
+                </svg>
+                {item}
+              </li>
+            ))}
           </ul>
-          <a class="mk-btn mk-btn--ghost" href={url('download')} style="margin-top: auto;">Download free</a>
         </div>
       </div>
 
       <!-- FAQ -->
-      <div style="max-width: 720px; margin: 72px auto 0;">
-        <h3 style="font-family: var(--font-display); font-size: 24px; font-weight: 600; margin: 0 0 24px; letter-spacing: -0.02em; text-align: center;">A few honest answers</h3>
-
-        <details class="mk-faq-item">
-          <summary>Is Inbind really free?</summary>
-          <p class="mk-faq-body">Yes. Download it, use it, keep your files. It uses your existing Claude Code or Codex subscription for AI, no separate setup needed.</p>
-        </details>
-
-        <details class="mk-faq-item">
-          <summary>Will there ever be a paid plan?</summary>
-          <p class="mk-faq-body">Probably. We're still figuring out what that looks like and who it's actually for. We'll be upfront about it before it happens.</p>
-        </details>
-
-        <details class="mk-faq-item">
-          <summary>Where do my notes live?</summary>
-          <p class="mk-faq-body">In a folder on your computer. As <code>.md</code> files. We don't have a cloud. If you put that folder in iCloud or Dropbox, it'll sync there. Up to you.</p>
-        </details>
-
-        <details class="mk-faq-item">
-          <summary>Do you train on my notes?</summary>
-          <p class="mk-faq-body">No. We don't see them.</p>
-        </details>
-
-        <details class="mk-faq-item">
-          <summary>What happens to my files if I stop using Inbind?</summary>
-          <p class="mk-faq-body">Nothing. They're <code>.md</code> files in a folder. Open them in any other editor. We're not the kind of tool you have to migrate out of.</p>
-        </details>
+      <div class="mk-faq">
+        <h2 class="mk-faq-title">A few honest answers</h2>
+        {faqs.map((f) => (
+          <details class="mk-faq-item">
+            <summary>{f.q}</summary>
+            <p class="mk-faq-body" set:html={f.html ?? f.text} />
+          </details>
+        ))}
       </div>
     </div>
   </section>

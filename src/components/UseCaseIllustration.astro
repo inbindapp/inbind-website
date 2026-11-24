@@ -12,7 +12,7 @@
  */
 
 interface Props {
-  kind: "scattered" | "voice" | "raw" | "docs" | "client";
+  kind: "scattered" | "voice" | "messaging" | "docs" | "client";
 }
 const { kind } = Astro.props;
 
@@ -62,11 +62,17 @@ const voiceWidths = [
   [28, 70, 70, 22, 90, 76, 84],
 ];
 
-/* ─── 3. Raw notes ─────────────────────────────────────── */
-const rawFlows = [0, 1, 2, 3].map((i) => {
-  const yStart = 50 + i * 50;
-  const yEnd = 110 + (i - 1.5) * 18;
-  return `M 170 ${yStart} C 230 ${yStart}, 270 ${yEnd}, 320 ${yEnd}`;
+/* ─── 3. Messaging (stakeholder input → shared collateral) ─ */
+const messagingInputs = [
+  { x: 14, y: 26,  w: 132 },
+  { x: 30, y: 104, w: 120 },
+  { x: 14, y: 182, w: 132 },
+];
+const messagingDotColors = ["#ff6b6b", "#ffd93d", "#ff6b6b"];
+const messagingFlows = [0, 1, 2].map((i) => {
+  const yStart = 50 + i * 78;
+  const yEnd = 130 + (i - 1) * 20;
+  return `M 162 ${yStart} C 230 ${yStart}, 266 ${yEnd}, 318 ${yEnd}`;
 });
 
 /* ─── 4. Docs ──────────────────────────────────────────── */
@@ -166,55 +172,48 @@ const clientFlows = [0, 1, 2, 3].map((i) => {
     </>
   )}
 
-  {kind === "raw" && (
+  {kind === "messaging" && (
     <>
-      <g transform="translate(20 40)">
-        <rect width="142" height="184" rx="6" fill={PAPER_HI} stroke={BORDER} stroke-width="1.3" />
-        <text x="12" y="22" font-family="JetBrains Mono, monospace" font-size="10.5" fill={INK}>
-          <tspan fill="#ff6b6b">#</tspan> Heading
-        </text>
-        <text x="12" y="40" font-family="JetBrains Mono, monospace" font-size="10.5" fill={INK_SOFT}>raw note line</text>
-        <text x="12" y="55" font-family="JetBrains Mono, monospace" font-size="10.5" fill={INK_SOFT}>another line</text>
-        <text x="12" y="74" font-family="JetBrains Mono, monospace" font-size="10.5" fill={INK}>
-          <tspan fill="#ff6b6b">##</tspan> Subhead
-        </text>
-        <text x="12" y="92" font-family="JetBrains Mono, monospace" font-size="10.5" fill={INK_SOFT}>
-          <tspan fill="#ff6b6b">- </tspan>bullet one
-        </text>
-        <text x="12" y="107" font-family="JetBrains Mono, monospace" font-size="10.5" fill={INK_SOFT}>
-          <tspan fill="#ff6b6b">- </tspan>bullet two
-        </text>
-        <text x="12" y="122" font-family="JetBrains Mono, monospace" font-size="10.5" fill={INK_SOFT}>
-          <tspan fill="#ff6b6b">- </tspan>bullet three
-        </text>
-        <text x="12" y="142" font-family="JetBrains Mono, monospace" font-size="10.5" fill={INK_SOFT}>
-          <tspan fill="#ff6b6b">[[</tspan>link<tspan fill="#ff6b6b">]]</tspan>
-        </text>
-        <text x="12" y="160" font-family="JetBrains Mono, monospace" font-size="10.5" fill={INK_SOFT}>todo: cleanup</text>
-      </g>
-      {rawFlows.map((d) => (
+      {messagingInputs.map((m, i) => (
+        <g transform={`translate(${m.x} ${m.y})`}>
+          <path
+            d={`M 10 0 H ${m.w - 10} a 10 10 0 0 1 10 10 V 30 a 10 10 0 0 1 -10 10 H 30 L 18 50 V 40 H 10 a 10 10 0 0 1 -10 -10 V 10 a 10 10 0 0 1 10 -10 Z`}
+            fill={PAPER_HI}
+            stroke={BORDER}
+            stroke-width="1.2"
+          />
+          <circle cx="18" cy="20" r="7" fill={messagingDotColors[i]} opacity="0.7" />
+          <rect x="32" y="14" width={m.w - 50} height="2.6" rx="1.3" fill={INK} opacity="0.7" />
+          <rect x="32" y="22" width={m.w - 64} height="2.6" rx="1.3" fill={INK_SOFT} opacity="0.55" />
+        </g>
+      ))}
+      {messagingFlows.map((d) => (
         <path d={d} stroke={`url(#${gradId})`} stroke-width={FLOW_STROKE} stroke-opacity={FLOW_OPACITY} stroke-linecap="round" fill="none" />
       ))}
-      <rect x="324" y="44" width={ANCHOR_W} height="172" rx={ANCHOR_W / 2} fill={INK} opacity={INK_OPACITY} />
-      <g transform="translate(354 36)">
-        <rect width="90" height="188" rx="6" fill={PAPER} stroke={INK} stroke-width="1.3" />
-        <rect x="12" y="16" width="50" height="6"  rx="2.5" fill={INK} />
-        <rect x="12" y="32" width="68" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
-        <rect x="12" y="40" width="62" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
-        <rect x="12" y="48" width="66" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
-        <rect x="12" y="56" width="44" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
-        <rect x="12" y="72" width="36" height="4" rx="1.8" fill={INK} />
-        <rect x="18" y="86" width="60" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
-        <circle cx="14" cy="87.5" r="1.4" fill="#ff6b6b" />
-        <rect x="18" y="96" width="56" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
-        <circle cx="14" cy="97.5" r="1.4" fill="#ff6b6b" />
-        <rect x="18" y="106" width="64" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
-        <circle cx="14" cy="107.5" r="1.4" fill="#ff6b6b" />
-        <rect x="12" y="124" width="30" height="4" rx="1.8" fill={INK} />
-        <rect x="12" y="138" width="66" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
-        <rect x="12" y="146" width="58" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
-        <rect x="12" y="154" width="64" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
-        <rect x="12" y="162" width="40" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
+      <rect x="322" y="54" width={ANCHOR_W} height="152" rx={ANCHOR_W / 2} fill={INK} opacity={INK_OPACITY} />
+      <g transform="translate(350 30)">
+        <rect width="84" height="150" rx="6" fill={PAPER} stroke={INK} stroke-width="1.3" />
+        <rect x="11" y="12" width="40" height="11" rx="2.5" fill="#ff6b6b" />
+        <text x="31" y="20.5" font-family="DM Sans, sans-serif" font-size="6.5" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="0.4">SOURCE</text>
+        <rect x="11" y="32" width="52" height="5" rx="2.4" fill={INK} />
+        <rect x="11" y="46" width="62" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
+        <rect x="11" y="54" width="56" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
+        <rect x="11" y="62" width="60" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
+        <rect x="11" y="78" width="32" height="3.6" rx="1.6" fill={INK} />
+        <rect x="17" y="90" width="50" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
+        <circle cx="13" cy="91.2" r="1.4" fill="#ff6b6b" />
+        <rect x="17" y="98" width="44" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
+        <circle cx="13" cy="99.2" r="1.4" fill="#ff6b6b" />
+        <rect x="17" y="106" width="52" height="2.4" rx="1.2" fill={INK_SOFT} opacity="0.55" />
+        <circle cx="13" cy="107.2" r="1.4" fill="#ff6b6b" />
+      </g>
+      <g transform="translate(372 150)">
+        <rect width="80" height="54" rx="5" fill={PAPER} stroke={INK} stroke-width="1.3" />
+        <rect x="9" y="10" width="34" height="4" rx="2" fill={INK} />
+        <rect x="9" y="20" width="28" height="2.2" rx="1.1" fill={INK_SOFT} opacity="0.55" />
+        <rect x="9" y="27" width="24" height="2.2" rx="1.1" fill={INK_SOFT} opacity="0.55" />
+        <rect x="46" y="18" width="25" height="26" rx="3" fill={`url(#${gradId})`} opacity="0.55" />
+        <rect x="9" y="38" width="30" height="2.2" rx="1.1" fill={INK_SOFT} opacity="0.55" />
       </g>
     </>
   )}

@@ -1,0 +1,189 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import FlowLines from '../../components/FlowLines.astro';
+import UseCaseIllustration from '../../components/UseCaseIllustration.astro';
+import { url } from '../../utils/url';
+
+const steps = [
+  {
+    title: 'Keep your context where the AI can read it',
+    body: 'Put your brand voice, product docs, customer notes and meeting transcripts in your workspace as plain markdown files. The AI chat reads them, so you stop pasting the same background into every new conversation.',
+  },
+  {
+    title: 'Turn your process into skills',
+    body: "A skill is a saved way of doing a task, like turning a meeting transcript into a blog brief or a brief into a first draft. Inbind comes with a skill that keeps writing in line with your voice guidance and away from the usual AI writing habits, and another that builds new skills from a short conversation. Skills you've already made for Claude or Codex work as they are.",
+  },
+  {
+    title: "Review it like you'd review a coworker's draft",
+    body: 'Leave comments for the AI right on the page. Every change it suggests shows up in the formatted draft, and you accept or reject each one, so you make the creative calls and decide what goes out.',
+  },
+  {
+    title: 'Bring in research and data',
+    body: 'The AI can search the web and pull from the tools you connect through MCP, so research and numbers land next to the draft instead of in another tab.',
+  },
+  {
+    title: 'Work on it together',
+    body: 'Share the workspace with your team through GitHub. Everyone works from the same up-to-date files, with comments on the page and every change in the history.',
+  },
+];
+
+// Latest posts for the "we write our own content this way" block.
+let latestPosts: { slug: string; name: string; published: string }[] = [];
+try {
+  const res = await fetch('https://cdn.inbind.app/content/596/posts/_index.json');
+  if (res.ok) {
+    const data = await res.json();
+    latestPosts = ((data.items ?? []) as any[])
+      .sort((a, b) => new Date(b._meta.published_at).valueOf() - new Date(a._meta.published_at).valueOf())
+      .slice(0, 3)
+      .map((p) => ({ slug: p.slug, name: p.name, published: p._meta.published_at }));
+  }
+} catch {}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+}
+---
+
+<Layout
+  title="Inbind for content marketing"
+  description="Write with AI and still sound like your company. Inbind drafts from your own notes, product docs and brand voice, for founders and small teams who publish regularly."
+  ogImage="/og/content-marketing.png"
+>
+  <Header />
+
+  <!-- HERO -->
+  <section class="mk-cm-hero">
+    <div class="mk-container mk-cm-hero-grid">
+      <div>
+        <div class="mk-eyebrow">Use case: content marketing</div>
+        <h1 class="mk-h1">Write with AI and still sound like yourself.</h1>
+        <p class="mk-lead">Inbind is for founders and small teams who publish regularly and want AI to help, without every draft sounding like everyone else using the same prompts.</p>
+        <div class="mk-hero-ctas">
+          <div class="mk-hero-ctas__buttons">
+            <a class="mk-btn mk-btn--primary mk-btn--lg" href={url('download')}>Download Inbind</a>
+          </div>
+        </div>
+      </div>
+      <div class="mk-cm-hero-illus">
+        <UseCaseIllustration kind="voice" />
+      </div>
+    </div>
+  </section>
+
+  <!-- THE PROBLEM -->
+  <section class="mk-section mk-band">
+    <div class="mk-container mk-statement">
+      <h2>The model isn't the problem. <em>The context is.</em></h2>
+      <p>A good prompt can still produce a draft that sounds like everyone else's, because the AI doesn't know what you sell, who you sell it to or how you talk about it. So you paste notes, docs and guidelines into the chat before you can start, then edit out everything that doesn't sound like you once the draft comes back. The result is content you're okay with but not proud of, even though you're paying for capable tools.</p>
+    </div>
+  </section>
+
+  <!-- TWO PEOPLE -->
+  <section class="mk-section">
+    <div class="mk-container">
+      <div class="mk-section-head">
+        <h2 class="mk-section-h">Two people we built this for.</h2>
+      </div>
+      <div class="mk-persona-grid">
+        <article class="mk-persona">
+          <div class="mk-feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/>
+              <path d="M9 18h6"/>
+              <path d="M10 22h4"/>
+            </svg>
+          </div>
+          <h3>If you're the founder</h3>
+          <p>Your expertise is the content, but it's spread across meeting notes, product updates and your own head. You capture your thinking in Inbind as you go, keep your product and brand material next to it, and turn the same material into a LinkedIn post, an article for your blog or a script for a video. A launch or a campaign needs a consistent set of pieces, and because they all start from the same source, they tell the same story.</p>
+        </article>
+        <article class="mk-persona">
+          <div class="mk-feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <path d="M16 2v4"/>
+              <path d="M8 2v4"/>
+              <path d="M3 10h18"/>
+              <path d="m9 16 2 2 4-4"/>
+            </svg>
+          </div>
+          <h3>If you're the one keeping content going</h3>
+          <p>You might not be the expert on every topic, so you rely on teammates for input. In Inbind, their notes land in the same workspace as your brand voice and product docs, and the AI drafts from all of it. First drafts come out closer to publishable, and the voice stays consistent even when the ideas come from several people.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="mk-section mk-band">
+    <div class="mk-container mk-steps-wrap">
+      <div class="mk-steps-head">
+        <h2 class="mk-section-h">How it works in Inbind.</h2>
+      </div>
+      <ol class="mk-steps">
+        {steps.map((step, i) => (
+          <li class="mk-step">
+            <span class="mk-step-num">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3>{step.title}</h3>
+              <p>{step.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- WE WRITE OUR OWN CONTENT THIS WAY -->
+  <section class="mk-section">
+    <div class="mk-container">
+      <div class="mk-dogfood">
+        <div>
+          <h2>We write our own content this way.</h2>
+          <p>We're not full-time marketers, and we use Inbind to write our own blog. We publish what we learn along the way, including the attempts that didn't work.</p>
+          <a class="mk-arrow-link" href={url('blog')}>Read the blog <span aria-hidden="true">→</span></a>
+        </div>
+        {latestPosts.length > 0 && (
+          <div class="mk-dogfood-posts">
+            {latestPosts.map((post) => (
+              <a class="mk-dogfood-post" href={url(`blog/${post.slug}`)}>
+                <span>{formatDate(post.published)}</span>
+                <strong>{post.name}</strong>
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <!-- NOT A FIT -->
+      <div class="mk-callout" style="margin-top: 56px;">
+        <div class="mk-callout-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4"/>
+            <path d="M12 8h.01"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Not a fit</h3>
+          <p>If you're a large marketing team with content operations already in place, Inbind isn't a CMS or a content pipeline tool at this stage. And if you only write now and then, the value of keeping your context in one place won't have time to build up.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section class="mk-cta">
+    <div class="mk-cta-flow-tl"><FlowLines count={4} withAnchor={false} /></div>
+    <div class="mk-cta-flow-br"><FlowLines count={4} withAnchor={false} /></div>
+    <div class="mk-container mk-cta-inner">
+      <h2>Try it on your next piece.</h2>
+      <p>Download Inbind, open a folder with your notes and brand docs, and write your next post from there. It's free, and it uses the Claude or ChatGPT subscription you already have.</p>
+      <a class="mk-btn mk-btn--primary mk-btn--lg" href={url('download')}>Download Inbind</a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
