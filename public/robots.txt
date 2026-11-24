@@ -1,4 +1,9 @@
+# Content Signals (https://contentsignals.org/)
+# search: yes, index us for search results.
+# ai-input: yes, AI tools can quote and link our pages in answers.
+# ai-train: no, don't use our content to train models.
 User-agent: *
+Content-Signal: ai-train=no, search=yes, ai-input=yes
 Allow: /
 
 Sitemap: https://inbind.app/sitemap-index.xml

@@ -1,5 +1,7 @@
 ---
 import { url } from '../utils/url';
+import { markdownPath } from '../utils/markdown';
+import WebMcpTools from '../components/WebMcpTools.astro';
 // Self-hosted variable fonts (Latin + Latin Extended). Served from our own
 // origin with hashed file names, so there's no extra connection and they
 // cache for good.
@@ -36,6 +38,9 @@ const ogImageUrl = new URL(ogImage, Astro.site).toString();
   <title>{pageTitle}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalUrl} />
+  <!-- Markdown copy of this page and a site index for AI agents -->
+  <link rel="alternate" type="text/markdown" href={markdownPath(Astro.url.pathname)} />
+  <link rel="alternate" type="text/plain" href={url('llms.txt')} title="llms.txt" />
 
   <!-- Open Graph -->
   <meta property="og:site_name" content="Inbind" />
@@ -65,6 +70,7 @@ const ogImageUrl = new URL(ogImage, Astro.site).toString();
   <div class="mk-page">
     <slot />
   </div>
+  <WebMcpTools />
 </body>
 </html>
 

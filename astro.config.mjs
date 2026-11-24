@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import agentMarkdown from './src/integrations/agent-markdown';
 
 export default defineConfig({
   site: 'https://inbind.app',
@@ -10,5 +11,6 @@ export default defineConfig({
     sitemap({
       filter: (page) => !page.includes('/og/'),
     }),
+    agentMarkdown(),
   ],
 });
