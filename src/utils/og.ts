@@ -43,6 +43,7 @@ export async function generateOgImage(title: string, description: string): Promi
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: '72px 80px',
+          boxSizing: 'border-box',
           fontFamily: '"Figtree"',
         },
         children: [
