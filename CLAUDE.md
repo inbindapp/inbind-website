@@ -1,8 +1,10 @@
 # Inbind Marketing Website
 
-Astro 5 static site deployed to GitHub Pages at inbind.app. Pushes to `main` auto-deploy via GitHub Actions (`.github/workflows/`).
+Astro 7 static site deployed to GitHub Pages at inbind.app. Pushes to `main` auto-deploy via GitHub Actions (`.github/workflows/`).
 
 ## Dev commands
+
+Needs Node 26 (see `.nvmrc`, run `nvm use`). CI reads the same file.
 
 ```
 npm run dev      # local dev server
@@ -12,7 +14,7 @@ npm run preview  # serve dist/ locally
 
 ## Stack
 
-- **Astro 5** — static output, no adapter
+- **Astro 7** — static output, no adapter. `compressHTML: true` keeps Astro 5 whitespace behavior
 - **TypeScript** — strict null checks
 - **Plain CSS** — design tokens in `src/styles/tokens.css`, marketing styles in `src/styles/marketing.css`
 - **Fonts** — Sora (display), Figtree (body), JetBrains Mono (code), loaded via Google Fonts in `Layout.astro`
@@ -33,6 +35,13 @@ Dynamic share images (1200×630 PNG) generated at build time via `satori` + `@re
 - Blog posts: `src/pages/og/blog/[slug].png.ts` — auto-generated per post from CMS data.
 
 `Layout.astro` emits all `og:*` and `twitter:*` meta tags automatically once `ogImage` is set.
+
+## Agent readiness
+
+- **Markdown copies + llms.txt:** `src/integrations/agent-markdown.ts` runs after the build and writes a markdown copy of every page (`/pricing/` → `/pricing.md`) plus `/llms.txt`. New pages are picked up automatically. Header, footer, nav, buttons, SVGs and `aria-hidden` elements are left out. Add `data-md-skip` to anything else that's decoration, like the homepage app mock.
+- **WebMCP:** read-only browser tools for AI agents in `src/components/WebMcpTools.astro`, loaded on every page by `Layout.astro`.
+- **Content Signals:** `public/robots.txt` declares `ai-train=no, search=yes, ai-input=yes`.
+- **Not possible from the repo:** Link response headers and `Accept: text/markdown` negotiation need response headers, which GitHub Pages can't set. They'd need the Cloudflare proxy turned on.
 
 ## URL utility
 

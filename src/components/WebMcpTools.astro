@@ -1,0 +1,118 @@
+---
+// Read-only WebMCP tools (https://webmachinelearning.github.io/webmcp/) so
+// in-browser AI agents can look things up on the site. Does nothing in
+// browsers without WebMCP support.
+---
+
+<script>
+  import { markdownPath } from '../utils/markdown';
+  import { url } from '../utils/url';
+
+  interface ModelContextTool {
+    name: string;
+    title?: string;
+    description: string;
+    inputSchema?: object;
+    annotations?: { readOnlyHint?: boolean };
+    execute: (input: any) => Promise<unknown>;
+  }
+
+  interface ModelContext {
+    registerTool(tool: ModelContextTool): Promise<void>;
+  }
+
+  const RELEASES_API = 'https://api.github.com/repos/inbindapp/inbind/releases/latest';
+  const PLATFORM_EXTENSIONS: Record<string, string[]> = {
+    macos: ['.dmg'],
+    windows: ['.msi', '.exe'],
+    linux: ['.AppImage', '.deb', '.rpm'],
+  };
+
+  async function fetchText(path: string): Promise<string> {
+    const res = await fetch(path);
+    if (!res.ok) throw new Error(`Couldn't load ${path} (HTTP ${res.status})`);
+    return res.text();
+  }
+
+  // Older Chrome builds expose the API on navigator instead of document.
+  const modelContext: ModelContext | undefined =
+    (document as any).modelContext ?? (navigator as any).modelContext;
+
+  if (modelContext?.registerTool) {
+    const tools: ModelContextTool[] = [
+      {
+        name: 'list_pages',
+        title: 'List Inbind pages',
+        description:
+          'List every page and blog post on inbind.app, with a one-line description and a link to a markdown copy of each.',
+        inputSchema: { type: 'object', properties: {} },
+        annotations: { readOnlyHint: true },
+        execute: () => fetchText(url('llms.txt')),
+      },
+      {
+        name: 'read_page',
+        title: 'Read an Inbind page',
+        description:
+          'Get the content of a page on inbind.app as markdown. Use list_pages to find paths.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            path: {
+              type: 'string',
+              description: 'Path of the page, for example "/pricing" or "/blog/why-ai-content-sounds-generic".',
+            },
+          },
+          required: ['path'],
+        },
+        annotations: { readOnlyHint: true },
+        execute: async ({ path }: { path: string }) => {
+          const target = new URL(path, location.origin);
+          if (target.origin !== location.origin) throw new Error('Only inbind.app pages can be read.');
+          return fetchText(markdownPath(target.pathname));
+        },
+      },
+      {
+        name: 'get_download_links',
+        title: 'Get Inbind download links',
+        description:
+          'Get direct download links for the latest version of the Inbind desktop app. Inbind is free for macOS, Windows and Linux.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            platform: {
+              type: 'string',
+              enum: Object.keys(PLATFORM_EXTENSIONS),
+              description: 'Only return downloads for this platform. Leave out to get all platforms.',
+            },
+          },
+        },
+        annotations: { readOnlyHint: true },
+        execute: async ({ platform }: { platform?: string }) => {
+          const res = await fetch(RELEASES_API);
+          if (!res.ok) {
+            return { downloadPage: new URL(url('download'), location.origin).toString() };
+          }
+          const release = await res.json();
+          const platforms = platform ? [platform] : Object.keys(PLATFORM_EXTENSIONS);
+          const downloads = platforms.flatMap((p) =>
+            (release.assets as { name: string; browser_download_url: string }[])
+              .filter((a) => PLATFORM_EXTENSIONS[p]?.some((ext) => a.name.endsWith(ext)))
+              .map((a) => ({ platform: p, file: a.name, url: a.browser_download_url })),
+          );
+          return {
+            version: String(release.tag_name).replace(/^v/, ''),
+            releaseNotes: release.html_url,
+            downloads,
+          };
+        },
+      },
+    ];
+
+    for (const tool of tools) {
+      // Promise.resolve covers older builds where registerTool didn't return a promise.
+      Promise.resolve()
+        .then(() => modelContext.registerTool(tool))
+        .catch((err) => console.warn(`WebMCP: couldn't register ${tool.name}`, err));
+    }
+  }
+</script>
