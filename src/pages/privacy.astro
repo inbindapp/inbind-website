@@ -1,0 +1,172 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const sections = [
+  { id: 'your-files', title: 'Your files stay on your computer' },
+  { id: 'sharing', title: 'Sharing is your choice' },
+  { id: 'ai', title: 'The AI runs on your own account' },
+  { id: 'collects', title: 'What Inbind collects' },
+  { id: 'never', title: 'What Inbind never collects' },
+  { id: 'where', title: 'Where the data goes' },
+  { id: 'turn-off', title: 'How to turn it off' },
+  { id: 'it-team', title: 'For your IT team' },
+  { id: 'website', title: 'This website' },
+  { id: 'questions', title: 'Questions' },
+];
+
+const collected = [
+  { label: 'A random install ID', rest: ", created the first time you run Inbind. It isn't linked to your name, email or any account." },
+  { label: 'App details:', rest: ' the Inbind version, your operating system, CPU type, and whether you use the stable or nightly build.' },
+  { label: 'Which features you use', rest: ', for example that a workspace was opened, a note was edited or a chat message was sent. We record the kind of action, never its content.' },
+  { label: 'AI provider and model names', rest: ', so we know which models matter.' },
+  { label: 'Download counts', rest: " for each installer on GitHub. It's a number, with nothing about who downloaded it." },
+];
+
+const neverCollected = [
+  'The contents of your notes',
+  "Your chat prompts or the AI's responses",
+  'File, folder or workspace names, or paths',
+  'Your name, email address or username',
+  'API keys or tokens',
+  'The names of skills or MCP servers you installed yourself',
+  'Your IP address',
+];
+
+const itPoints = [
+  "Your files stay on the user's computer or wherever your organization chooses to sync them, so Inbind doesn't add a new system that stores your data.",
+  'The macOS app is notarized by Apple.',
+  "The AI runs on the Claude or ChatGPT accounts your organization already has, so Inbind doesn't add another AI vendor.",
+];
+
+const title = (id: string) => sections.find((s) => s.id === id)?.title;
+---
+
+<Layout
+  title="Privacy & security"
+  description="Your files stay on your computer as plain markdown. Here's what Inbind collects, what it never collects, and how to turn analytics off."
+  ogImage="/og/privacy.png"
+>
+  <Header />
+
+  <section class="mk-page-head">
+    <div class="mk-container">
+      <div class="mk-section-head">
+        <div class="mk-section-eyebrow">Privacy &amp; security</div>
+        <h1 class="mk-section-h">Your knowledge is yours.</h1>
+        <p class="mk-section-sub">When context is the most valuable thing your team has, you should decide where it lives. Here's what happens to your files and exactly what Inbind collects.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mk-section mk-band">
+    <div class="mk-container mk-doc">
+      <nav class="mk-doc-toc" aria-label="On this page">
+        <h2>On this page</h2>
+        <ol>
+          {sections.map((s) => (
+            <li><a href={`#${s.id}`}>{s.title}</a></li>
+          ))}
+        </ol>
+      </nav>
+
+      <div class="mk-doc-body">
+        <section class="mk-doc-section" id="your-files">
+          <h2>{title('your-files')}</h2>
+          <p>Inbind works on plain markdown files in a folder you pick. There's no proprietary format and no import or export step, and Inbind has no cloud of its own, so it never holds your files. If you put the folder in iCloud or Dropbox, it syncs there, and if you stop using Inbind, any tool that opens markdown can still open your work.</p>
+        </section>
+
+        <section class="mk-doc-section" id="sharing">
+          <h2>{title('sharing')}</h2>
+          <p>If you want to work with your team, you share a workspace through GitHub, in a repository you control. Nothing is shared unless you set it up.</p>
+        </section>
+
+        <section class="mk-doc-section" id="ai">
+          <h2>{title('ai')}</h2>
+          <p>Inbind uses the Claude or ChatGPT subscription you already have, through Claude Code or Codex. When you use the AI chat, the files and messages the AI works with go to the provider you picked, under your own agreement with them. When the AI searches the web, the search goes through a search provider. Tools you connect through MCP only share what you've connected.</p>
+        </section>
+
+        <section class="mk-doc-section" id="collects">
+          <h2>{title('collects')}</h2>
+          <p>Inbind collects a small amount of anonymous usage data so we can see what works and what doesn't:</p>
+          <ul class="mk-data-list">
+            {collected.map((item) => (
+              <li>
+                <span class="mk-data-mark mk-data-mark--yes" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 8 6 12 14 4"/></svg>
+                </span>
+                <span><strong>{item.label}</strong>{item.rest}</span>
+              </li>
+            ))}
+          </ul>
+          <p>We use this to count active users, see where new users get stuck and decide what to build next.</p>
+        </section>
+
+        <section class="mk-doc-section" id="never">
+          <h2>{title('never')}</h2>
+          <ul class="mk-data-list mk-data-never">
+            {neverCollected.map((item) => (
+              <li>
+                <span class="mk-data-mark mk-data-mark--no" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
+                </span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="mk-doc-section" id="where">
+          <h2>{title('where')}</h2>
+          <p>Usage data goes to PostHog, hosted in the EU. We've turned on the setting that discards IP addresses, so they're never stored.</p>
+        </section>
+
+        <section class="mk-doc-section" id="turn-off">
+          <h2>{title('turn-off')}</h2>
+          <div class="mk-menu-paths" aria-hidden="true">
+            <div class="mk-menu-path">
+              <span class="mk-menu-path-os">macOS</span>
+              <kbd>Inbind</kbd>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              <kbd>Share Anonymous Usage Data</kbd>
+            </div>
+            <div class="mk-menu-path">
+              <span class="mk-menu-path-os">Windows and Linux</span>
+              <kbd>Help</kbd>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              <kbd>Share Anonymous Usage Data</kbd>
+            </div>
+          </div>
+          <p>Untick <strong>Share Anonymous Usage Data</strong> in the Inbind menu on macOS, or in the Help menu on Windows and Linux. Inbind stops sending data right away and drops anything that was waiting to be sent, and it remembers your choice the next time you start the app.</p>
+        </section>
+
+        <section class="mk-doc-section" id="it-team">
+          <h2>{title('it-team')}</h2>
+          <div class="mk-it-card">
+            <ul>
+              {itPoints.map((point) => (
+                <li>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 8 6 12 14 4"/></svg>
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section class="mk-doc-section" id="website">
+          <h2>{title('website')}</h2>
+          <p>Our website uses Simple Analytics to count visits.</p>
+        </section>
+
+        <section class="mk-doc-section" id="questions">
+          <h2>{title('questions')}</h2>
+          <p>Questions about privacy: <a href="mailto:hey@inbind.app">hey@inbind.app</a></p>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

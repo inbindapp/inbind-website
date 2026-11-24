@@ -91,7 +91,7 @@ export async function generateOgImage(title: string, description: string): Promi
                       margin: '0',
                       maxWidth: '800px',
                     },
-                    children: truncate(description, 120),
+                    children: truncate(description, 170),
                   },
                 },
               ],

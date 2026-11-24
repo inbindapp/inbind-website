@@ -1,0 +1,116 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FlowLines from '../components/FlowLines.astro';
+import { url } from '../utils/url';
+
+const beliefs = [
+  {
+    title: 'Your AI is only as good as the context you give it.',
+    body: "A better prompt won't fix a draft that doesn't know what you sell, who you sell it to or how you sound.",
+  },
+  {
+    title: 'Context should compound, not decay.',
+    body: 'New decisions flow in, outdated claims get replaced, and the whole thing gets more useful the longer you work in it.',
+  },
+  {
+    title: 'AI works with you, not for you or against you.',
+    body: 'Every change the AI proposes shows up in the document for you to approve or throw away, and you make the creative calls.',
+  },
+  {
+    title: 'Grounded or nothing.',
+    body: "We'd much rather Inbind tell you there's nothing in your workspace about pricing yet than make up a number that sounds right.",
+  },
+  {
+    title: 'Your knowledge is yours.',
+    body: 'Plain markdown files on your computer, shared only if you choose to do so, and your own AI subscription.',
+  },
+  {
+    title: 'Opinionated beats endlessly configurable.',
+    body: 'You could always hack it together yourself, and we did for a while, but it was a setup to maintain rather than a place to work.',
+  },
+];
+---
+
+<Layout
+  title="About"
+  description="Inbind is built by two founders who kept running into the same problem: AI content is only as good as the context behind it."
+  ogImage="/og/about.png"
+>
+  <Header />
+
+  <section class="mk-page-head">
+    <div class="mk-container">
+      <div class="mk-section-head">
+        <div class="mk-section-eyebrow">About</div>
+        <h1 class="mk-section-h">We built the workspace we wished we had.</h1>
+        <p class="mk-section-sub">Inbind started when we realized that AI content is only as good as the context behind it, and that keeping that context current was a job nobody had.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT STARTED -->
+  <section class="mk-section" style="padding-top: 24px;">
+    <div class="mk-story">
+      <h2>How it started</h2>
+      <p>We were building a headless CMS and writing content for it with AI. The drafts looked fine on the surface, but they got the tone slightly wrong, repeated positioning we'd already moved away from, and sounded like everyone else using the same prompts. The models were only getting better, so they weren't the problem. The context we gave them was.</p>
+      <p>Our notes and meeting transcripts lived in one place and the docs we wrote from lived in another, and nothing separated what was current from what was a passing thought. Stray notes leaked into the output, and at one point a single note about an AI content editor ended up in a blog post about our CMS, describing the product as both.</p>
+      <blockquote class="mk-pull">That's when we saw that the hard part wasn't generating content but keeping the context behind it clean and current.</blockquote>
+      <p>Creating and marketing content was the harder problem. We kept running into it ourselves, so we started building the thing we wished we had.</p>
+    </div>
+  </section>
+
+  <!-- WHAT WE BELIEVE -->
+  <section class="mk-section mk-band">
+    <div class="mk-container">
+      <div class="mk-section-head">
+        <div class="mk-section-eyebrow">What we believe</div>
+        <h2 class="mk-section-h">These are the beliefs we try to build Inbind by.</h2>
+      </div>
+      <ol class="mk-beliefs">
+        {beliefs.map((b, i) => (
+          <li class="mk-belief">
+            <span class="mk-belief-num" aria-hidden="true">{i + 1}</span>
+            <h3>{b.title}</h3>
+            <p>{b.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- WHERE WE ARE / WHERE WE'RE GOING -->
+  <section class="mk-section">
+    <div class="mk-container mk-twocol">
+      <div class="mk-twocol-card">
+        <div class="mk-section-eyebrow">Today</div>
+        <h2>Where we are</h2>
+        <p>Inbind is our daily driver. We run our own work in it every day, including the notes and drafts this page was written from. Everything you see here, and however you found us, was produced in Inbind.</p>
+        <p class="is-strong">What we still have to prove is that it works as well for you as it does for us.</p>
+      </div>
+      <div class="mk-twocol-card">
+        <div class="mk-section-eyebrow">Next</div>
+        <h2>Where we're going</h2>
+        <p>We think context management is about to become one of the most important jobs on any team that works with AI, and right now it's nobody's job.</p>
+        <p>We picture teams where nobody has to re-brief anyone or re-explain the positioning. Every person and every AI agent starts from the same current understanding of what the company is, what it sells and who it's for.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TALK TO US -->
+  <section class="mk-cta">
+    <div class="mk-cta-flow-tl"><FlowLines count={4} withAnchor={false} /></div>
+    <div class="mk-cta-flow-br"><FlowLines count={4} withAnchor={false} /></div>
+    <div class="mk-container mk-cta-inner">
+      <h2>Tell us how you write with AI today.</h2>
+      <p>If you produce content with AI and you've built your own setup to keep it on track, we'd love to hear how it works and where it breaks. We're not trying to pitch you. We just want to learn how other people do it.</p>
+      <div class="mk-cta-actions">
+        <a class="mk-btn mk-btn--primary mk-btn--lg" href="mailto:hey@inbind.app">Email us at hey@inbind.app</a>
+        <a class="mk-btn mk-btn--ghost mk-btn--lg" href={url('download')}>Download Inbind</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

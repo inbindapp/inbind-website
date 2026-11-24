@@ -14,7 +14,7 @@ const schema = {
   url: 'https://inbind.app',
   applicationCategory: 'ProductivityApplication',
   operatingSystem: 'macOS, Windows, Linux',
-  description: 'A local-first markdown editor with built-in AI chat. Write, store context, and generate content in one window.',
+  description: 'A workspace where your AI starts from what your team actually knows. A free markdown editor with AI chat for macOS, Windows and Linux.',
   offers: {
     '@type': 'Offer',
     price: '0',
@@ -26,31 +26,84 @@ const schema = {
     url: 'https://inbind.app',
   },
 };
+
+const features = [
+  {
+    title: 'An editor that feels like a document',
+    body: 'You see formatted text as you write, with tables, code blocks and to-do lists, instead of raw markdown. Link one page to another, drop images in where you need them, and add properties like status or type so you can find and filter your files later.',
+    icon: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>',
+  },
+  {
+    title: 'AI that works like a teammate',
+    body: 'The AI chat reads the files in your workspace and can search the web when it needs to. Leave it a comment on the page the way you would for a coworker. Every change it suggests shows up in the formatted page, and you accept or reject it before anything is applied.',
+    icon: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8"/><path d="M8 13h5"/>',
+  },
+  {
+    title: 'Bring your own AI',
+    body: "Use the Claude or ChatGPT subscription you already pay for, so there's no second bill. You'll get each provider's newest capabilities as soon as they ship, and you can switch whenever you like.",
+    icon: '<path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/>',
+  },
+  {
+    title: 'Skills',
+    body: "A skill is a saved way of doing a task: what to ask, what to read and what shape the result should take. The AI follows it every time, so you don't explain the same job twice. Skills you've already built for Claude or Codex work as they are, and you can create new ones by describing what you want in a short conversation.",
+    icon: '<path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/>',
+  },
+  {
+    title: 'Connect your tools',
+    body: "Connect the tools you already work in through MCP, and the AI can pull what it needs straight from them, so you're not copying and pasting into the chat.",
+    icon: '<path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>',
+  },
+  {
+    title: 'Work together on the same files',
+    body: "Connect a GitHub account and your team works from the same up-to-date workspace, with comments on the page and every change kept in the history. Inbind handles the git side, so you don't need to know much about git, and your work stays backed up as plain markdown files you own.",
+    icon: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  },
+];
+
+const alternatives = [
+  {
+    name: 'Google Docs and Microsoft Word',
+    body: "Great editors with a legacy, and they come with the office suite most teams already use. The AI assistant was added on top of them later, so it isn't shaped by reviewed, current context about your product and customers.",
+  },
+  {
+    name: 'Notion and Confluence',
+    body: 'A shared place for your team\'s knowledge, with AI added on top. Notion only includes AI in its more expensive plans and charges credits for heavier use, and the pages go stale unless someone keeps them up to date by hand.',
+  },
+  {
+    name: 'ChatGPT and Claude apps',
+    body: "The chat is great. Their memory and projects hold a slice of your context, but it's flat, your team can't review it, and it stays with one vendor.",
+  },
+  {
+    name: 'A setup you built yourself',
+    body: 'An Obsidian vault, VS Code with Claude Code, or an "AI brain" in Claude can cover everything, but it\'s a setup to maintain rather than a place to work. Keeping it current means re-uploading files and rewriting instructions by hand.',
+  },
+];
 ---
 
-<Layout title="Inbind — Markdown editor with AI chat" description="A local-first markdown editor with built-in AI chat. For people already using AI and markdown who are tired of juggling four tools to get one draft out." ogImage="/og/home.png" schema={schema}>
+
+<Layout title="Inbind" description="A workspace where your AI starts from what your team actually knows. A free markdown editor with AI chat for macOS, Windows and Linux." ogImage="/og/home.png" schema={schema}>
   <Header />
 
   <!-- HERO -->
   <section class="mk-hero">
     <div class="mk-container">
-      <div style="max-width: 760px;">
-        <div class="mk-eyebrow">A context-first writing tool</div>
-        <h1 class="mk-h1">Take notes the way AI likes to read them.</h1>
+      <div style="max-width: 780px;">
+        <div class="mk-eyebrow">A context-first workspace</div>
+        <h1 class="mk-h1">Your AI is only as good as the context you give it.</h1>
         <p class="mk-lead">
-          Inbind is a writing tool for people who already use AI and markdown but are tired of juggling a notes app, a code editor, version control, and an AI chat just to get a decent draft out.<span style="display: block; margin-top: 12px;">Notes, context, and editor in one place. So the AI actually has something real to work with.</span>
+          Inbind keeps your notes, docs and drafts where the AI can read them, so a blog post, product doc or customer update starts from what you actually know instead of guessing.
         </p>
         <div class="mk-hero-ctas">
           <div class="mk-hero-ctas__buttons">
             <a class="mk-btn mk-btn--primary mk-btn--lg" href={url('download')}>Download Inbind</a>
           </div>
           <span class="mk-hero-meta">
-            Free download for macOS, Windows & Linux.
+            Free for macOS, Windows and Linux. Works with the Claude or ChatGPT subscription you already have.
           </span>
         </div>
       </div>
 
-      <!-- HERO COMPOSITION — Product mock with flow lines -->
+      <!-- HERO COMPOSITION: product mock with flow lines -->
       <div class="mk-hero-frame">
         <div style="position: relative;">
           <FlowLinesZ
@@ -58,7 +111,7 @@ const schema = {
             style="position: absolute; top: -80px; left: -80px; width: calc(100% + 160px); height: calc(100% + 160px); pointer-events: none;"
             opacity={0.35}
           />
-<div class="mk-hero-mock" style="position: relative; z-index: 2;">
+          <div class="mk-hero-mock" style="position: relative; z-index: 2;">
             <AppMock />
           </div>
         </div>
@@ -66,76 +119,44 @@ const schema = {
     </div>
   </section>
 
+  <!-- WHO IT'S FOR -->
+  <section class="mk-audience">
+    <div class="mk-container mk-audience-grid">
+      <div>
+        <div class="mk-section-eyebrow">For AI-native GTM teams</div>
+        <h2 class="mk-section-h">Made for people who write with AI every week.</h2>
+      </div>
+      <div class="mk-audience-body">
+        <div class="mk-role-chips" aria-hidden="true">
+          <span class="mk-role-chip">Marketing</span>
+          <span class="mk-role-chip">Sales</span>
+          <span class="mk-role-chip">Product</span>
+          <span class="mk-role-chip">Customer success</span>
+        </div>
+        <p>Inbind is for people in marketing, sales, product and customer success who use AI to produce market-facing work. If your drafts keep coming out generic because the AI doesn't know what's true about your product and customers right now, this is the problem we built Inbind to fix.</p>
+        <a class="mk-arrow-link" href={url('use-cases')}>See how people use it <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
   <!-- FEATURES -->
-  <section class="mk-section" style="background: var(--bg-panel); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+  <section class="mk-section mk-band">
     <div class="mk-container">
       <div class="mk-section-head">
         <div class="mk-section-eyebrow">What you get</div>
-        <h2 class="mk-section-h">Built for the way you actually write.</h2>
-        <p class="mk-section-sub">Everything works out of the box. No plugins, no configuration. Your files stay on your computer as plain Markdown.</p>
+        <h2 class="mk-section-h">Write with AI and see exactly what it changes.</h2>
+        <p class="mk-section-sub">Inbind works on plain markdown files in a folder on your computer. Everything here comes with the free download, and there are no plugins to set up first.</p>
       </div>
       <div class="mk-features">
-        <div class="mk-feature">
-          <div class="mk-feature-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
+        {features.map((f) => (
+          <div class="mk-feature">
+            <div class="mk-feature-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={f.icon} />
+            </div>
+            <h3>{f.title}</h3>
+            <p>{f.body}</p>
           </div>
-          <h3>Real-time Markdown editor</h3>
-          <p>Write in markdown and see formatted output instantly. Select text to change formatting. No preview toggle, no raw syntax on screen.</p>
-        </div>
-        <div class="mk-feature">
-          <div class="mk-feature-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6l2.1 2.1M5.6 18.4l2.1-2.1m8.6-8.6l2.1-2.1"/>
-            </svg>
-          </div>
-          <h3>AI chat that reads your files</h3>
-          <p>A built-in chat panel (Claude or Codex) that reads everything in your workspace. Ask it to summarize a doc, draft from your notes, or rewrite in your voice.</p>
-        </div>
-        <div class="mk-feature">
-          <div class="mk-feature-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="9 11 12 14 22 4"/>
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-            </svg>
-          </div>
-          <h3>Visual AI edit approval</h3>
-          <p>Changes proposed by the AI are shown as a visual diff before they're applied. Review and approve edits in one click. No raw markdown diffs.</p>
-        </div>
-        <div class="mk-feature">
-          <div class="mk-feature-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-              <line x1="9" y1="13" x2="15" y2="13"/>
-              <line x1="9" y1="17" x2="13" y2="17"/>
-            </svg>
-          </div>
-          <h3>Local-first Markdown</h3>
-          <p>Your notes are <code>.md</code> files in a folder you choose. Open them in any other editor whenever you want.</p>
-        </div>
-        <div class="mk-feature">
-          <div class="mk-feature-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-              <line x1="7" y1="7" x2="7.01" y2="7"/>
-            </svg>
-          </div>
-          <h3>Page properties</h3>
-          <p>Add metadata to any file. Status, tags, content type, whatever makes sense. No raw YAML required.</p>
-        </div>
-        <div class="mk-feature">
-          <div class="mk-feature-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-            </svg>
-          </div>
-          <h3>Wiki links and inline assets</h3>
-          <p>Type <code>[[</code> to link any note. Drag in screenshots and see them inline. The agent follows links the way you do.</p>
-        </div>
+        ))}
       </div>
     </div>
   </section>
@@ -145,75 +166,23 @@ const schema = {
     <div class="mk-container">
       <div class="mk-section-head">
         <div class="mk-section-eyebrow">Honest comparison</div>
-        <h2 class="mk-section-h">How Inbind is different.</h2>
-        <p class="mk-section-sub">If your writing workflow involves three or four apps before you even start drafting, you know the pain. Inbind puts all of that in one window.</p>
+        <h2 class="mk-section-h">How Inbind compares to what you use today.</h2>
+        <p class="mk-section-sub">Most people weigh Inbind against an editor they already have, an AI chat app, or a setup they built themselves. Each of those covers part of the job well.</p>
       </div>
-      <div class="mk-compare-wrap">
-      <div class="mk-compare">
-        <table>
-          <thead>
-            <tr>
-              <th>What you want</th>
-              <th class="is-self">Inbind</th>
-              <th>ChatGPT</th>
-              <th>Notion AI</th>
-              <th>Obsidian</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Real-time formatted editing</td>
-              <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
-              <td><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-              <td><span class="mk-compare-cell">Partially</span></td>
-            </tr>
-            <tr>
-              <td>AI edits shown before they apply</td>
-              <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
-              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
-              <td><span class="mk-compare-cell">N/A</span></td>
-            </tr>
-            <tr>
-              <td>AI agent reads your folder</td>
-              <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-              <td><span class="mk-compare-cell">Scoped to chat</span></td>
-              <td><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-              <td><span class="mk-compare-cell">Third-party</span></td>
-            </tr>
-            <tr>
-              <td>Plain Markdown on your computer</td>
-              <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
-              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
-              <td><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-            </tr>
-            <tr>
-              <td>Works out of the box, no plugins</td>
-              <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-              <td><span class="mk-compare-cell">N/A</span></td>
-              <td><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
-            </tr>
-            <tr>
-              <td>File metadata without raw YAML</td>
-              <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
-              <td><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-              <td><span class="mk-compare-cell">Partially</span></td>
-            </tr>
-            <tr>
-              <td>Works offline</td>
-              <td class="is-self"><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
-              <td><span class="mk-compare-cell mk-compare-no">— No</span></td>
-              <td><span class="mk-compare-cell mk-compare-yes">✓ Yes</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <span class="mk-compare-fade" aria-hidden="true"></span>
+      <div class="mk-alt-grid">
+        {alternatives.map((alt) => (
+          <div class="mk-alt-card">
+            <h3>{alt.name}</h3>
+            <p>{alt.body}</p>
+          </div>
+        ))}
+        <div class="mk-alt-self">
+          <img src={url('favicon.svg')} alt="" width="52" height="52" />
+          <div>
+            <h3>Inbind</h3>
+            <p>The AI chat, an editor made for writing and your skills all work on the same files, and every change the AI suggests shows up in the formatted page before it lands. It uses the AI subscription you already have.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -223,26 +192,11 @@ const schema = {
     <div class="mk-cta-flow-tl"><FlowLines count={4} withAnchor={false} /></div>
     <div class="mk-cta-flow-br"><FlowLines count={4} withAnchor={false} /></div>
     <div class="mk-container mk-cta-inner">
-      <h2>Try it. It's free.</h2>
-      <p>No account. No upload. Just download and point it at a folder.</p>
+      <h2>Try it on your own files.</h2>
+      <p>Inbind is free, and there's no Inbind account to create. Download it, open a folder, and connect the Claude or ChatGPT subscription you already have.</p>
       <a class="mk-btn mk-btn--primary mk-btn--lg" href={url('download')}>Download Inbind</a>
     </div>
   </section>
 
   <Footer />
 </Layout>
-
-<script>
-  // Hide the comparison table's right-edge fade once scrolled to the end.
-  const wrap = document.querySelector('.mk-compare-wrap');
-  const scroller = wrap?.querySelector('.mk-compare') as HTMLElement | null;
-  if (wrap && scroller) {
-    const update = () => {
-      const atEnd = scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 1;
-      wrap.classList.toggle('is-end', atEnd);
-    };
-    scroller.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-  }
-</script>

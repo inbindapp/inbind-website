@@ -56,7 +56,8 @@ function formatDate(iso: string) {
       <p class="mk-post-lead">{post['post-summary']}</p>
       <div class="mk-post-body" set:html={post['post-body']} />
       <div class="mk-post-footer">
-        <span style="color: var(--text-subtle); font-size: 14.5px;">Like this post? Inbind is free to try.</span>
+        <img src={url('favicon.svg')} alt="" width="36" height="36" />
+        <p>We wrote this post in Inbind, from our own notes. It's free for you to try too.</p>
         <a href={url('download')} class="mk-btn mk-btn--primary">Download Inbind</a>
       </div>
     </div>

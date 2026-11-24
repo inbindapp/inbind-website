@@ -26,15 +26,15 @@ function formatDate(iso: string) {
 }
 ---
 
-<Layout title="Blog" description="Notes from the Inbind team. Honest posts about building the product." ogImage="/og/blog.png">
+<Layout title="Blog" description="Notes from the Inbind team on writing with AI, keeping the context behind it current, and building Inbind in the open." ogImage="/og/blog.png">
   <Header />
 
   <section class="mk-section" style="padding-top: 88px;">
     <div class="mk-container">
       <div class="mk-section-head">
-        <div class="mk-section-eyebrow">Blog</div>
-        <h2 class="mk-section-h">Notes from the team.</h2>
-        <p class="mk-section-sub">We publish when we have something honest to say. No SEO posts. No listicles.</p>
+        <div class="mk-section-eyebrow" style="color: var(--accent);">Blog</div>
+        <h1 class="mk-section-h">Notes from the team.</h1>
+        <p class="mk-section-sub">We write about producing content with AI, keeping the context behind it current, and what we learn while building Inbind, including the parts that don't work yet.</p>
       </div>
       <div class="mk-blog-list">
         {posts.map((post) => (
