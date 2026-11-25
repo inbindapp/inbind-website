@@ -822,6 +822,31 @@
   color: var(--text); font-style: italic;
 }
 
+/* Tables in post and answer bodies. Wide comparison tables scroll sideways
+   on phones instead of pushing the page wider. */
+.mk-post-body table {
+  display: block; overflow-x: auto; max-width: 100%;
+  border-collapse: collapse; margin: 0 0 24px; font-size: 15px; line-height: 1.5;
+}
+.mk-post-body th, .mk-post-body td {
+  border: 1px solid var(--border-subtle); padding: 10px 12px; text-align: left; vertical-align: top;
+  min-width: 140px;
+}
+.mk-post-body thead th { background: var(--bg-panel); font-weight: 600; }
+.mk-post-body tbody td:first-child { font-weight: 600; }
+.mk-post-body code {
+  font-family: var(--font-mono); font-size: 0.88em;
+  background: var(--bg-panel); border: 1px solid var(--border-subtle);
+  border-radius: 4px; padding: 1px 5px;
+}
+
+/* The phrasing people type into an AI assistant, under the answer's title */
+.mk-answer-prompt { font-size: 15px; color: var(--text-subtle); margin: 0 0 36px; }
+.mk-answer-prompt q { color: var(--text); font-style: italic; }
+
+/* Answers list has no date column */
+.mk-answer-list .mk-blog-item { grid-template-columns: 1fr; }
+
 /* Slash commands menu */
 .mk-slash-menu {
   position: absolute; z-index: 20;

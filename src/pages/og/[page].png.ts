@@ -34,6 +34,10 @@ const pages: Record<string, { title: string; description: string }> = {
     title: 'Blog',
     description: 'Notes from the Inbind team on writing with AI, keeping the context behind it current, and building Inbind in the open.',
   },
+  answers: {
+    title: 'Answers',
+    description: 'Straight answers to the questions people ask about writing with Claude, keeping brand docs current and sharing context with a team.',
+  },
 };
 
 export const getStaticPaths: GetStaticPaths = () =>
