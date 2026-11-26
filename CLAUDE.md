@@ -19,6 +19,7 @@ npm run preview  # serve dist/ locally
 - **Plain CSS** — design tokens in `src/styles/tokens.css`, marketing styles in `src/styles/marketing.css`
 - **Fonts** — Sora (display), Figtree (body), JetBrains Mono (code), loaded via Google Fonts in `Layout.astro`
 - **Blog content** — fetched at build time from `https://cdn.inbind.app/content/596/posts`
+- **Answers (AEO)** — `/answers/[slug]`, fetched at build time from `https://cdn.inbind.app/content/596/aeo-articles` via `src/utils/answers.ts`. Not linked from header or footer on purpose. Reached through the sitemap, `llms.txt` and the `/answers/` index. The build fails if the CDN is unreachable, so an outage can't silently unpublish them. Items listed in the index but returning 404 are skipped with a warning. Their `last-updated` dates feed `lastmod` in the sitemap (`astro.config.mjs`).
 
 ## Adding a page
 

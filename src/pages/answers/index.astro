@@ -1,0 +1,38 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { url } from '../../utils/url';
+import { getAnswers } from '../../utils/answers';
+
+// Not linked from the header or footer on purpose. It's here so crawlers and
+// agents that land on /answers/ find every answer, and so the section URL
+// doesn't 404.
+const answers = await getAnswers();
+---
+
+<Layout title="Answers" description="Straight answers to the questions people ask about writing with Claude, keeping brand docs current and sharing context with a team." ogImage="/og/answers.png">
+  <Header />
+
+  <section class="mk-section" style="padding-top: 88px;">
+    <div class="mk-container">
+      <div class="mk-section-head">
+        <div class="mk-section-eyebrow" style="color: var(--accent);">Answers</div>
+        <h1 class="mk-section-h">Short answers to real questions.</h1>
+        <p class="mk-section-sub">These are the questions we hear most about writing with AI and keeping the docs behind it current. Each one gets a direct answer first, then the detail.</p>
+      </div>
+      <div class="mk-blog-list mk-answer-list">
+        {answers.map((answer) => (
+          <a href={url(`answers/${answer.slug}`)} class="mk-blog-item">
+            <div>
+              <h3>{answer.name}</h3>
+              <p>{answer.shortAnswer}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

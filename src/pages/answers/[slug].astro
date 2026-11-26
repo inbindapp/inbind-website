@@ -1,0 +1,63 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { url } from '../../utils/url';
+import { getAnswers, formatDate, type Answer } from '../../utils/answers';
+
+export async function getStaticPaths() {
+  const answers = await getAnswers();
+  return answers.map((answer) => ({ params: { slug: answer.slug }, props: { answer } }));
+}
+
+const { answer } = Astro.props as { answer: Answer };
+const pageUrl = new URL(`/answers/${answer.slug}`, Astro.site).toString();
+
+// Article for the page itself, with the question and its short answer as the
+// main entity, so crawlers and AI agents can lift the answer directly.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: answer.name,
+  description: answer.shortAnswer,
+  url: pageUrl,
+  mainEntityOfPage: pageUrl,
+  datePublished: answer.published,
+  dateModified: answer.updated,
+  image: new URL(`/og/answers/${answer.slug}.png`, Astro.site).toString(),
+  author: answer.author && { '@type': 'Person', name: answer.author.name },
+  publisher: { '@type': 'Organization', name: 'Inbind', url: 'https://inbind.app' },
+  mainEntity: {
+    '@type': 'Question',
+    name: answer.name,
+    ...(answer.targetPrompt && { alternateName: answer.targetPrompt }),
+    acceptedAnswer: { '@type': 'Answer', text: answer.shortAnswer, url: pageUrl },
+  },
+};
+---
+
+<Layout title={answer.name} description={answer.shortAnswer} ogImage={`/og/answers/${answer.slug}.png`} schema={schema}>
+  <Header />
+
+  <article class="mk-post">
+    <div class="mk-narrow">
+      <a href={url('answers')} class="mk-back-link">← All answers</a>
+      <div class="mk-post-meta">
+        {answer.updated && <>Updated <time datetime={answer.updated}>{formatDate(answer.updated)}</time></>}
+        {answer.author && <> · {answer.author.name}</>}
+      </div>
+      <h1>{answer.name}</h1>
+      {answer.targetPrompt && (
+        <p class="mk-answer-prompt">Often asked as <q data-answer-prompt>{answer.targetPrompt}</q></p>
+      )}
+      <div class="mk-post-body" set:html={answer.body} />
+      <div class="mk-post-footer">
+        <img src={url('favicon.svg')} alt="" width="36" height="36" />
+        <p>Inbind is a free workspace where your AI writes from what your team actually knows.</p>
+        <a href={url('download')} class="mk-btn mk-btn--primary">Download Inbind</a>
+      </div>
+    </div>
+  </article>
+
+  <Footer />
+</Layout>

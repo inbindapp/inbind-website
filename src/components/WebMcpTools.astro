@@ -44,7 +44,7 @@
         name: 'list_pages',
         title: 'List Inbind pages',
         description:
-          'List every page and blog post on inbind.app, with a one-line description and a link to a markdown copy of each.',
+          'List every page, blog post and answer on inbind.app, with a one-line description and a link to a markdown copy of each.',
         inputSchema: { type: 'object', properties: {} },
         annotations: { readOnlyHint: true },
         execute: () => fetchText(url('llms.txt')),

@@ -18,6 +18,7 @@ interface PageEntry {
   description: string;
   mdUrl: string;
   published?: string;
+  updated?: string;
 }
 
 function absolutize(root: HTMLElement, site: URL) {
@@ -39,13 +40,16 @@ function listifyLinkRows(root: HTMLElement) {
   }
 }
 
-function publishedDate(root: HTMLElement): string | undefined {
+function schemaDates(root: HTMLElement): { published?: string; updated?: string } {
   for (const el of root.querySelectorAll('script[type="application/ld+json"]')) {
     try {
       const data = JSON.parse(el.textContent);
-      if (data.datePublished) return data.datePublished;
+      if (data.datePublished || data.dateModified) {
+        return { published: data.datePublished, updated: data.dateModified };
+      }
     } catch {}
   }
+  return {};
 }
 
 function frontmatter(fields: Record<string, string>): string {
@@ -58,8 +62,11 @@ function llmsTxt(pages: PageEntry[], site: URL, summary: string): string {
   const blog = pages
     .filter((p) => p.mdUrl.startsWith('/blog/'))
     .sort((a, b) => (b.published ?? '').localeCompare(a.published ?? ''));
+  const answers = pages
+    .filter((p) => p.mdUrl.startsWith('/answers/'))
+    .sort((a, b) => a.title.localeCompare(b.title));
   const rest = pages
-    .filter((p) => !blog.includes(p))
+    .filter((p) => !blog.includes(p) && !answers.includes(p))
     .sort((a, b) => (a.mdUrl === '/index.md' ? -1 : b.mdUrl === '/index.md' ? 1 : a.mdUrl.localeCompare(b.mdUrl)));
 
   return [
@@ -76,6 +83,12 @@ function llmsTxt(pages: PageEntry[], site: URL, summary: string): string {
     '## Blog',
     '',
     ...blog.map(item),
+    '',
+    '## Answers',
+    '',
+    'Direct answers to common questions about writing with AI from your own docs. Each page opens with the answer, then the detail and sources.',
+    '',
+    ...answers.map(item),
     '',
   ].join('\n');
 }
@@ -102,6 +115,26 @@ export default function agentMarkdown(): AstroIntegration {
           filter: (node) => node.nodeName === 'PRE' && !node.querySelector('code'),
           replacement: (_content, node) => `\n\n\`\`\`\n${node.textContent}\n\`\`\`\n\n`,
         });
+        // Turndown has no table support and flattens cells into loose lines.
+        // Comparison tables matter to agents, so emit GFM pipe tables.
+        turndown.addRule('table', {
+          filter: 'table',
+          replacement: (_content, node) => {
+            const cell = (el: Element) =>
+              turndown.turndown((el as HTMLElement).innerHTML).replace(/\s*\n+\s*/g, ' ').replace(/\|/g, '\\|').trim();
+            const rows = Array.from((node as HTMLTableElement).querySelectorAll('tr'))
+              .map((tr) => Array.from(tr.children).map(cell));
+            if (!rows.length) return '';
+            const width = Math.max(...rows.map((r) => r.length));
+            const line = (r: string[]) => `| ${Array.from({ length: width }, (_, i) => r[i] ?? '').join(' | ')} |`;
+            const [head, ...body] = rows;
+            return `\n\n${[line(head), line(Array(width).fill('---')), ...body.map(line)].join('\n')}\n\n`;
+          },
+        });
+        turndown.addRule('inline-quote', {
+          filter: 'q',
+          replacement: (content) => `"${content}"`,
+        });
         const entries: PageEntry[] = [];
         let summary = '';
 
@@ -119,7 +152,7 @@ export default function agentMarkdown(): AstroIntegration {
           const description = root.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
           const url = new URL(pathname, site).toString();
           const mdUrl = markdownPath(`/${pathname}`);
-          const published = publishedDate(root);
+          const { published, updated } = schemaDates(root);
           if (mdUrl === '/index.md') summary = description;
 
           const body = root.querySelector('body')!;
@@ -131,9 +164,12 @@ export default function agentMarkdown(): AstroIntegration {
           const markdown = turndown.turndown(body.innerHTML).replace(/\n{3,}/g, '\n\n').trim();
           const meta: Record<string, string> = { title, description, url };
           if (published) meta.published = published;
+          if (updated) meta.updated = updated;
+          const prompt = body.querySelector('[data-answer-prompt]')?.textContent.trim();
+          if (prompt) meta.prompt = prompt;
 
           await writeFile(new URL(mdUrl.slice(1), dir), `${frontmatter(meta)}${markdown}\n`);
-          entries.push({ title: mdUrl === '/index.md' ? 'Home' : title, description, mdUrl, published });
+          entries.push({ title: mdUrl === '/index.md' ? 'Home' : title, description, mdUrl, published, updated });
         }
 
         await writeFile(new URL('llms.txt', dir), llmsTxt(entries, site, summary));
